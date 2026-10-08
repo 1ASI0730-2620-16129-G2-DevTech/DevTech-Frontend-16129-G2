@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import App from './app.vue'
 import PrimeVue from 'primevue/config'
 import WashTrackPreset from '@/shared/presentation/washtrack-preset.js'
 import '@/shared/presentation/styles/washtrack-theme.css'
