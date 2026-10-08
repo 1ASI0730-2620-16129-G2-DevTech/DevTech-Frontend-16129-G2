@@ -7,6 +7,7 @@ import about from "@/shared/presentation/views/about.vue";
 import laundryOperationsRoutes from "@/laundry-operations/presentation/laundry-operations-routes.js";
 import Home from "@/shared/presentation/views/home.vue";
 import LoginView from "@/iam/presentation/views/login-view.vue";
+import RegisterView from "@/iam/presentation/views/register-view.vue";
 
 const routes =
     [
@@ -15,6 +16,12 @@ const routes =
             name: 'login',
             component: LoginView,
             meta: { titleKey: 'login.title', hideLayout: true }
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: RegisterView,
+            meta: { titleKey: 'register.title', hideLayout: true }
         },
         {
             path: '/home',
