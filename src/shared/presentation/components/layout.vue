@@ -4,7 +4,6 @@ import {useRoute} from "vue-router";
 import {useI18n} from "vue-i18n";
 import LanguageSwitcher from "./language-switcher.vue";
 import SidebarMenu from "./sidebar-menu.vue";
-import FooterContent from "./footer-content.vue";
 import NotificationToaster from "@/tracking-notifications/presentation/components/notification-toaster.vue";
 
 const { t } = useI18n();
@@ -45,7 +44,6 @@ const pageTitle = computed(() => route.meta.titleKey ? t(route.meta.titleKey) : 
       <main class="main">
         <router-view />
       </main>
-      <footer-content />
     </div>
     <notification-toaster />
   </div>
