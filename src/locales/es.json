@@ -1,0 +1,171 @@
+{
+  "menu": {
+    "dashboard": "Dashboard",
+    "groups": {
+      "operations": "Operaciones",
+      "monitoring": "Monitoreo"
+    },
+    "orders": "Pedidos",
+    "customers": "Clientes",
+    "garments": "Prendas",
+    "services": "Servicios",
+    "payments": "Pagos",
+    "deliveries": "Recojos y entregas",
+    "tracking": "Seguimiento",
+    "iot": "Monitoreo IoT",
+    "alerts": "Alertas",
+    "logout": "Cerrar sesión",
+    "open": "Abrir menú",
+    "coming-soon": "Próximamente"
+  },
+  "roles": {
+    "customer": "Cliente",
+    "shift-manager": "Encargada de turno",
+    "staff": "Personal",
+    "owner": "Propietario"
+  },
+  "breadcrumb": {
+    "home": "Inicio"
+  },
+  "routes": {
+    "trackings": "Seguimiento",
+    "tracker": "Detalle de seguimiento",
+    "deliveries": "Recojos y entregas"
+  },
+  "header": {
+    "search": "Buscar pedido de cliente"
+  },
+  "footer": {
+    "copyright": "Copyright © 2026. WashTrack",
+    "intro": "Hecho con",
+    "use": "utilizando",
+    "author": "por el Equipo de Desarrollo de {brand}"
+  },
+  "errors": {
+    "occurred": "Ocurrieron errores"
+  },
+  "tracking": {
+    "stages": {
+      "received": "Recepción",
+      "sorting": "Clasificación",
+      "washing": "Lavado",
+      "drying-ironing": "Secado/Planchado",
+      "packaging": "Empaquetado",
+      "ready": "Listo"
+    },
+    "status": {
+      "completed": "Completada",
+      "current": "En proceso",
+      "pending": "Pendiente"
+    },
+    "progress": "Etapa {done} de {total}"
+  },
+  "trackings": {
+    "title": "Pedidos en seguimiento",
+    "search": "Buscar por código (ej. WT-001)",
+    "estimated-delivery": "Entrega estimada",
+    "view": "Ver seguimiento",
+    "loading": "Cargando pedidos...",
+    "empty": "No se encontraron pedidos."
+  },
+  "tracker": {
+    "title": "Seguimiento del pedido {code}",
+    "not-found": "No se encontró seguimiento para este pedido.",
+    "progress": "Progreso del pedido",
+    "history": "Historial de estados",
+    "no-history": "Aún no hay movimientos registrados.",
+    "details": "Detalle del pedido",
+    "order": "Pedido",
+    "current-stage": "Etapa actual",
+    "estimated-delivery": "Entrega estimada"
+  },
+  "notifications": {
+    "types": {
+      "order-stage-changed": {
+        "summary": "Actualización de pedido",
+        "detail": "Pedido {code}: {stage}."
+      },
+      "order-on-the-way": {
+        "summary": "Pedido en camino",
+        "detail": "Su pedido {code} se encuentra en camino. Tenga su identificación a la mano."
+      },
+      "pickup-on-the-way": {
+        "summary": "Recojo en ruta",
+        "detail": "El delivery de recojo del pedido {code} ya está en ruta."
+      }
+    }
+  },
+  "deliveries": {
+    "title": "Recojos y entregas",
+    "catalog-title": "Catálogo de recojos y entregas ({count})",
+    "schedule": "Programar recojo o entrega",
+    "table": {
+      "id": "ID",
+      "type": "Tipo",
+      "customer": "Cliente",
+      "address": "Dirección",
+      "driver": "Repartidor",
+      "status": "Estado",
+      "date-time": "Fecha y hora"
+    },
+    "types": {
+      "delivery": "Entrega",
+      "pickup": "Recojo"
+    },
+    "status": {
+      "completed": "Completado",
+      "scheduled": "Programado",
+      "cancelled": "Cancelado"
+    },
+    "chart": {
+      "title": "Recojos y entregas - {range}"
+    },
+    "ranges": {
+      "last-hour": {
+        "label": "Última hora",
+        "title": "última hora"
+      },
+      "24-hours": {
+        "label": "24 horas",
+        "title": "últimas 24 horas"
+      },
+      "7-days": {
+        "label": "7 días",
+        "title": "últimos 7 días"
+      },
+      "30-days": {
+        "label": "30 días",
+        "title": "últimos 30 días"
+      }
+    },
+    "tracking": {
+      "title": "Seguimiento de entrega {code}",
+      "on-the-way": "En camino · llega en ~{minutes} min",
+      "updated": "Actualizado hace {minutes} min",
+      "driver": "Repartidor",
+      "call": "Llamar",
+      "origin": "Sede",
+      "stages": {
+        "confirmed": "Confirmado",
+        "picked-up": "Recogido",
+        "on-the-way": "En camino",
+        "delivered": "Entregado"
+      },
+      "details": "Detalle de la entrega",
+      "fields": {
+        "order": "Pedido",
+        "customer": "Cliente",
+        "address": "Dirección",
+        "service": "Servicio",
+        "garments": "Prendas"
+      },
+      "map": {
+        "zoom-in": "Acercar",
+        "zoom-out": "Alejar",
+        "my-location": "Mi ubicación"
+      }
+    },
+    "empty": "No se encontraron recojos ni entregas.",
+    "unassigned": "Sin asignar"
+  }
+}
