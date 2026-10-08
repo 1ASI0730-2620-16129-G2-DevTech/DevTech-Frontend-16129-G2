@@ -1,38 +1,69 @@
-# webapp
+# WashTrack WebApp (DevTech)
 
-This template should help get you started developing with Vue 3 in Vite.
+Aplicación web de **WashTrack**: gestión inteligente y monitoreo IoT para lavanderías. Vue 3 + Vite organizada con **Domain-Driven Design (DDD)**, siguiendo la estructura del proyecto `learning-center`.
 
-## Recommended IDE Setup
+## Tecnologías
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Vue 3, Vite, Pinia, Vue Router, Vue I18n, PrimeVue + PrimeFlex + PrimeIcons, Axios y json-server (API mock local).
 
-## Recommended Browser Setup
+## Estructura (DDD)
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+```
+src/
+  <bounded-context>/            # Un directorio por bounded context
+    domain/model/               # Entidades, enums, value objects (JS puro, sin Vue ni HTTP)
+    application/                # Stores de Pinia (casos de uso)
+    infrastructure/             # API, assemblers
+    presentation/
+      views/                    # Vistas
+      components/               # Componentes
+      <context>-routes.js       # Rutas del contexto
 
-## Customize configuration
+  shared/                       # Lo transversal a todos los contextos
+    domain/model/               # Money, Currency, uuid, errores
+    infrastructure/             # BaseApi, BaseEndpoint
+    presentation/
+      components/               # layout, sidebar, topbar, language-switcher
+      views/                    # home, about, page-not-found
+      styles/                   # Tokens de diseño WashTrack (colores, tipografías)
+      navigation-items.js       # Items del sidebar
+      washtrack-preset.js       # Tema de PrimeVue
+  locales/                      # en.json / es.json
+  router.js  main.js  i18n.js  pinia.js
+```
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Cómo agregar un bounded context
 
-## Project Setup
+1. Crear `src/<context>/` con las capas `domain`, `application`, `infrastructure` y `presentation`.
+2. Exportar sus rutas en `presentation/<context>-routes.js` (cada ruta con `meta: { titleKey: '<clave i18n>' }`) y registrarlas en `src/router.js` como rutas hijas.
+3. Agregar sus textos en `src/locales/es.json` y `en.json`, y su item en `src/shared/presentation/navigation-items.js`.
+4. Agregar las variables de sus endpoints en `.env.development` y `.env.production`, y sus colecciones en `server/db.json`.
+
+## Ejecutar el proyecto
 
 ```sh
 npm install
-```
 
-### Compile and Hot-Reload for Development
+# Terminal 1: API mock (http://localhost:3000/api/v1)
+cd server
+sh start.sh
 
-```sh
+# Terminal 2: app
 npm run dev
 ```
 
-### Compile and Minify for Production
+Otros comandos: `npm run build` y `npm run preview`.
 
-```sh
-npm run build
-```
+## Variables de entorno
+
+Definidas en `.env.development` y `.env.production`:
+
+- `VITE_WASHTRACK_PLATFORM_API_URL`: URL base de la API.
+- `VITE_PRIME_UI_LICENSE_KEY`: licencia de PrimeVue.
+- Una variable `VITE_<RECURSO>_ENDPOINT_PATH` por cada recurso de cada bounded context.
+
+## Flujo de trabajo (Git)
+
+- `main`: producción. `develop`: integración.
+- Cada integrante trabaja en `feature/<nombre>` creada desde `develop` y entrega por Pull Request hacia `develop`.
+- Commits con [Conventional Commits](https://www.conventionalcommits.org/): `feat(scope): ...`, `fix(scope): ...`, `chore: ...`, `docs: ...`.

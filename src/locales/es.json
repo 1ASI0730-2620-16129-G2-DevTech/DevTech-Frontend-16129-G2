@@ -1,0 +1,42 @@
+{
+  "option": {
+    "dashboard": "Dashboard",
+    "about": "Acerca de",
+    "orders": "Pedidos",
+    "customers": "Clientes",
+    "garments": "Prendas",
+    "services": "Servicios",
+    "payments": "Pagos",
+    "pickups-deliveries": "Recojos y entregas",
+    "iot-monitoring": "Monitoreo IoT",
+    "alerts": "Alertas"
+  },
+  "group": {
+    "operations": "Operaciones",
+    "monitoring": "Monitoreo"
+  },
+  "layout": {
+    "breadcrumb-home": "Inicio",
+    "search": "Buscar pedido, cliente…",
+    "notifications": "Notificaciones",
+    "open-menu": "Abrir menú",
+    "logout": "Cerrar sesión",
+    "role-shift-manager": "Encargada de turno"
+  },
+  "errors": {
+    "occurred": "Ocurrió un error"
+  },
+  "home": {
+    "title": "Bienvenido a WashTrack",
+    "content": "WashTrack conecta pedidos, sensores IoT y pagos en una sola plataforma para digitalizar la gestión de tu lavandería."
+  },
+  "about": {
+    "title": "Acerca de WashTrack",
+    "content": "WashTrack es una plataforma de gestión inteligente y monitoreo IoT para lavanderías: pedidos, seguimiento en seis etapas, monitoreo de lavadoras y pagos. Desarrollada por el equipo DevTech."
+  },
+  "page-not-found": {
+    "title": "Página no encontrada",
+    "content": "La ruta {unavailable-route} no está disponible.",
+    "go-home": "Ir al Inicio"
+  }
+}

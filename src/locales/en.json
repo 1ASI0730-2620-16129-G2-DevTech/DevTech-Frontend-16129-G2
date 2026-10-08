@@ -1,0 +1,42 @@
+{
+  "option": {
+    "dashboard": "Dashboard",
+    "about": "About",
+    "orders": "Orders",
+    "customers": "Customers",
+    "garments": "Garments",
+    "services": "Services",
+    "payments": "Payments",
+    "pickups-deliveries": "Pickups & deliveries",
+    "iot-monitoring": "IoT Monitoring",
+    "alerts": "Alerts"
+  },
+  "group": {
+    "operations": "Operations",
+    "monitoring": "Monitoring"
+  },
+  "layout": {
+    "breadcrumb-home": "Home",
+    "search": "Search order, customer…",
+    "notifications": "Notifications",
+    "open-menu": "Open menu",
+    "logout": "Sign out",
+    "role-shift-manager": "Shift manager"
+  },
+  "errors": {
+    "occurred": "An error occurred"
+  },
+  "home": {
+    "title": "Welcome to WashTrack",
+    "content": "WashTrack connects orders, IoT sensors and payments in a single platform to digitalize your laundry management."
+  },
+  "about": {
+    "title": "About WashTrack",
+    "content": "WashTrack is a smart management and IoT monitoring platform for laundries: orders, six-stage tracking, washing machine monitoring and payments. Built by the DevTech team."
+  },
+  "page-not-found": {
+    "title": "Page Not Found",
+    "content": "The path {unavailable-route} is not available.",
+    "go-home": "Go Home"
+  }
+}
