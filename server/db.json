@@ -244,6 +244,96 @@
       "createdAt": "2026-10-07T12:00:00-05:00"
     }
   ],
+  "payments": [
+    {
+      "id": 1,
+      "orderId": 1,
+      "customerId": 1,
+      "customerName": "Rosa Díaz",
+      "amount": 45,
+      "paymentMethod": "yape",
+      "status": "paid",
+      "paidAt": "2026-10-01T09:16:00-05:00",
+      "orderDate": "2026-10-01T09:15:00-05:00"
+    },
+    {
+      "id": 2,
+      "orderId": 2,
+      "customerId": 2,
+      "customerName": "Jorge Salas",
+      "amount": 28.5,
+      "paymentMethod": "card",
+      "status": "paid",
+      "paidAt": "2026-10-03T10:31:00-05:00",
+      "orderDate": "2026-10-03T10:30:00-05:00"
+    },
+    {
+      "id": 3,
+      "orderId": 3,
+      "customerId": 3,
+      "customerName": "Ana Ruiz",
+      "amount": 72,
+      "paymentMethod": "yape",
+      "status": "pending",
+      "paidAt": null,
+      "orderDate": "2026-10-05T11:05:00-05:00"
+    },
+    {
+      "id": 4,
+      "orderId": 4,
+      "customerId": 4,
+      "customerName": "Lucía Prado",
+      "amount": 18,
+      "paymentMethod": "cash",
+      "status": "cancelled",
+      "paidAt": null,
+      "orderDate": "2026-10-06T08:45:00-05:00"
+    },
+    {
+      "id": 5,
+      "orderId": 5,
+      "customerId": 1,
+      "customerName": "Rosa Díaz",
+      "amount": 33,
+      "paymentMethod": "card",
+      "status": "paid",
+      "paidAt": "2026-10-06T15:21:00-05:00",
+      "orderDate": "2026-10-06T15:20:00-05:00"
+    },
+    {
+      "id": 6,
+      "orderId": 6,
+      "customerId": 2,
+      "customerName": "Jorge Salas",
+      "amount": 54.5,
+      "paymentMethod": "card",
+      "status": "pending",
+      "paidAt": null,
+      "orderDate": "2026-10-07T08:10:00-05:00"
+    },
+    {
+      "id": 7,
+      "orderId": 7,
+      "customerId": 3,
+      "customerName": "Ana Ruiz",
+      "amount": 25,
+      "paymentMethod": "cash",
+      "status": "cancelled",
+      "paidAt": null,
+      "orderDate": "2026-10-07T10:40:00-05:00"
+    },
+    {
+      "id": 8,
+      "orderId": 8,
+      "customerId": 4,
+      "customerName": "Lucía Prado",
+      "amount": 40,
+      "paymentMethod": "yape",
+      "status": "paid",
+      "paidAt": "2026-10-07T12:01:00-05:00",
+      "orderDate": "2026-10-07T12:00:00-05:00"
+    }
+  ],
   "subscription-plans": [
     {
       "id": 1,
