@@ -13,4 +13,14 @@ export class WashingCycle {
         this.durationMinutes = durationMinutes;
         this.compatibleType = compatibleType;
     }
+
+    /**
+     * Checks if this cycle can be used for a garment item.
+     * @param {{type: string}} item - The garment item (from the Order Management context).
+     * @returns {boolean} True if the garment type matches the compatible type.
+     */
+    isCompatible(item) {
+        const type = String(item?.type ?? '').trim().toLowerCase();
+        return type !== '' && type === String(this.compatibleType).trim().toLowerCase();
+    }
 }

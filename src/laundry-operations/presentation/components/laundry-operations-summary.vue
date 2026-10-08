@@ -2,10 +2,10 @@
 import {onMounted} from "vue";
 import {useI18n} from "vue-i18n";
 import {storeToRefs} from "pinia";
-import useLaundryOperationStore from "@/laundry-operations/application/laundry-operation.store.js";
+import useLaundryOperationsStore from "@/laundry-operations/application/laundry-operations.store.js";
 
 const {t} = useI18n();
-const store = useLaundryOperationStore();
+const store = useLaundryOperationsStore();
 const {summary} = storeToRefs(store);
 
 onMounted(() => {

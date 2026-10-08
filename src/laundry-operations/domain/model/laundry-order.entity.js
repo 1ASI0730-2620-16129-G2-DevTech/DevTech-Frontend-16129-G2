@@ -1,10 +1,8 @@
 import {ValidationError} from "@/shared/domain/model/errors.js";
-import {
-    nextStage,
-    PROCESSING_STAGES,
-    ProcessingStage
-} from "@/laundry-operations/domain/model/processing-stage.js";
+import {PROCESSING_STAGES, ProcessingStage} from "@/laundry-operations/domain/model/processing-stage.js";
 import {Priority} from "@/laundry-operations/domain/model/priority.js";
+import {WashingCycle} from "@/laundry-operations/domain/model/washing-cycle.entity.js";
+import {LaundryResource} from "@/laundry-operations/domain/model/laundry-resource.entity.js";
 
 function ensureStage(order, expected, action) {
     if (order.currentStage !== expected) {
@@ -14,8 +12,7 @@ function ensureStage(order, expected, action) {
 
 /**
  * Aggregate root that represents the operational processing of an order inside a laundry.
- * It references other aggregates only by id: `orderId` (Order Management),
- * `washingCycleId` and `resourceId` (this context).
+ * Its `orderId` references the Order aggregate of the Order Management context (by id only).
  */
 export class LaundryOrder {
     constructor({
@@ -50,47 +47,58 @@ export class LaundryOrder {
         return this.priority === Priority.VIP;
     }
 
-    /**
-     * Moves the order to the next stage. WASHING requires a washing cycle and a resource.
-     * @param {string|null} stage - Optional target stage; it must be the next one (stages cannot be skipped).
-     */
-    advanceStage(stage = null) {
-        if (this.isReady) {
-            throw new ValidationError("The order is already READY");
+    /** Registers the arrival of the order (RECEPTION stage). */
+    receive() {
+        if (!this.orderId) {
+            throw new ValidationError("A laundry order must reference an order");
         }
-        const next = nextStage(this.currentStage);
-        if (stage !== null && stage !== next) {
-            throw new ValidationError(`Cannot move from ${this.currentStage} to ${stage}: the next stage is ${next}`);
-        }
-        if (next === ProcessingStage.WASHING && (!this.washingCycleId || !this.resourceId)) {
-            throw new ValidationError("A washing cycle and a resource are required to start washing");
-        }
-        this.currentStage = next;
+        this.currentStage = ProcessingStage.RECEPTION;
+    }
+
+    /** RECEPTION -> CLASSIFICATION. */
+    classify() {
+        ensureStage(this, ProcessingStage.RECEPTION, 'classify the order');
+        this.advanceStage();
     }
 
     /**
      * Assigns a washing cycle. Only allowed while the order is in CLASSIFICATION.
-     * @param {string} cycleId
+     * @param {WashingCycle} cycle
      */
-    assignWashingCycle(cycleId) {
-        if (!cycleId) {
-            throw new ValidationError("A washing cycle is required");
+    assignCycle(cycle) {
+        if (!(cycle instanceof WashingCycle)) {
+            throw new ValidationError("A valid washing cycle is required");
         }
         ensureStage(this, ProcessingStage.CLASSIFICATION, 'assign a washing cycle');
-        this.washingCycleId = cycleId;
+        this.washingCycleId = cycle.id;
     }
 
     /**
-     * Assigns a resource. Only allowed while the order is in CLASSIFICATION.
-     * Checking that the resource is available is the responsibility of the application layer.
-     * @param {string} resourceId
+     * Assigns a resource. Only allowed while the order is in CLASSIFICATION and the resource is available.
+     * @param {LaundryResource} resource
      */
-    assignResource(resourceId) {
-        if (!resourceId) {
-            throw new ValidationError("A resource is required");
+    assignResource(resource) {
+        if (!(resource instanceof LaundryResource)) {
+            throw new ValidationError("A valid resource is required");
         }
         ensureStage(this, ProcessingStage.CLASSIFICATION, 'assign a resource');
-        this.resourceId = resourceId;
+        if (resource.id === this.resourceId) return;
+        if (!resource.isAvailable()) {
+            throw new ValidationError(`Resource "${resource.name}" is not available`);
+        }
+        this.resourceId = resource.id;
+    }
+
+    /** Moves the order to the next stage. WASHING requires a cycle and a resource. */
+    advanceStage() {
+        if (this.isReady) {
+            throw new ValidationError("The order is already READY");
+        }
+        const next = PROCESSING_STAGES[PROCESSING_STAGES.indexOf(this.currentStage) + 1];
+        if (next === ProcessingStage.WASHING && (!this.washingCycleId || !this.resourceId)) {
+            throw new ValidationError("A washing cycle and a resource are required to start washing");
+        }
+        this.currentStage = next;
     }
 
     /**

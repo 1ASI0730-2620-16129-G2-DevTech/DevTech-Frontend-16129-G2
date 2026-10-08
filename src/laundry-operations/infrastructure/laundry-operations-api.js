@@ -41,11 +41,6 @@ export class LaundryOperationsApi extends BaseApi {
         return this.#washingCyclesEndpoint.getById(id);
     }
 
-    /** WashingCycleRepository.findCompatible(type) */
-    getCompatibleWashingCycles(type) {
-        return this.http.get(washingCyclesEndpointPath, {params: {compatibleType: type}});
-    }
-
     getLaundryResources() {
         return this.#laundryResourcesEndpoint.getAll();
     }

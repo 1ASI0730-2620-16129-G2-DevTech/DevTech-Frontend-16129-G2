@@ -2,7 +2,6 @@
 import {computed} from "vue";
 import {useI18n} from "vue-i18n";
 import {Priority} from "@/laundry-operations/domain/model/priority.js";
-import {nextStage} from "@/laundry-operations/domain/model/processing-stage.js";
 
 const props = defineProps({
   order: {type: Object, required: true},
@@ -42,7 +41,7 @@ const atRisk = computed(() => props.order.isAtDeliveryRisk());
         <pv-button v-if="isClassification" icon="pi pi-cog" size="small" severity="secondary"
                    :label="t('laundry-operations.card.assign')" @click="emit('assign', order.id)"/>
         <pv-button v-if="!isReception && !order.isReady" icon="pi pi-arrow-right" size="small"
-                   :label="t('laundry-operations.card.advance')" @click="emit('advance', order.id, nextStage(order.currentStage))"/>
+                   :label="t('laundry-operations.card.advance')" @click="emit('advance', order.id)"/>
         <pv-button v-if="!order.isVip && !order.isReady" icon="pi pi-star" size="small" severity="warn" text rounded
                    @click="emit('prioritize', order.id)"/>
       </div>
