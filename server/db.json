@@ -802,5 +802,93 @@
       "status": "cancelled",
       "scheduledAt": "2026-10-08T11:00:00-05:00"
     }
+  ],
+  "laundryOrders": [
+    {
+      "id": "0192a1c0-0000-7000-8000-000000000001",
+      "orderId": "0192a1b0-0000-7000-8000-0000000000a1",
+      "currentStage": "RECEPTION",
+      "priority": "NORMAL",
+      "washingCycleId": null,
+      "resourceId": null,
+      "expectedCompletion": "2026-10-12T18:00:00.000Z"
+    },
+    {
+      "id": "0192a1c0-0000-7000-8000-000000000002",
+      "orderId": "0192a1b0-0000-7000-8000-0000000000a2",
+      "currentStage": "CLASSIFICATION",
+      "priority": "VIP",
+      "washingCycleId": null,
+      "resourceId": null,
+      "expectedCompletion": "2026-10-01T18:00:00.000Z"
+    },
+    {
+      "id": "0192a1c0-0000-7000-8000-000000000003",
+      "orderId": "0192a1b0-0000-7000-8000-0000000000a3",
+      "currentStage": "WASHING",
+      "priority": "NORMAL",
+      "washingCycleId": "0192a1d0-0000-7000-8000-000000000001",
+      "resourceId": "0192a1e0-0000-7000-8000-000000000001",
+      "expectedCompletion": "2026-10-12T20:00:00.000Z"
+    },
+    {
+      "id": "0192a1c0-0000-7000-8000-000000000004",
+      "orderId": "0192a1b0-0000-7000-8000-0000000000a4",
+      "currentStage": "READY",
+      "priority": "NORMAL",
+      "washingCycleId": "0192a1d0-0000-7000-8000-000000000002",
+      "resourceId": null,
+      "expectedCompletion": "2026-10-06T12:00:00.000Z"
+    }
+  ],
+  "washingCycles": [
+    {
+      "id": "0192a1d0-0000-7000-8000-000000000001",
+      "name": "Cotton 40°C",
+      "durationMinutes": 60,
+      "compatibleType": "cotton"
+    },
+    {
+      "id": "0192a1d0-0000-7000-8000-000000000002",
+      "name": "Delicates 30°C",
+      "durationMinutes": 45,
+      "compatibleType": "delicate"
+    },
+    {
+      "id": "0192a1d0-0000-7000-8000-000000000003",
+      "name": "Heavy duty 60°C",
+      "durationMinutes": 90,
+      "compatibleType": "denim"
+    }
+  ],
+  "laundryResources": [
+    {
+      "id": "0192a1e0-0000-7000-8000-000000000001",
+      "laundryId": "0192a1f0-0000-7000-8000-000000000001",
+      "name": "Washer 1",
+      "status": "BUSY",
+      "capacity": 10
+    },
+    {
+      "id": "0192a1e0-0000-7000-8000-000000000002",
+      "laundryId": "0192a1f0-0000-7000-8000-000000000001",
+      "name": "Washer 2",
+      "status": "AVAILABLE",
+      "capacity": 8
+    },
+    {
+      "id": "0192a1e0-0000-7000-8000-000000000003",
+      "laundryId": "0192a1f0-0000-7000-8000-000000000001",
+      "name": "Dryer 1",
+      "status": "AVAILABLE",
+      "capacity": 12
+    },
+    {
+      "id": "0192a1e0-0000-7000-8000-000000000004",
+      "laundryId": "0192a1f0-0000-7000-8000-000000000001",
+      "name": "Washer 3",
+      "status": "MAINTENANCE",
+      "capacity": 10
+    }
   ]
 }
