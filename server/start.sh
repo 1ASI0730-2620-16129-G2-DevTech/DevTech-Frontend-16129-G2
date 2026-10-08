@@ -1,1 +1,1 @@
-json-server --watch db.json --routes routes.json
+json-server --watch server/db.json --routes server/routes.json
