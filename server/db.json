@@ -55,45 +55,10 @@
   "users": [
     {
       "id": 1,
-      "username": "rosa.diaz",
+      "username": "developer",
       "email": "rosa.diaz@example.com",
-      "role": "customer"
-    },
-    {
-      "id": 2,
-      "username": "jorge.salas",
-      "email": "jorge.salas@example.com",
-      "role": "customer"
-    },
-    {
-      "id": 3,
-      "username": "ana.ruiz",
-      "email": "ana.ruiz@example.com",
-      "role": "customer"
-    },
-    {
-      "id": 4,
-      "username": "lucia.prado",
-      "email": "lucia.prado@example.com",
-      "role": "customer"
-    },
-    {
-      "id": 5,
-      "username": "carla.reyes",
-      "email": "carla.reyes@example.com",
-      "role": "shift-manager"
-    },
-    {
-      "id": 6,
-      "username": "katia.leon",
-      "email": "katia.leon@example.com",
-      "role": "staff"
-    },
-    {
-      "id": 7,
-      "username": "miguel.ramos",
-      "email": "miguel.ramos@example.com",
-      "role": "staff"
+      "role": "customer",
+      "password": "123456"
     }
   ],
   "operation-tasks": [
