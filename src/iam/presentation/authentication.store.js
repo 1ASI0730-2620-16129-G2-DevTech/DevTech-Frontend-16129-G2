@@ -1,13 +1,15 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { IdentityService } from "./identity-service.js";
+import { IdentityService } from "../application/identity-service.js";
 import { AuthenticationServiceImpl } from "../infrastructure/authentication-service-impl.js";
 import { UserRepositoryImpl } from "../infrastructure/user-repository-impl.js";
+import { AuthenticationController } from "./authentication-controller.js";
 
 const identityService = new IdentityService({
     userRepository: new UserRepositoryImpl(),
     authenticationService: new AuthenticationServiceImpl(),
 });
+const authenticationController = new AuthenticationController({ identityService });
 
 export const useAuthenticationStore = defineStore("authentication", () => {
     const user = ref(null);
@@ -18,7 +20,7 @@ export const useAuthenticationStore = defineStore("authentication", () => {
         loading.value = true;
         error.value = "";
         try {
-            user.value = await identityService.authenticate(email, password);
+            user.value = await authenticationController.signIn({ email, password });
             if (!user.value) {
                 error.value = "login.invalid-credentials";
                 return false;
@@ -36,7 +38,7 @@ export const useAuthenticationStore = defineStore("authentication", () => {
         loading.value = true;
         error.value = "";
         try {
-            await identityService.register({
+            await authenticationController.signUp({
                 username: username.trim(),
                 email: email.trim().toLowerCase(),
                 password,
@@ -52,5 +54,9 @@ export const useAuthenticationStore = defineStore("authentication", () => {
         }
     }
 
-    return { user, loading, error, signIn, register };
+    async function getUserById(id) {
+        return authenticationController.getUserById(id);
+    }
+
+    return { user, loading, error, signIn, register, getUserById };
 });
