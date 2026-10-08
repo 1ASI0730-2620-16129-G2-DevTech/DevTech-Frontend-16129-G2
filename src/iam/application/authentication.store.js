@@ -27,5 +27,26 @@ export const useAuthenticationStore = defineStore("authentication", () => {
         }
     }
 
-    return { user, loading, error, signIn };
+    async function register(username, email, password) {
+        loading.value = true;
+        error.value = "";
+        try {
+            await authenticationApi.register({
+                username: username.trim(),
+                email: email.trim().toLowerCase(),
+                password,
+                role: "customer",
+            });
+            return true;
+        } catch (requestError) {
+            error.value = requestError.message === "EMAIL_ALREADY_REGISTERED"
+                ? "register.email-already-registered"
+                : "register.connection-error";
+            return false;
+        } finally {
+            loading.value = false;
+        }
+    }
+
+    return { user, loading, error, signIn, register };
 });
