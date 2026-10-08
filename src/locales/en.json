@@ -1,69 +1,171 @@
-{ "menu": { "dashboard": "Dashboard", "groups": { "operations": "Operations", "monitoring": "Monitoring" }, "orders": "Orders", "customers": "Customers", "garments": "Garments", "services": "Services", "payments": "Payments", "deliveries": "Pickups & deliveries", "tracking": "Tracking", "iot": "IoT monitoring", "alerts": "Alerts", "logout": "Sign out", "open": "Open menu", "coming-soon": "Coming soon" },
-
-  "roles": { "customer": "Customer", "shift-manager": "Shift manager", "staff": "Staff", "owner": "Owner" },
-
-  "breadcrumb": { "home": "Home" },
-
-  "routes": { "trackings": "Tracking", "tracker": "Tracking detail", "deliveries": "Pickups & deliveries" },
-
-  "header": { "search": "Search customer order" },
-
-  "footer": { "copyright": "Copyright © 2026. WashTrack", "intro": "Made with", "use": "using", "author": "by the {brand} Developer Team" },
-
-  "errors": { "occurred": "An error occurred" },
-
-  "option": { "production": "Production" },
-
-  "tracking": { "stages": { "received": "Reception", "sorting": "Sorting", "washing": "Washing", "drying-ironing": "Drying/Ironing", "packaging": "Packaging", "ready": "Ready" }, "status": { "completed": "Completed", "current": "In progress", "pending": "Pending" }, "progress": "Stage {done} of {total}" },
-
-  "trackings": { "title": "Orders being tracked", "search": "Search by code (e.g. WT-001)", "estimated-delivery": "Estimated delivery", "view": "View tracking", "loading": "Loading orders...", "empty": "No orders found." },
-
-  "tracker": { "title": "Tracking of order {code}", "not-found": "No tracking was found for this order.", "progress": "Order progress", "history": "Status history", "no-history": "There are no recorded movements yet.", "details": "Order details", "order": "Order", "current-stage": "Current stage", "estimated-delivery": "Estimated delivery" },
-
-  "notifications": { "types": { "order-stage-changed": { "summary": "Order update", "detail": "Order {code}: {stage}." }, "order-on-the-way": { "summary": "Order on the way", "detail": "Your order {code} is on the way. Please have your ID at hand." }, "pickup-on-the-way": { "summary": "Pickup on the way", "detail": "The pickup driver for order {code} is already on the way." } } },
-
-  "deliveries": { "title": "Pickups & deliveries", "catalog-title": "Pickups & deliveries catalog ({count})", "schedule": "Schedule pickup or delivery",
-
-    "table": { "id": "ID", "type": "Type", "customer": "Customer", "address": "Address", "driver": "Driver", "status": "Status", "date-time": "Date and time" },
-
-    "types": { "delivery": "Delivery", "pickup": "Pickup" },
-
-    "status": { "completed": "Completed", "scheduled": "Scheduled", "cancelled": "Cancelled" },
-
-    "chart": { "title": "Pickups & deliveries - {range}" },
-
-    "ranges": { "last-hour": { "label": "Last hour", "title": "last hour" }, "24-hours": { "label": "24 hours", "title": "last 24 hours" }, "7-days": { "label": "7 days", "title": "last 7 days" }, "30-days": { "label": "30 days", "title": "last 30 days" } },
-
-    "tracking": { "title": "Delivery tracking {code}", "on-the-way": "On the way · arriving in ~{minutes} min", "updated": "Updated {minutes} min ago", "driver": "Driver", "call": "Call", "origin": "Branch",
-
-      "stages": { "confirmed": "Confirmed", "picked-up": "Picked up", "on-the-way": "On the way", "delivered": "Delivered" },
-
+{
+  "menu": {
+    "dashboard": "Dashboard",
+    "groups": {
+      "operations": "Operations",
+      "monitoring": "Monitoring"
+    },
+    "orders": "Orders",
+    "customers": "Customers",
+    "garments": "Garments",
+    "services": "Services",
+    "payments": "Payments",
+    "deliveries": "Pickups & deliveries",
+    "tracking": "Tracking",
+    "iot": "IoT monitoring",
+    "alerts": "Alerts",
+    "logout": "Sign out",
+    "open": "Open menu",
+    "coming-soon": "Coming soon"
+  },
+  "roles": {
+    "customer": "Customer",
+    "shift-manager": "Shift manager",
+    "staff": "Staff",
+    "owner": "Owner"
+  },
+  "breadcrumb": {
+    "home": "Home"
+  },
+  "routes": {
+    "trackings": "Tracking",
+    "tracker": "Tracking detail",
+    "deliveries": "Pickups & deliveries"
+  },
+  "header": {
+    "search": "Search customer order"
+  },
+  "footer": {
+    "copyright": "Copyright © 2026. WashTrack",
+    "intro": "Made with",
+    "use": "using",
+    "author": "by the {brand} Developer Team"
+  },
+  "errors": {
+    "occurred": "Errors occurred"
+  },
+  "tracking": {
+    "stages": {
+      "received": "Reception",
+      "sorting": "Sorting",
+      "washing": "Washing",
+      "drying-ironing": "Drying/Ironing",
+      "packaging": "Packaging",
+      "ready": "Ready"
+    },
+    "status": {
+      "completed": "Completed",
+      "current": "In progress",
+      "pending": "Pending"
+    },
+    "progress": "Stage {done} of {total}"
+  },
+  "trackings": {
+    "title": "Orders being tracked",
+    "search": "Search by code (e.g. WT-001)",
+    "estimated-delivery": "Estimated delivery",
+    "view": "View tracking",
+    "loading": "Loading orders...",
+    "empty": "No orders found."
+  },
+  "tracker": {
+    "title": "Tracking of order {code}",
+    "not-found": "No tracking was found for this order.",
+    "progress": "Order progress",
+    "history": "Status history",
+    "no-history": "There are no recorded movements yet.",
+    "details": "Order details",
+    "order": "Order",
+    "current-stage": "Current stage",
+    "estimated-delivery": "Estimated delivery"
+  },
+  "notifications": {
+    "types": {
+      "order-stage-changed": {
+        "summary": "Order update",
+        "detail": "Order {code}: {stage}."
+      },
+      "order-on-the-way": {
+        "summary": "Order on the way",
+        "detail": "Your order {code} is on the way. Please have your ID at hand."
+      },
+      "pickup-on-the-way": {
+        "summary": "Pickup on the way",
+        "detail": "The pickup driver for order {code} is already on the way."
+      }
+    }
+  },
+  "deliveries": {
+    "title": "Pickups & deliveries",
+    "catalog-title": "Pickups & deliveries catalog ({count})",
+    "schedule": "Schedule pickup or delivery",
+    "table": {
+      "id": "ID",
+      "type": "Type",
+      "customer": "Customer",
+      "address": "Address",
+      "driver": "Driver",
+      "status": "Status",
+      "date-time": "Date and time"
+    },
+    "types": {
+      "delivery": "Delivery",
+      "pickup": "Pickup"
+    },
+    "status": {
+      "completed": "Completed",
+      "scheduled": "Scheduled",
+      "cancelled": "Cancelled"
+    },
+    "chart": {
+      "title": "Pickups & deliveries - {range}"
+    },
+    "ranges": {
+      "last-hour": {
+        "label": "Last hour",
+        "title": "last hour"
+      },
+      "24-hours": {
+        "label": "24 hours",
+        "title": "last 24 hours"
+      },
+      "7-days": {
+        "label": "7 days",
+        "title": "last 7 days"
+      },
+      "30-days": {
+        "label": "30 days",
+        "title": "last 30 days"
+      }
+    },
+    "tracking": {
+      "title": "Delivery tracking {code}",
+      "on-the-way": "On the way · arriving in ~{minutes} min",
+      "updated": "Updated {minutes} min ago",
+      "driver": "Driver",
+      "call": "Call",
+      "origin": "Branch",
+      "stages": {
+        "confirmed": "Confirmed",
+        "picked-up": "Picked up",
+        "on-the-way": "On the way",
+        "delivered": "Delivered"
+      },
       "details": "Delivery details",
-
-      "fields": { "order": "Order", "customer": "Customer", "address": "Address", "service": "Service", "garments": "Garments" },
-
-      "map": { "zoom-in": "Zoom in", "zoom-out": "Zoom out", "my-location": "My location" } },
-
-    "empty": "No pickups or deliveries found.", "unassigned": "Unassigned" },
-
-  "laundry-operations": { "menu": { "production-board": "Production Board", "resources": "Resources", "washing-cycles": "Washing Cycles" },
-
-    "board": { "title": "Production Board", "receive": "Receive order", "order-id": "Order ID", "dismiss": "Dismiss" },
-
-    "stages": { "RECEPTION": "Reception", "CLASSIFICATION": "Classification", "WASHING": "Washing", "DRYING_IRONING": "Drying/Ironing", "PACKAGING": "Packaging", "READY": "Ready" },
-
-    "priority": { "NORMAL": "Normal", "VIP": "VIP" },
-
-    "card": { "expected": "Expected", "cycle": "Cycle", "resource": "Resource", "at-risk": "Delivery risk", "classify": "Classify", "assign": "Assign", "advance": "Advance" },
-
-    "assign": { "title": "Assign cycle and resource", "cycle": "Washing cycle", "resource": "Resource" },
-
-    "resources": { "title": "Laundry Resources", "name": "Name", "capacity": "Capacity", "status": "Status", "sync": "Sync with sensors" },
-
-    "resource-status": { "AVAILABLE": "Available", "BUSY": "Busy", "MAINTENANCE": "Maintenance" },
-
-    "cycles": { "title": "Washing Cycles", "name": "Name", "duration": "Duration (min)", "compatible-type": "Compatible garment type" },
-
-    "common": { "save": "Save", "cancel": "Cancel" },
-
-    "summary": { "pending": "Pending", "inProcess": "In process", "ready": "Ready for delivery", "vip": "VIP in progress", "atRisk": "At risk" } } }
+      "fields": {
+        "order": "Order",
+        "customer": "Customer",
+        "address": "Address",
+        "service": "Service",
+        "garments": "Garments"
+      },
+      "map": {
+        "zoom-in": "Zoom in",
+        "zoom-out": "Zoom out",
+        "my-location": "My location"
+      }
+    },
+    "empty": "No pickups or deliveries found.",
+    "unassigned": "Unassigned"
+  }
+}

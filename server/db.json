@@ -861,64 +861,6 @@
       "compatibleType": "denim"
     }
   ],
-  "laundryOrders": [
-    {
-      "id": "0192a1c0-0000-7000-8000-000000000001",
-      "orderId": "0192a1b0-0000-7000-8000-0000000000a1",
-      "currentStage": "RECEPTION",
-      "priority": "NORMAL",
-      "washingCycleId": null,
-      "resourceId": null,
-      "expectedCompletion": "2026-10-12T18:00:00.000Z"
-    },
-    {
-      "id": "0192a1c0-0000-7000-8000-000000000002",
-      "orderId": "0192a1b0-0000-7000-8000-0000000000a2",
-      "currentStage": "CLASSIFICATION",
-      "priority": "VIP",
-      "washingCycleId": null,
-      "resourceId": null,
-      "expectedCompletion": "2026-10-01T18:00:00.000Z"
-    },
-    {
-      "id": "0192a1c0-0000-7000-8000-000000000003",
-      "orderId": "0192a1b0-0000-7000-8000-0000000000a3",
-      "currentStage": "WASHING",
-      "priority": "NORMAL",
-      "washingCycleId": "0192a1d0-0000-7000-8000-000000000001",
-      "resourceId": "0192a1e0-0000-7000-8000-000000000001",
-      "expectedCompletion": "2026-10-12T20:00:00.000Z"
-    },
-    {
-      "id": "0192a1c0-0000-7000-8000-000000000004",
-      "orderId": "0192a1b0-0000-7000-8000-0000000000a4",
-      "currentStage": "READY",
-      "priority": "NORMAL",
-      "washingCycleId": "0192a1d0-0000-7000-8000-000000000002",
-      "resourceId": null,
-      "expectedCompletion": "2026-10-06T12:00:00.000Z"
-    }
-  ],
-  "washingCycles": [
-    {
-      "id": "0192a1d0-0000-7000-8000-000000000001",
-      "name": "Cotton 40\u00b0C",
-      "durationMinutes": 60,
-      "compatibleType": "cotton"
-    },
-    {
-      "id": "0192a1d0-0000-7000-8000-000000000002",
-      "name": "Delicates 30\u00b0C",
-      "durationMinutes": 45,
-      "compatibleType": "delicate"
-    },
-    {
-      "id": "0192a1d0-0000-7000-8000-000000000003",
-      "name": "Heavy duty 60\u00b0C",
-      "durationMinutes": 90,
-      "compatibleType": "denim"
-    }
-  ],
   "laundryResources": [
     {
       "id": "0192a1e0-0000-7000-8000-000000000001",
@@ -947,44 +889,6 @@
       "name": "Washer 3",
       "status": "MAINTENANCE",
       "capacity": 10
-    }
-  ],
-  "sensorData": [
-    {
-      "id": "1",
-      "deviceId": "0192a1e0-0000-7000-8000-000000000001",
-      "rawStatusCode": 1,
-      "humidity": 38,
-      "vibration": 22,
-      "electricCurrent": 4.2,
-      "timestamp": "2026-10-07T20:00:00.000Z"
-    },
-    {
-      "id": "2",
-      "deviceId": "0192a1e0-0000-7000-8000-000000000002",
-      "rawStatusCode": 0,
-      "humidity": 20,
-      "vibration": 0,
-      "electricCurrent": 0.1,
-      "timestamp": "2026-10-07T20:00:00.000Z"
-    },
-    {
-      "id": "3",
-      "deviceId": "0192a1e0-0000-7000-8000-000000000003",
-      "rawStatusCode": 0,
-      "humidity": 18,
-      "vibration": 0,
-      "electricCurrent": 0.1,
-      "timestamp": "2026-10-07T20:00:00.000Z"
-    },
-    {
-      "id": "4",
-      "deviceId": "0192a1e0-0000-7000-8000-000000000004",
-      "rawStatusCode": 2,
-      "humidity": 45,
-      "vibration": 31,
-      "electricCurrent": 6.8,
-      "timestamp": "2026-10-07T20:00:00.000Z"
     }
   ]
 }
