@@ -26,7 +26,7 @@ const groups = [
 ];
 
 // TODO: take the signed-in user from the IAM store once the IAM context exists.
-const currentUser = { name: 'Carla Reyes', role: 'shift-manager' };
+const currentUser = { name: 'Rosa Diaz', role: 'shift-manager' };
 
 // TODO: call the IAM store sign-out once the IAM context exists.
 const signOut = () => {};
