@@ -18,6 +18,19 @@
     "open": "Abrir menú",
     "coming-soon": "Próximamente"
   },
+  "login": {
+    "title": "Iniciar sesión",
+    "description": "Ingresa a tu cuenta de WashTrack.",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Ingresar",
+    "submitting": "Ingresando...",
+    "invalid-credentials": "El correo o la contraseña no son correctos.",
+    "connection-error": "No se pudo conectar con el servicio de autenticación.",
+    "demo-hint": "Credenciales de prueba:",
+    "demo-email": "Correo:",
+    "demo-password": "Contraseña:"
+  },
   "roles": {
     "customer": "Cliente",
     "shift-manager": "Encargada de turno",

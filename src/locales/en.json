@@ -18,6 +18,19 @@
     "open": "Open menu",
     "coming-soon": "Coming soon"
   },
+  "login": {
+    "title": "Sign in",
+    "description": "Sign in to your WashTrack account.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "invalid-credentials": "The email or password is incorrect.",
+    "connection-error": "Could not connect to the authentication service.",
+    "demo-hint": "Demo credentials:",
+    "demo-email": "Email:",
+    "demo-password": "Password:"
+  },
   "roles": {
     "customer": "Customer",
     "shift-manager": "Shift manager",
