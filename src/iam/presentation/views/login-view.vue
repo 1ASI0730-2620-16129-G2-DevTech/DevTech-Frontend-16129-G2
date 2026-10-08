@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useAuthenticationStore } from "@/iam/application/authentication.store.js";
 
 const { t } = useI18n();
+const route = useRoute();
 const router = useRouter();
 const authentication = useAuthenticationStore();
 const email = ref("");
@@ -23,6 +24,9 @@ async function submit() {
     <form class="login-card" @submit.prevent="submit">
       <h1>{{ t("login.title") }}</h1>
       <p>{{ t("login.description") }}</p>
+      <p v-if="route.query.registered" class="login-success" role="status">
+        {{ t("login.registration-success") }}
+      </p>
 
       <label for="email">{{ t("login.email") }}</label>
       <input
@@ -49,6 +53,11 @@ async function submit() {
       <button type="submit" :disabled="authentication.loading">
         {{ authentication.loading ? t("login.submitting") : t("login.submit") }}
       </button>
+
+      <p class="register-link">
+        {{ t("login.no-account") }}
+        <router-link to="/register">{{ t("login.register") }}</router-link>
+      </p>
 
       <small>{{ t("login.demo-hint") }}</small>
       <small><strong>{{ t("login.demo-email") }}</strong> rosa.diaz@example.com</small>
@@ -80,6 +89,15 @@ async function submit() {
 .login-card h1,
 .login-card p {
   margin: 0;
+}
+
+.register-link {
+  text-align: center;
+}
+
+.register-link a {
+  color: var(--wt-secondary);
+  font-weight: 600;
 }
 
 .login-card label {
@@ -114,6 +132,10 @@ async function submit() {
 
 .login-error {
   color: var(--wt-danger);
+}
+
+.login-success {
+  color: var(--wt-success);
 }
 
 .login-card small {
