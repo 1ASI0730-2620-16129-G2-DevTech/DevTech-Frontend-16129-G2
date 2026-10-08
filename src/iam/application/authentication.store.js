@@ -1,8 +1,13 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { AuthenticationApi } from "../infrastructure/authentication-api.js";
+import { IdentityService } from "./identity-service.js";
+import { AuthenticationServiceImpl } from "../infrastructure/authentication-service-impl.js";
+import { UserRepositoryImpl } from "../infrastructure/user-repository-impl.js";
 
-const authenticationApi = new AuthenticationApi();
+const identityService = new IdentityService({
+    userRepository: new UserRepositoryImpl(),
+    authenticationService: new AuthenticationServiceImpl(),
+});
 
 export const useAuthenticationStore = defineStore("authentication", () => {
     const user = ref(null);
@@ -13,7 +18,7 @@ export const useAuthenticationStore = defineStore("authentication", () => {
         loading.value = true;
         error.value = "";
         try {
-            user.value = await authenticationApi.authenticate(email, password);
+            user.value = await identityService.authenticate(email, password);
             if (!user.value) {
                 error.value = "login.invalid-credentials";
                 return false;
@@ -31,11 +36,10 @@ export const useAuthenticationStore = defineStore("authentication", () => {
         loading.value = true;
         error.value = "";
         try {
-            await authenticationApi.register({
+            await identityService.register({
                 username: username.trim(),
                 email: email.trim().toLowerCase(),
                 password,
-                role: "customer",
             });
             return true;
         } catch (requestError) {

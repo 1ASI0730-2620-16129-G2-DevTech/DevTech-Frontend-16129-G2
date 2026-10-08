@@ -14,20 +14,24 @@ export class AuthenticationApi extends BaseApi {
         this.#usersEndpoint = new BaseEndpoint(this, endpointPath);
     }
 
+    getUsers(params = {}) {
+        return this.#usersEndpoint.http.get(this.#usersEndpoint.endpointPath, { params });
+    }
+
     async authenticate(email, password) {
-        const response = await this.#usersEndpoint.http.get(this.#usersEndpoint.endpointPath, {
-            params: { email: email.trim().toLowerCase(), password },
+        const response = await this.getUsers({
+            email: email.trim().toLowerCase(),
+            password,
         });
         return response.data[0] ?? null;
     }
 
-    async register(user) {
-        const existingUsers = await this.#usersEndpoint.http.get(this.#usersEndpoint.endpointPath, {
-            params: { email: user.email },
-        });
-        if (existingUsers.data.length > 0) {
-            throw new Error("EMAIL_ALREADY_REGISTERED");
-        }
-        return this.#usersEndpoint.create(user);
+    async getByIamId(id) {
+        const response = await this.getUsers({ iamId: id });
+        return response.data[0] ?? null;
+    }
+
+    createUser(resource) {
+        return this.#usersEndpoint.create(resource);
     }
 }
