@@ -20,4 +20,14 @@ export class AuthenticationApi extends BaseApi {
         });
         return response.data[0] ?? null;
     }
+
+    async register(user) {
+        const existingUsers = await this.#usersEndpoint.http.get(this.#usersEndpoint.endpointPath, {
+            params: { email: user.email },
+        });
+        if (existingUsers.data.length > 0) {
+            throw new Error("EMAIL_ALREADY_REGISTERED");
+        }
+        return this.#usersEndpoint.create(user);
+    }
 }
