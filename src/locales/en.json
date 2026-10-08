@@ -44,6 +44,24 @@
   "errors": {
     "occurred": "Errors occurred"
   },
+  "payments": {
+    "title": "Payments",
+    "breadcrumb": "Home / Payments",
+    "catalog-title": "Payment catalog ({count})",
+    "table-title": "Customer payments",
+    "search": "Search by customer or order",
+    "summary": "Payment summary",
+    "results": "results",
+    "loading": "Loading payments...",
+    "error": "The payment catalog could not be loaded.",
+    "empty": "No payments match the search.",
+    "filters": {"all": "All", "paid": "Paid", "pending": "Pending", "cancelled": "Order cancelled"},
+    "status": {"paid": "Paid", "pending": "Pending", "cancelled": "Cancelled"},
+    "columns": {"id": "ID", "order": "Order", "customer": "Customer", "amount": "Amount", "method": "Method", "status": "Status", "date": "Date"},
+    "chart-title": "Most requested garments - last 24 hours",
+    "periods": {"hour": "Last hour", "day": "24 hours", "week": "7 days", "month": "30 days"},
+    "detail": {"title": "Payment details", "back": "Back to payments"}
+  },
   "tracking": {
     "stages": {
       "received": "Reception",
