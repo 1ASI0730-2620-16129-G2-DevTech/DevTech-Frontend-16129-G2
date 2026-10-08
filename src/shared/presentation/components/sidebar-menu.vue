@@ -15,7 +15,7 @@ const groups = [
       { label: 'menu.customers', to: null },
       { label: 'menu.garments', to: null },
       { label: 'menu.services', to: null },
-      { label: 'menu.payments', to: null },
+      { label: 'menu.payments', to: '/payments' },
       { label: 'menu.deliveries', to: '/pickups-deliveries/deliveries' },
       { label: 'menu.tracking', to: '/tracking-notifications/trackings' }
     ] },
