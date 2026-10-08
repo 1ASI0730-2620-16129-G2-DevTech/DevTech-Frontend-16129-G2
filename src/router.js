@@ -6,9 +6,23 @@ import pageNotFound from "@/shared/presentation/views/page-not-found.vue";
 import about from "@/shared/presentation/views/about.vue";
 import laundryOperationsRoutes from "@/laundry-operations/presentation/laundry-operations-routes.js";
 import Home from "@/shared/presentation/views/home.vue";
+import LoginView from "@/iam/presentation/views/login-view.vue";
+import RegisterView from "@/iam/presentation/views/register-view.vue";
 
 const routes =
     [
+        {
+            path: '/login',
+            name: 'login',
+            component: LoginView,
+            meta: { titleKey: 'login.title', hideLayout: true }
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: RegisterView,
+            meta: { titleKey: 'register.title', hideLayout: true }
+        },
         {
             path: '/home',
             name: 'home',
@@ -30,7 +44,7 @@ const routes =
         },
         {
             path: '/',
-            redirect: '/home'
+            redirect: '/login'
         },
         {
             path: '/:pageMatch(.*)*',
@@ -50,11 +64,6 @@ const routes =
             name: 'pickups-deliveries',
             children: pickupsDeliveriesRoutes
         },
-        {
-            path: '/',
-            redirect: '/tracking-notifications/trackings'
-        },
-
     ];
 
 const router = createRouter({

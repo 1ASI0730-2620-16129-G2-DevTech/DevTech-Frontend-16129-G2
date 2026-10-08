@@ -18,6 +18,37 @@
     "open": "Open menu",
     "coming-soon": "Coming soon"
   },
+  "login": {
+    "title": "Sign in",
+    "description": "Sign in to your WashTrack account.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "invalid-credentials": "The email or password is incorrect.",
+    "connection-error": "Could not connect to the authentication service.",
+    "registration-success": "Account created. You can now sign in.",
+    "no-account": "Don't have an account?",
+    "register": "Sign up",
+    "demo-hint": "Demo credentials:",
+    "demo-email": "Email:",
+    "demo-password": "Password:"
+  },
+  "register": {
+    "title": "Create account",
+    "description": "Enter your details to sign up for WashTrack.",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password (at least 6 characters)",
+    "confirm-password": "Confirm password",
+    "submit": "Create account",
+    "submitting": "Creating account...",
+    "passwords-do-not-match": "The passwords do not match.",
+    "email-already-registered": "An account with this email already exists.",
+    "connection-error": "Could not create your account. Please try again.",
+    "has-account": "Already have an account?",
+    "sign-in": "Sign in"
+  },
   "roles": {
     "customer": "Customer",
     "shift-manager": "Shift manager",

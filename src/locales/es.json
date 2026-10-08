@@ -18,6 +18,37 @@
     "open": "Abrir menú",
     "coming-soon": "Próximamente"
   },
+  "login": {
+    "title": "Iniciar sesión",
+    "description": "Ingresa a tu cuenta de WashTrack.",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Ingresar",
+    "submitting": "Ingresando...",
+    "invalid-credentials": "El correo o la contraseña no son correctos.",
+    "connection-error": "No se pudo conectar con el servicio de autenticación.",
+    "registration-success": "Cuenta creada. Ya puedes iniciar sesión.",
+    "no-account": "¿No tienes una cuenta?",
+    "register": "Regístrate",
+    "demo-hint": "Credenciales de prueba:",
+    "demo-email": "Correo:",
+    "demo-password": "Contraseña:"
+  },
+  "register": {
+    "title": "Crear cuenta",
+    "description": "Completa tus datos para registrarte en WashTrack.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña (mínimo 6 caracteres)",
+    "confirm-password": "Confirmar contraseña",
+    "submit": "Crear cuenta",
+    "submitting": "Creando cuenta...",
+    "passwords-do-not-match": "Las contraseñas no coinciden.",
+    "email-already-registered": "Ya existe una cuenta con ese correo.",
+    "connection-error": "No se pudo crear la cuenta. Inténtalo nuevamente.",
+    "has-account": "¿Ya tienes una cuenta?",
+    "sign-in": "Inicia sesión"
+  },
   "roles": {
     "customer": "Cliente",
     "shift-manager": "Encargada de turno",
