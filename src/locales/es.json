@@ -44,6 +44,24 @@
   "errors": {
     "occurred": "Ocurrieron errores"
   },
+  "payments": {
+    "title": "Pagos",
+    "breadcrumb": "Inicio / Pagos",
+    "catalog-title": "Catálogo de pagos ({count})",
+    "table-title": "Pagos de clientes",
+    "search": "Buscar por cliente u orden",
+    "summary": "Resumen de pagos",
+    "results": "resultados",
+    "loading": "Cargando pagos...",
+    "error": "No se pudo cargar el catálogo de pagos.",
+    "empty": "No hay pagos que coincidan con la búsqueda.",
+    "filters": {"all": "Todos", "paid": "Pagaron", "pending": "Falta pagar", "cancelled": "Orden cancelada"},
+    "status": {"paid": "Pagado", "pending": "Falta pagar", "cancelled": "Cancelado"},
+    "columns": {"id": "ID", "order": "Pedido", "customer": "Cliente", "amount": "Monto", "method": "Método", "status": "Estado", "date": "Fecha"},
+    "chart-title": "Prendas más solicitadas - últimas 24 horas",
+    "periods": {"hour": "Última hora", "day": "24 horas", "week": "7 días", "month": "30 días"},
+    "detail": {"title": "Detalle de pago", "back": "Volver a pagos"}
+  },
   "tracking": {
     "stages": {
       "received": "Recepción",
