@@ -1,0 +1,489 @@
+{
+  "menu": {
+    "dashboard": "Dashboard",
+    "groups": {
+      "operations": "Operations",
+      "monitoring": "Monitoring"
+    },
+    "orders": "Orders",
+    "customers": "Customers",
+    "laundry": "Laundry Operations",
+    "garments": "Garments",
+    "services": "Services",
+    "payments": "Payments",
+    "deliveries": "Pickups & deliveries",
+    "tracking": "Tracking",
+    "iot": "IoT monitoring",
+    "alerts": "Alerts",
+    "logout": "Sign out",
+    "open": "Open menu",
+    "coming-soon": "Coming soon"
+  },
+  "login": {
+    "title": "Sign in",
+    "description": "Sign in to your WashTrack account.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "invalid-credentials": "The email or password is incorrect.",
+    "connection-error": "Could not connect to the authentication service.",
+    "registration-success": "Account created. You can now sign in.",
+    "no-account": "Don't have an account?",
+    "register": "Sign up",
+    "demo-hint": "Demo credentials:",
+    "demo-email": "Email:",
+    "demo-password": "Password:"
+  },
+  "register": {
+    "title": "Create account",
+    "description": "Enter your details to sign up for WashTrack.",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password (at least 6 characters)",
+    "confirm-password": "Confirm password",
+    "submit": "Create account",
+    "submitting": "Creating account...",
+    "passwords-do-not-match": "The passwords do not match.",
+    "email-already-registered": "An account with this email already exists.",
+    "connection-error": "Could not create your account. Please try again.",
+    "has-account": "Already have an account?",
+    "sign-in": "Sign in"
+  },
+  "roles": {
+    "customer": "Customer",
+    "shift-manager": "Shift manager",
+    "staff": "Staff",
+    "owner": "Owner"
+  },
+  "breadcrumb": {
+    "home": "Home"
+  },
+  "routes": {
+    "trackings": "Tracking",
+    "tracker": "Tracking detail",
+    "deliveries": "Pickups & deliveries"
+  },
+  "header": {
+    "search": "Search customer order"
+  },
+  "footer": {
+    "copyright": "Copyright © 2026. WashTrack",
+    "intro": "Made with",
+    "use": "using",
+    "author": "by the {brand} Developer Team"
+  },
+  "errors": {
+    "occurred": "Errors occurred"
+  },
+  "tracking": {
+    "stages": {
+      "received": "Reception",
+      "sorting": "Sorting",
+      "washing": "Washing",
+      "drying-ironing": "Drying/Ironing",
+      "packaging": "Packaging",
+      "ready": "Ready"
+    },
+    "status": {
+      "completed": "Completed",
+      "current": "In progress",
+      "pending": "Pending"
+    },
+    "progress": "Stage {done} of {total}"
+  },
+  "trackings": {
+    "columns": {"order":"Order","stage":"Stage","progress":"Progress"},
+    "title": "Orders being tracked",
+    "search": "Search by code (e.g. WT-001)",
+    "estimated-delivery": "Estimated delivery",
+    "view": "View tracking",
+    "loading": "Loading orders...",
+    "empty": "No orders found."
+  },
+  "tracker": {
+    "back": "Back to tracking",
+    "map-alt": "Map of the courier route to the customer address",
+    "title": "Tracking of order {code}",
+    "not-found": "No tracking was found for this order.",
+    "progress": "Order progress",
+    "history": "Status history",
+    "no-history": "There are no recorded movements yet.",
+    "details": "Order details",
+    "order": "Order",
+    "current-stage": "Current stage",
+    "estimated-delivery": "Estimated delivery"
+  },
+  "notifications": {
+    "types": {
+      "order-stage-changed": {
+        "summary": "Order update",
+        "detail": "Order {code}: {stage}."
+      },
+      "order-on-the-way": {
+        "summary": "Order on the way",
+        "detail": "Your order {code} is on the way. Please have your ID at hand."
+      },
+      "pickup-on-the-way": {
+        "summary": "Pickup on the way",
+        "detail": "The pickup driver for order {code} is already on the way."
+      }
+    }
+  },
+  "laundry-operations": {
+    "menu": {
+      "production-board": "Production Board",
+      "resources": "Resources",
+      "washing-cycles": "Washing Cycles"
+    },
+    "board": {
+      "title": "Production Board",
+      "receive": "Receive order",
+      "order-id": "Order ID",
+      "dismiss": "Dismiss"
+    },
+    "stages": {
+      "RECEPTION": "Reception",
+      "CLASSIFICATION": "Classification",
+      "WASHING": "Washing",
+      "DRYING_IRONING": "Drying/Ironing",
+      "PACKAGING": "Packaging",
+      "READY": "Ready"
+    },
+    "priority": {
+      "NORMAL": "Normal",
+      "VIP": "VIP"
+    },
+    "card": {
+      "expected": "Expected",
+      "cycle": "Cycle",
+      "resource": "Resource",
+      "at-risk": "Delivery risk",
+      "classify": "Classify",
+      "assign": "Assign",
+      "advance": "Advance"
+    },
+    "assign": {
+      "title": "Assign cycle and resource",
+      "cycle": "Washing cycle",
+      "resource": "Resource"
+    },
+    "resources": {
+      "title": "Laundry Resources",
+      "name": "Name",
+      "capacity": "Capacity",
+      "status": "Status",
+      "sync": "Sync with sensors"
+    },
+    "resource-status": {
+      "AVAILABLE": "Available",
+      "BUSY": "Busy",
+      "MAINTENANCE": "Maintenance"
+    },
+    "cycles": {
+      "title": "Washing Cycles",
+      "name": "Name",
+      "duration": "Duration (min)",
+      "compatible-type": "Compatible garment type"
+    },
+    "common": {
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "summary": {
+      "pending": "Pending",
+      "inProcess": "In process",
+      "ready": "Ready for delivery",
+      "vip": "VIP in progress",
+      "atRisk": "At risk"
+    }
+  },
+  "orders": {
+    "title": "Orders",
+    "catalog-title": "All orders ({count})",
+    "new": "New order",
+    "loading": "Loading orders...",
+    "empty": "There are no orders yet.",
+    "error": "The operation could not be completed",
+    "advance": "Move to {status}",
+    "columns": {
+      "id": "ID",
+      "customer": "Customer",
+      "reception": "Received",
+      "estimated-delivery": "Est. delivery",
+      "garments": "Garments",
+      "service": "Service",
+      "status": "Status",
+      "payment": "Payment",
+      "delivery": "Delivery"
+    },
+    "delivery": {
+      "PICKUP": "Store",
+      "DELIVERY": "Home"
+    },
+    "service": {
+      "WASHING": "Washing",
+      "WASHING_DRYING": "Washing + Drying",
+      "WASHING_IRONING": "Washing + Ironing",
+      "IRONING": "Ironing",
+      "DRYING": "Drying",
+      "DRY_CLEANING": "Dry cleaning"
+    },
+    "status": {
+      "CREATED": "Created",
+      "RECEIVED": "Received",
+      "CLASSIFIED": "Classified",
+      "IN_PROCESS": "In process",
+      "READY": "Ready for delivery",
+      "DELIVERED": "Delivered"
+    },
+    "payment-method": {
+      "yape": "Yape",
+      "card": "Card",
+      "cash": "Cash"
+    },
+    "form": {
+      "title": "New Order",
+      "customer": "Customer",
+      "customer-placeholder": "Search by name or document",
+      "customer-required": "Pick a customer from the list.",
+      "document": "ID",
+      "reception-date": "Reception date",
+      "delivery-date": "Delivery date",
+      "dates-invalid": "Delivery cannot be before reception.",
+      "service": "Service",
+      "garments": "Garments",
+      "order-status": "Status",
+      "payment-status": "Payment status",
+      "delivery-method": "Delivery type",
+      "payment-method": "Payment method",
+      "delivery": {
+        "PICKUP": "Store pickup",
+        "DELIVERY": "Home delivery"
+      },
+      "cancel": "Cancel",
+      "save": "Save",
+      "default-garment": "Assorted garments",
+      "payment-error": "The order was saved, but its payment could not be registered."
+    },
+    "detail": {
+      "title": "Garments of order {code}",
+      "garment": "Garment",
+      "quantity": "Quantity",
+      "care": "Care",
+      "no-items": "The order has no garments yet."
+    }
+  },
+  "payments": {
+    "title": "Payments",
+    "breadcrumb": "Home / Payments",
+    "catalog-title": "Payment catalog ({count})",
+    "table-title": "Customer payments",
+    "search": "Search by customer or order",
+    "summary": "Payment summary",
+    "results": "results",
+    "loading": "Loading payments...",
+    "error": "The payment catalog could not be loaded.",
+    "empty": "No payments match the search.",
+    "filters": {"all": "All", "paid": "Paid", "pending": "Pending", "cancelled": "Order cancelled"},
+    "status": {"paid": "Paid", "pending": "Pending", "cancelled": "Cancelled"},
+    "columns": {"id": "ID", "order": "Order", "customer": "Customer", "amount": "Amount", "method": "Method", "status": "Status", "date": "Date"},
+    "chart-title": "Most requested garments - last 24 hours",
+    "periods": {"hour": "Last hour", "day": "24 hours", "week": "7 days", "month": "30 days"},
+    "detail": {"title": "Payment details", "back": "Back to payments"}
+  },
+  "deliveries": {
+    "title": "Pickups & deliveries",
+    "catalog-title": "Pickups & deliveries catalog ({count})",
+    "schedule": "Schedule pickup or delivery",
+    "table": {
+      "id": "ID",
+      "type": "Type",
+      "customer": "Customer",
+      "address": "Address",
+      "driver": "Driver",
+      "status": "Status",
+      "date-time": "Date and time"
+    },
+    "types": {
+      "delivery": "Delivery",
+      "pickup": "Pickup"
+    },
+    "status": {
+      "completed": "Completed",
+      "scheduled": "Scheduled",
+      "cancelled": "Cancelled"
+    },
+    "chart": {
+      "title": "Pickups & deliveries - {range}"
+    },
+    "ranges": {
+      "last-hour": {
+        "label": "Last hour",
+        "title": "last hour"
+      },
+      "24-hours": {
+        "label": "24 hours",
+        "title": "last 24 hours"
+      },
+      "7-days": {
+        "label": "7 days",
+        "title": "last 7 days"
+      },
+      "30-days": {
+        "label": "30 days",
+        "title": "last 30 days"
+      }
+    },
+    "tracking": {
+      "title": "Delivery tracking {code}",
+      "on-the-way": "On the way · arriving in ~{minutes} min",
+      "updated": "Updated {minutes} min ago",
+      "driver": "Driver",
+      "call": "Call",
+      "origin": "Branch",
+      "stages": {
+        "confirmed": "Confirmed",
+        "picked-up": "Picked up",
+        "on-the-way": "On the way",
+        "delivered": "Delivered"
+      },
+      "details": "Delivery details",
+      "fields": {
+        "order": "Order",
+        "customer": "Customer",
+        "address": "Address",
+        "service": "Service",
+        "garments": "Garments"
+      },
+      "map": {
+        "zoom-in": "Zoom in",
+        "zoom-out": "Zoom out",
+        "my-location": "My location"
+      }
+    },
+    "empty": "No pickups or deliveries found.",
+    "unassigned": "Unassigned"
+  },
+  "customers": {
+    "title": "Customers",
+    "catalog-title": "All customers ({count})",
+    "new": "Add New Customer",
+    "loading": "Loading customers...",
+    "empty": "No customers registered.",
+    "error": "Customers could not be loaded",
+    "columns": {
+      "id": "ID",
+      "customer": "CUSTOMER",
+      "phone": "Phone",
+      "document-type": "Document Type",
+      "document": "Document"
+    },
+    "form": {
+      "title": "New customer",
+      "full-name": "Full name",
+      "full-name-required": "Enter the customer name.",
+      "phone": "Phone",
+      "phone-invalid": "The phone must have 9 digits.",
+      "document-type": "Document type",
+      "document": "Document number",
+      "document-invalid": "The {type} must have {length} digits.",
+      "address": "Address",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
+  "catalog": {
+    "loading": "Loading catalog...",
+    "error": "The catalog could not be loaded",
+    "columns": {
+      "id": "ID",
+      "category": "Category",
+      "base-price": "Base Price",
+      "estimated-time": "Estimated Time",
+      "status": "Status"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "periods": {
+      "hour": "Last hour",
+      "day": "24 hours",
+      "week": "7 days",
+      "month": "30 days"
+    },
+    "period-titles": {
+      "hour": "last hour",
+      "day": "last 24 hours",
+      "week": "last 7 days",
+      "month": "last 30 days"
+    },
+    "chart-top": "{name}: {total} requests",
+    "chart-empty": "No requests in this period.",
+    "form": {
+      "name": "Name",
+      "category": "Category",
+      "base-price": "Base price",
+      "estimated-hours": "Estimated time",
+      "status": "Status",
+      "name-required": "Enter the name.",
+      "category-required": "Choose or type a category.",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
+  "services": {
+    "title": "Services",
+    "catalog-title": "Service Catalog ({count})",
+    "new": "Add Service",
+    "name-column": "Service",
+    "empty": "No services registered.",
+    "chart-title": "Most requested service - {period}",
+    "form-title": "New service"
+  },
+  "garments": {
+    "title": "Garments",
+    "catalog-title": "Garment Catalog ({count})",
+    "new": "Add Garment",
+    "name-column": "Garment",
+    "empty": "No garments registered.",
+    "chart-title": "Most requested garment - {period}",
+    "form-title": "New garment"
+  },
+  "board-search": {
+    "placeholder": "Search order, customer…",
+    "no-results": "No results for \"{query}\"."
+  },
+  "dashboard": {
+    "error": "The dashboard could not be loaded",
+    "kpis": {
+      "orders": "Orders of the day",
+      "in-process": "In process",
+      "ready": "Ready for delivery",
+      "pending": "Pending",
+      "revenue-today": "Revenue today",
+      "customers": "Registered customers"
+    },
+    "machines": {
+      "title": "Machine status",
+      "normal": "Normal",
+      "warning": "Warning",
+      "review": "Review",
+      "offline": "Offline"
+    },
+    "alerts": {
+      "title": "Recent alerts",
+      "maintenance": "Review recommended",
+      "maintenance-detail": "{name} · under maintenance",
+      "empty": "No recent alerts."
+    },
+    "charts": {
+      "orders-per-day": "Orders per day",
+      "revenue": "Revenue",
+      "top-services": "Most requested services",
+      "status-distribution": "Status distribution",
+      "empty": "No data yet."
+    }
+  }
+}

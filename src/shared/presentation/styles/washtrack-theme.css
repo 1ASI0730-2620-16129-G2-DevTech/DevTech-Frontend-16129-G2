@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+/* WashTrack design tokens (see report, section 4.1.1 Style Guidelines) */
+:root {
+    --wt-primary: #123B7A;
+    --wt-primary-dark: #0B192C;
+    --wt-secondary: #087FEA;
+    --wt-secondary-light: #22B8F0;
+    --wt-surface: #EAF8FF;
+    --wt-white: #FFFFFF;
+    --wt-success: #1A8A5F;
+    --wt-danger: #C2452F;
+    --wt-warning: #D97706;
+    --wt-border: #DCE9F5;
+    --wt-font-body: 'Poppins', sans-serif;
+    --wt-font-title: 'Playfair Display', serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    font-family: var(--wt-font-body);
+    color: var(--wt-primary-dark);
+    background: var(--wt-white);
+}
+
+h1, h2, h3 {
+    font-family: var(--wt-font-title);
+    color: var(--wt-primary);
+    line-height: 1.2;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
