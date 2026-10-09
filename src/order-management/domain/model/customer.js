@@ -1,5 +1,12 @@
 import { ValidationError } from "../../../shared/domain/model/errors.js";
-import { validateUuid } from "../../../shared/domain/model/uuid.js";
+
+/**
+ * @param {*} value
+ * @returns {boolean} True when value is a customer code such as CL001.
+ */
+export function isValidCustomerId(value) {
+    return typeof value === "string" && /^CL\d{3,}$/.test(value);
+}
 
 /**
  * Customer as seen by the Order Management context: just enough to
@@ -12,13 +19,13 @@ export class Customer {
 
     /**
      * @param {Object} params
-     * @param {string} params.id - UUID.
+     * @param {string} params.id - Customer code, e.g. CL001.
      * @param {string} params.fullName
      * @param {string} [params.documentNumber]
      */
     constructor({ id, fullName, documentNumber = "" }) {
-        if (!validateUuid(id)) {
-            throw new ValidationError("Customer id must be a valid UUID");
+        if (!isValidCustomerId(id)) {
+            throw new ValidationError("Customer id must follow the CL000 format");
         }
         if (typeof fullName !== "string" || fullName.trim() === "") {
             throw new ValidationError("Customer full name must not be empty");

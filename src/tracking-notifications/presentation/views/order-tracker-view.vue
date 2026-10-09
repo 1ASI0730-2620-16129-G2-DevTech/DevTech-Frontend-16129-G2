@@ -29,49 +29,94 @@ const navigateBack = () => {
 </script>
 
 <template>
-  <div class="p-4">
+  <section class="wt-board">
     <div class="flex align-items-center gap-2 mb-3">
-      <pv-button icon="pi pi-arrow-left" text rounded @click="navigateBack" />
-      <h1 class="m-0">{{ t('tracker.title', { code: formatOrderCode(orderId) }) }}</h1>
+      <pv-button icon="pi pi-arrow-left" text rounded :aria-label="t('tracker.back')" @click="navigateBack" />
+      <h1 class="m-0 tracker-title">{{ t('tracker.title', { code: formatOrderCode(orderId) }) }}</h1>
     </div>
 
     <p v-if="!tracking">{{ t('tracker.not-found') }}</p>
 
-    <div v-else class="grid">
-      <div class="col-12 lg:col-7">
+    <div v-else class="tracker-layout">
+      <figure class="tracker-map">
+        <img src="/Seguimiento.png" :alt="t('tracker.map-alt')" />
+      </figure>
+
+      <div class="tracker-cards">
         <section class="tracker-card">
           <h2>{{ t('tracker.progress') }}</h2>
           <stage-stepper :current-stage="tracking.currentStage" />
         </section>
-        <section class="tracker-card mt-3">
-          <h2>{{ t('tracker.history') }}</h2>
-          <tracking-history :history="tracking.history" />
-        </section>
-      </div>
-      <div class="col-12 lg:col-5">
         <section class="tracker-card">
           <h2>{{ t('tracker.details') }}</h2>
           <tracking-summary :tracking="tracking" />
         </section>
+        <section class="tracker-card">
+          <h2>{{ t('tracker.history') }}</h2>
+          <tracking-history :history="tracking.history" />
+        </section>
       </div>
     </div>
 
-    <div v-if="store.errors.length" class="text-red-500 mt-3">
+    <div v-if="store.errors.length" class="wt-board-error mt-3">
       {{ t('errors.occurred') }}: {{ store.errors.map(e => e.message).join(', ') }}
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
+.tracker-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.tracker-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 1.5rem;
+}
+
+.tracker-cards {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+/* Cards as in the visual reference: white, dark thin border, very rounded. */
 .tracker-card {
-  border: 1px solid #1a2f5a;
-  border-radius: 1rem;
   padding: 1rem 1.25rem;
+  border: 1px solid #1a2f5a;
+  border-radius: 1.1rem;
+  background: #fff;
 }
 
 .tracker-card h2 {
-  margin-top: 0;
-  font-size: 1.1rem;
-  color: #1a2f5a;
+  margin: 0 0 .75rem;
+  font-size: 1.05rem;
+  color: #123b7a;
+}
+
+.tracker-map {
+  position: sticky;
+  top: 1rem;
+  margin: 0;
+}
+
+.tracker-map img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}
+
+@media (max-width: 960px) {
+  .tracker-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tracker-map {
+    position: static;
+  }
 }
 </style>

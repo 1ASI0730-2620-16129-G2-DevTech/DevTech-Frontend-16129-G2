@@ -7,6 +7,8 @@ import {usePaymentsStore} from "@/payments/application/payments.store.js";
 import {ORDER_STATUS_SEQUENCE, OrderStatus} from "../../domain/model/order-status.js";
 import {CURRENT_LAUNDRY_ID} from "../current-laundry.js";
 import OrderCreateDialog from "../components/order-create-dialog.vue";
+import {mergeSort} from "@/shared/domain/model/merge-sort.js";
+import {searchItems, useBoardSearch} from "@/shared/presentation/board-search.js";
 
 const {t} = useI18n();
 const orderStore = useOrderStore();
@@ -24,7 +26,12 @@ const customerNames = computed(() =>
 const paymentsByOrder = computed(() =>
     new Map(payments.value.map((payment) => [String(payment.orderId), payment])));
 const sortedOrders = computed(() =>
-    [...orders.value].sort((a, b) => b.createdAt - a.createdAt));
+    mergeSort(orders.value, (a, b) => b.createdAt - a.createdAt));
+const {query} = useBoardSearch();
+const visibleOrders = computed(() => searchItems(sortedOrders.value, (order) => [
+  orderCode(order), customerName(order), t(`orders.service.${order.serviceType}`),
+  t(`orders.status.${order.status}`), paymentLabel(order), t(`orders.delivery.${order.deliveryMethod}`)
+], query.value));
 const selectedOrder = computed(() =>
     orders.value.find((order) => order.id === selectedOrderId.value) ?? null);
 
@@ -35,6 +42,16 @@ function canAdvance(order) {
   if (!nextStatus(order)) return false;
   return !(order.status === OrderStatus.CREATED && order.items.length === 0);
 }
+/** Badge color of each order status (same badge design on every board). */
+const STATUS_SEVERITY = {
+  [OrderStatus.CREATED]: "secondary",
+  [OrderStatus.RECEIVED]: "contrast",
+  [OrderStatus.CLASSIFIED]: "warn",
+  [OrderStatus.IN_PROCESS]: "info",
+  [OrderStatus.READY]: "success",
+  [OrderStatus.DELIVERED]: "success"
+};
+function statusSeverity(status) { return STATUS_SEVERITY[status] ?? "secondary"; }
 function orderCode(order) { return `#${order.id.slice(0, 6).toUpperCase()}`; }
 function customerName(order) { return customerNames.value.get(order.customerId) ?? "—"; }
 function paymentLabel(order) {
@@ -113,6 +130,7 @@ onMounted(() => {
     <div class="catalog-panel">
       <div v-if="loading && !orders.length" class="empty-state">{{ t('orders.loading') }}</div>
       <div v-else-if="!orders.length" class="empty-state">{{ t('orders.empty') }}</div>
+      <div v-else-if="!visibleOrders.length" class="empty-state">{{ t('board-search.no-results', {query}) }}</div>
       <div v-else class="table-wrapper">
         <table>
           <thead>
@@ -129,7 +147,7 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="order in sortedOrders" :key="order.id" class="order-row"
+            <tr v-for="order in visibleOrders" :key="order.id" class="order-row"
                 :class="{selected: order.id === selectedOrderId}" tabindex="0"
                 @click="selectedOrderId = order.id" @keydown.enter="selectedOrderId = order.id">
               <td class="order-id">{{ orderCode(order) }}</td>
@@ -139,9 +157,7 @@ onMounted(() => {
               <td>{{ order.garmentCount }}</td>
               <td>{{ t(`orders.service.${order.serviceType}`) }}</td>
               <td>
-                <span class="status" :class="`status-${order.status}`">
-                  <span class="status-dot" aria-hidden="true"></span>{{ t(`orders.status.${order.status}`) }}
-                </span>
+                <pv-tag :value="t(`orders.status.${order.status}`)" :severity="statusSeverity(order.status)"/>
               </td>
               <td>{{ paymentLabel(order) }}</td>
               <td>{{ t(`orders.delivery.${order.deliveryMethod}`) }}</td>
@@ -196,13 +212,6 @@ td { padding: 1.1rem 1.25rem; border-bottom: 1px solid #e8eef6; color: #1b2f55; 
 .order-row { cursor: pointer; }
 .order-row:hover, .order-row.selected { background: #f8fbfe; }
 .order-id { font-weight: 700; color: #123b7a; }
-.status { display: inline-flex; align-items: center; gap: .4rem; min-width: 8rem; padding: .25rem .6rem;
-  border-radius: 1rem; background: #f5f9fd; color: #123b7a; font-size: .68rem; font-weight: 600; }
-.status-dot { width: .4rem; height: .4rem; border-radius: 50%; background: #72819b; }
-.status-RECEIVED .status-dot { background: #123b7a; }
-.status-CLASSIFIED .status-dot { background: #f59e0b; }
-.status-IN_PROCESS .status-dot { background: #087fea; }
-.status-READY .status-dot, .status-DELIVERED .status-dot { background: #16a34a; }
 .order-detail { margin-top: 1.5rem; padding: 1rem 1.25rem; }
 .order-detail table { min-width: 0; }
 .order-detail th, .order-detail td { padding: .7rem 1rem; }

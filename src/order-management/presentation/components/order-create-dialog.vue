@@ -92,7 +92,7 @@ function save() {
 </script>
 
 <template>
-  <pv-dialog :visible="visible" modal :closable="false" :draggable="false" class="order-dialog"
+  <pv-dialog :visible="visible" modal :closable="false" :draggable="false" class="order-dialog wt-dialog"
              :style="{width: '49rem'}" :breakpoints="{'960px': '90vw'}"
              @update:visible="emit('update:visible', $event)">
     <template #header>
@@ -172,9 +172,9 @@ function save() {
     </form>
 
     <template #footer>
-      <div class="dialog-footer">
-        <pv-button :label="t('orders.form.cancel')" class="cancel-button" outlined @click="close"/>
-        <pv-button :label="t('orders.form.save')" class="save-button" :loading="saving" @click="save"/>
+      <div class="wt-dialog-actions">
+        <pv-button :label="t('orders.form.cancel')" class="wt-cancel" @click="close"/>
+        <pv-button :label="t('orders.form.save')" class="wt-save" :loading="saving" @click="save"/>
       </div>
     </template>
   </pv-dialog>
@@ -198,10 +198,6 @@ function save() {
 .field-error, .form-error { color: #b42318; }
 .form-error { margin: 0; padding: .6rem .8rem; border-radius: .5rem; background: #fdecec; font-size: .8rem; }
 .order-dialog :deep(.p-dialog-content) { padding-bottom: 1.5rem; }
-.order-dialog :deep(.p-dialog-footer) { padding: 1.5rem 3rem 1.5rem 1.5rem; background: #e2e2e2; }
-.dialog-footer { display: flex; justify-content: flex-end; gap: 1rem; }
-.dialog-footer :deep(.p-button) { min-width: 9rem; border-radius: .75rem; font-weight: 600; }
-.cancel-button { color: #123b7a; border-color: #1f2937; }
 @media (max-width: 640px) {
   .order-form { grid-template-columns: 1fr; }
 }

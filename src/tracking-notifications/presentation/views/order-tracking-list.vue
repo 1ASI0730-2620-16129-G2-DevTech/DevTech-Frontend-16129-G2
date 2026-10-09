@@ -1,7 +1,8 @@
 <script setup>
 import {useI18n} from "vue-i18n";
 import {useRouter} from "vue-router";
-import {computed, onMounted, ref, toRefs} from "vue";
+import {computed, onMounted, toRefs} from "vue";
+import {searchItems, useBoardSearch} from "@/shared/presentation/board-search.js";
 import useTrackingNotificationStore from "../../application/tracking-notification.store.js";
 import {formatOrderCode} from "../tracking-helpers.js";
 import TrackingList from "../components/tracking-list.vue";
@@ -12,7 +13,7 @@ const store = useTrackingNotificationStore();
 const { trackings, trackingsLoaded, trackingsCount, errors } = toRefs(store);
 const { fetchTrackings } = store;
 
-const search = ref('');
+const { query } = useBoardSearch();
 
 onMounted(() => {
   if (!store.trackingsLoaded) {
@@ -20,14 +21,10 @@ onMounted(() => {
   }
 });
 
-/** Trackings whose order code matches the search text (e.g. "WT-001" or "1"). */
-const filteredTrackings = computed(() => {
-  const text = search.value.trim().toLowerCase().replace('#', '');
-  if (!text) return trackings.value;
-  return trackings.value.filter(tracking =>
-      formatOrderCode(tracking.orderId).toLowerCase().replace('#', '').includes(text) ||
-      String(tracking.orderId) === text);
-});
+/** Trackings matching the header search by order code (e.g. "WT-001" or "1") or stage. */
+const filteredTrackings = computed(() => searchItems(trackings.value, (tracking) => [
+  formatOrderCode(tracking.orderId), tracking.orderId, t(`tracking.stages.${tracking.currentStage}`)
+], query.value));
 
 /**
  * Navigate to the tracking detail of an order.
@@ -39,17 +36,15 @@ const navigateToTracker = (orderId) => {
 </script>
 
 <template>
-  <div class="p-4">
-    <h1>{{ t('trackings.title') }} ({{ trackingsCount }})</h1>
-    <pv-icon-field class="mb-4">
-      <pv-input-icon class="pi pi-search" />
-      <pv-input-text v-model="search" :placeholder="t('trackings.search')" />
-    </pv-icon-field>
+  <section class="wt-board">
+    <div class="wt-board-heading">
+      <h1>{{ t('trackings.title') }} ({{ trackingsCount }})</h1>
+    </div>
     <tracking-list :trackings="filteredTrackings" :loading="!trackingsLoaded" @view="navigateToTracker" />
-    <div v-if="errors.length" class="text-red-500 mt-3">
+    <div v-if="errors.length" class="wt-board-error mt-3">
       {{ t('errors.occurred') }}: {{ errors.map(e => e.message).join(', ') }}
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>

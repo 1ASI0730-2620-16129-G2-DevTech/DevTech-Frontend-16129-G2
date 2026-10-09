@@ -1,6 +1,7 @@
 import { AggregateRoot } from "../../../shared/domain/model/aggregate-root.js";
 import { NotFoundError, ValidationError } from "../../../shared/domain/model/errors.js";
 import { generateUuid, validateUuid } from "../../../shared/domain/model/uuid.js";
+import { isValidCustomerId } from "./customer.js";
 import { DeliveryMethod } from "./delivery-method.js";
 import { GarmentItem } from "./garment-item.js";
 import { ORDER_STATUS_SEQUENCE, OrderStatus } from "./order-status.js";
@@ -27,7 +28,7 @@ export class Order extends AggregateRoot {
      * existing order (e.g. when reading it from the API).
      * @param {Object} params
      * @param {string} [params.id] - UUID; generated when omitted.
-     * @param {string} params.customerId
+     * @param {string} params.customerId - Customer code, e.g. CL001.
      * @param {string} params.laundryId
      * @param {string} params.deliveryMethod - One of DeliveryMethod.
      * @param {string} params.serviceType - One of ServiceType.
@@ -50,8 +51,8 @@ export class Order extends AggregateRoot {
         items = [],
     }) {
         super(id);
-        if (!validateUuid(customerId)) {
-            throw new ValidationError("Order customerId must be a valid UUID");
+        if (!isValidCustomerId(customerId)) {
+            throw new ValidationError("Order customerId must follow the CL000 format");
         }
         if (!validateUuid(laundryId)) {
             throw new ValidationError("Order laundryId must be a valid UUID");

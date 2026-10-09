@@ -1,0 +1,182 @@
+/*
+ * Shared layout for the list boards (Pedidos, Clientes, Prendas, Servicios, Pagos,
+ * Recojos y entregas, Seguimiento) so every board has the same width, spacing and table.
+ * Reference: the orders table (referenciaVisual.png).
+ */
+.wt-board {
+    width: 100%;
+    padding: 1.5rem 2rem 3rem;
+    color: var(--wt-primary);
+}
+
+.wt-board-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.wt-board-heading h1 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.wt-board-heading .p-button {
+    border-radius: .5rem;
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.wt-board-panel {
+    width: 100%;
+    overflow-x: auto;
+    background: #fff;
+}
+
+.wt-board-table {
+    width: 100%;
+    min-width: 48rem;
+    border-collapse: collapse;
+    font-size: .75rem;
+}
+
+.wt-board-table thead tr {
+    background: #f5f9fd;
+}
+
+.wt-board-table th {
+    padding: 1.1rem 1.25rem;
+    text-align: left;
+    color: #72819b;
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.wt-board-table td {
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid #e8eef6;
+    color: #1b2f55;
+    white-space: nowrap;
+}
+
+.wt-board-table .wt-board-id {
+    font-weight: 700;
+    color: var(--wt-primary);
+}
+
+.wt-board-table th.wt-centered,
+.wt-board-table td.wt-centered {
+    text-align: center;
+}
+
+.wt-board-table tbody tr.wt-clickable {
+    cursor: pointer;
+}
+
+.wt-board-table tbody tr.wt-clickable:hover,
+.wt-board-table tbody tr.wt-clickable:focus {
+    background: #f8fbfe;
+    outline: none;
+}
+
+.wt-board-empty {
+    padding: 1.5rem;
+    text-align: center;
+    color: #72819b;
+    font-size: .75rem;
+}
+
+.wt-board-error {
+    margin-bottom: .7rem;
+    padding: .6rem .8rem;
+    border-radius: .5rem;
+    background: #fdecec;
+    color: #b42318;
+    font-size: .75rem;
+}
+
+@media (max-width: 700px) {
+    .wt-board {
+        padding: 1rem;
+    }
+}
+
+/* Same look for boards that use PrimeVue's DataTable (it keeps its paginator). */
+.wt-board-datatable .p-datatable-thead > tr > th {
+    padding: 1.1rem 1.25rem;
+    border: 0;
+    background: #f5f9fd;
+    color: #72819b;
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.wt-board-datatable .p-datatable-tbody > tr > td {
+    padding: 1.1rem 1.25rem;
+    border-width: 0 0 1px;
+    border-color: #e8eef6;
+    color: #1b2f55;
+    font-size: .75rem;
+    white-space: nowrap;
+}
+
+.wt-board-datatable .p-datatable-tbody > tr > td.wt-board-id {
+    font-weight: 700;
+    color: var(--wt-primary);
+}
+
+/*
+ * "Agregar nuevo" dialogs (Pedidos, Clientes, Prendas, Servicios), as in image.png:
+ * navy title and labels, gray footer band, outlined Cancelar and blue Guardar.
+ * Global because PrimeVue renders dialogs outside the component (teleport).
+ */
+.wt-dialog {
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.wt-dialog .p-dialog-footer {
+    padding: 1.5rem 3rem 1.5rem 1.5rem;
+    background: #e2e2e2;
+}
+
+.wt-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    width: 100%;
+}
+
+.wt-dialog-actions .p-button {
+    min-width: 9rem;
+    border: 1px solid var(--wt-primary-dark);
+    border-radius: .75rem;
+    font-weight: 600;
+}
+
+.wt-dialog-actions .p-button.wt-cancel,
+.wt-dialog-actions .p-button.wt-cancel:not(:disabled):hover {
+    background: var(--wt-white);
+    color: var(--wt-primary);
+}
+
+.wt-dialog-actions .p-button.wt-cancel:not(:disabled):hover {
+    background: var(--wt-surface);
+}
+
+.wt-dialog-actions .p-button.wt-save {
+    background: var(--wt-secondary);
+    color: var(--wt-white);
+}
+
+.wt-dialog-actions .p-button.wt-save:not(:disabled):hover {
+    background: #0768c4;
+}

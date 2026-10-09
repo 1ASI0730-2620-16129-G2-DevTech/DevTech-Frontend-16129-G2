@@ -16,7 +16,7 @@ const { notifications } = toRefs(store);
 const { fetchUnreadNotifications, markNotificationAsRead } = store;
 
 // TODO: replace with the authenticated user once the IAM context is available.
-const userId = 1;
+const userId = 'CL001';
 
 // Ids already shown, so a notification is never displayed twice even if marking it as read fails.
 const shownNotificationIds = new Set();

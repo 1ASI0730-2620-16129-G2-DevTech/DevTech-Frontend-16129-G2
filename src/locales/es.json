@@ -92,6 +92,7 @@
     "progress": "Etapa {done} de {total}"
   },
   "trackings": {
+    "columns": {"order":"Pedido","stage":"Etapa","progress":"Progreso"},
     "title": "Pedidos en seguimiento",
     "search": "Buscar por código (ej. WT-001)",
     "estimated-delivery": "Entrega estimada",
@@ -100,6 +101,8 @@
     "empty": "No se encontraron pedidos."
   },
   "tracker": {
+    "back": "Volver a seguimiento",
+    "map-alt": "Mapa del recorrido del repartidor hacia la dirección del cliente",
     "title": "Seguimiento del pedido {code}",
     "not-found": "No se encontró seguimiento para este pedido.",
     "progress": "Progreso del pedido",
@@ -360,5 +363,126 @@
     },
     "empty": "No se encontraron recojos ni entregas.",
     "unassigned": "Sin asignar"
+  },
+  "customers": {
+    "title": "Clientes",
+    "catalog-title": "Todos los clientes ({count})",
+    "new": "Agregar Nuevo Cliente",
+    "loading": "Cargando clientes...",
+    "empty": "No hay clientes registrados.",
+    "error": "No se pudieron cargar los clientes",
+    "columns": {
+      "id": "ID",
+      "customer": "CLIENTE",
+      "phone": "Teléfono",
+      "document-type": "Tipo de Documento",
+      "document": "Documento"
+    },
+    "form": {
+      "title": "Nuevo cliente",
+      "full-name": "Nombre completo",
+      "full-name-required": "Ingresa el nombre del cliente.",
+      "phone": "Teléfono",
+      "phone-invalid": "El teléfono debe tener 9 dígitos.",
+      "document-type": "Tipo de documento",
+      "document": "Número de documento",
+      "document-invalid": "El {type} debe tener {length} dígitos.",
+      "address": "Dirección",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    }
+  },
+  "catalog": {
+    "loading": "Cargando catálogo...",
+    "error": "No se pudo cargar el catálogo",
+    "columns": {
+      "id": "ID",
+      "category": "Categoría",
+      "base-price": "Precio Base",
+      "estimated-time": "Tiempo Estimado",
+      "status": "Estado"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "periods": {
+      "hour": "Última hora",
+      "day": "24 horas",
+      "week": "7 días",
+      "month": "30 días"
+    },
+    "period-titles": {
+      "hour": "última hora",
+      "day": "últimas 24 horas",
+      "week": "últimos 7 días",
+      "month": "últimos 30 días"
+    },
+    "chart-top": "{name}: {total} solicitudes",
+    "chart-empty": "No hubo solicitudes en este periodo.",
+    "form": {
+      "name": "Nombre",
+      "category": "Categoría",
+      "base-price": "Precio base",
+      "estimated-hours": "Tiempo estimado",
+      "status": "Estado",
+      "name-required": "Ingresa el nombre.",
+      "category-required": "Elige o escribe una categoría.",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    }
+  },
+  "services": {
+    "title": "Servicios",
+    "catalog-title": "Catálogo de Servicios ({count})",
+    "new": "Agregar Servicio",
+    "name-column": "Servicio",
+    "empty": "No hay servicios registrados.",
+    "chart-title": "Servicio más solicitado - {period}",
+    "form-title": "Nuevo servicio"
+  },
+  "garments": {
+    "title": "Prendas",
+    "catalog-title": "Catálogo de Prendas ({count})",
+    "new": "Agregar Prenda",
+    "name-column": "Prenda",
+    "empty": "No hay prendas registradas.",
+    "chart-title": "Prenda más solicitada - {period}",
+    "form-title": "Nueva prenda"
+  },
+  "board-search": {
+    "placeholder": "Buscar pedido, cliente…",
+    "no-results": "No hay resultados para \"{query}\"."
+  },
+  "dashboard": {
+    "error": "No se pudo cargar el dashboard",
+    "kpis": {
+      "orders": "Pedidos del día",
+      "in-process": "En proceso",
+      "ready": "Listos entrega",
+      "pending": "Pendientes",
+      "revenue-today": "Ingresos hoy",
+      "customers": "Clientes registrados"
+    },
+    "machines": {
+      "title": "Estado de las máquinas",
+      "normal": "Normal",
+      "warning": "Advertencia",
+      "review": "Revisión",
+      "offline": "Sin conexión"
+    },
+    "alerts": {
+      "title": "Alertas recientes",
+      "maintenance": "Revisión recomendada",
+      "maintenance-detail": "{name} · en mantenimiento",
+      "empty": "No hay alertas recientes."
+    },
+    "charts": {
+      "orders-per-day": "Pedidos por día",
+      "revenue": "Ingresos",
+      "top-services": "Servicios más solicitados",
+      "status-distribution": "Distribución de estados",
+      "empty": "Sin datos todavía."
+    }
   }
 }

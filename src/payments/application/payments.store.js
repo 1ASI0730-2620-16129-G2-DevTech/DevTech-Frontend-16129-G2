@@ -4,9 +4,17 @@ import {PaymentsApi} from "../infrastructure/payments-api.js";
 import {PaymentAssembler} from "../infrastructure/payment-assembler.js";
 import {PaymentStatus} from "../domain/model/payment-status.js";
 import {Payment} from "../domain/model/payment.js";
-import {generateUuid} from "@/shared/domain/model/uuid.js";
-
 const paymentsApi = new PaymentsApi();
+
+/** Next free payment code (PG015 after PG014), read from the API so it is right even before the list loads. */
+async function nextPaymentCode() {
+    const response = await paymentsApi.getPayments();
+    const highest = response.data
+        .map((resource) => /^PG(\d+)$/.exec(String(resource.id))?.[1])
+        .filter(Boolean)
+        .reduce((max, digits) => Math.max(max, Number(digits)), 0);
+    return `PG${String(highest + 1).padStart(3, "0")}`;
+}
 
 export const usePaymentsStore = defineStore("payments", () => {
     const payments = ref([]);
@@ -41,7 +49,7 @@ export const usePaymentsStore = defineStore("payments", () => {
         errors.value = [];
         try {
             const payment = new Payment({
-                id: generateUuid(),
+                id: await nextPaymentCode(),
                 orderId,
                 customerId,
                 customerName,
