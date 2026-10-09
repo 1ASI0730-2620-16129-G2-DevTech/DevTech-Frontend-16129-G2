@@ -40,6 +40,10 @@ function formatAmount(amount) {
 function paymentCode(payment) {
   return `#PG${String(payment.id).padStart(3, "0")}`;
 }
+function orderCode(orderId) {
+  const id = String(orderId);
+  return /^d+$/.test(id) ? `#${id.padStart(4, "0")}` : `#${id.slice(0, 6).toUpperCase()}`;
+}
 function openDetails(payment) {
   selectedPayment.value = payment;
 }
@@ -71,7 +75,7 @@ onMounted(() => store.fetchPayments());
             <tr v-for="payment in filteredPayments" :key="payment.id" class="payment-row"
                 tabindex="0" @dblclick="openDetails(payment)" @keydown.enter="openDetails(payment)">
               <td class="payment-id">{{ paymentCode(payment) }}</td>
-              <td>#{{ String(payment.orderId).padStart(4, '0') }}</td>
+              <td>{{ orderCode(payment.orderId) }}</td>
               <td class="customer-name">{{ payment.customerName }}</td>
               <td>{{ formatAmount(payment.amount) }}</td><td>{{ formatMethod(payment.paymentMethod) }}</td>
               <td><span class="status" :class="`status-${payment.status}`">{{ statusLabel(payment.status) }}</span></td>
@@ -125,7 +129,7 @@ onMounted(() => store.fetchPayments());
             <h2>{{ t('payments.detail.title') }}</h2>
             <dl>
               <div><dt>{{ t('payments.columns.id') }}</dt><dd>{{ paymentCode(selectedPayment) }}</dd></div>
-              <div><dt>{{ t('payments.columns.order') }}</dt><dd>#{{ String(selectedPayment.orderId).padStart(4, '0') }}</dd></div>
+              <div><dt>{{ t('payments.columns.order') }}</dt><dd>{{ orderCode(selectedPayment.orderId) }}</dd></div>
               <div><dt>{{ t('payments.columns.customer') }}</dt><dd>{{ selectedPayment.customerName }}</dd></div>
               <div><dt>{{ t('payments.columns.method') }}</dt><dd>{{ formatMethod(selectedPayment.paymentMethod) }}</dd></div>
               <div><dt>{{ t('payments.columns.date') }}</dt><dd>{{ formatDate(selectedPayment.orderDate) }}</dd></div>

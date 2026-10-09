@@ -29,6 +29,15 @@ export class OrderRepositoryImpl extends BaseRepository {
      * @param {string} customerId
      * @returns {Promise<import("../domain/model/order.js").Order[]>}
      */
+    async findAll() {
+        const response = await this.endpoint.getAll();
+        return response.data.map((resource) => this.assembler.toEntityFromResource(resource));
+    }
+
+    /**
+     * @param {string} customerId
+     * @returns {Promise<import("../domain/model/order.js").Order[]>}
+     */
     async findByCustomer(customerId) {
         const response = await this.endpoint.http.get(this.endpoint.endpointPath, {
             params: { customerId },

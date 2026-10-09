@@ -25,6 +25,8 @@ export class OrderAssembler {
             customerId: resource.customerId,
             laundryId: resource.laundryId,
             deliveryMethod: resource.deliveryMethod,
+            serviceType: resource.serviceType,
+            estimatedDeliveryDate: new Date(resource.estimatedDeliveryDate),
             specialCareInstructions: resource.specialCareInstructions,
             status: resource.status,
             createdAt: new Date(resource.createdAt),
@@ -43,6 +45,8 @@ export class OrderAssembler {
             laundryId: order.laundryId,
             status: order.status,
             deliveryMethod: order.deliveryMethod,
+            serviceType: order.serviceType,
+            estimatedDeliveryDate: order.estimatedDeliveryDate.toISOString(),
             specialCareInstructions: order.specialCareInstructions,
             createdAt: order.createdAt.toISOString(),
             items: order.items.map((item) => ({

@@ -3,6 +3,8 @@ import {defineStore} from "pinia";
 import {PaymentsApi} from "../infrastructure/payments-api.js";
 import {PaymentAssembler} from "../infrastructure/payment-assembler.js";
 import {PaymentStatus} from "../domain/model/payment-status.js";
+import {Payment} from "../domain/model/payment.js";
+import {generateUuid} from "@/shared/domain/model/uuid.js";
 
 const paymentsApi = new PaymentsApi();
 
@@ -30,5 +32,34 @@ export const usePaymentsStore = defineStore("payments", () => {
         }
     }
 
-    return {payments, loading, errors, summary, fetchPayments};
+    /**
+     * Registers the payment of an order. The amount starts at 0 until the
+     * laundry prices the order.
+     * @returns {Promise<Payment|null>}
+     */
+    async function createPayment({orderId, customerId, customerName, paymentMethod, status, orderDate, amount = 0}) {
+        errors.value = [];
+        try {
+            const payment = new Payment({
+                id: generateUuid(),
+                orderId,
+                customerId,
+                customerName,
+                amount,
+                paymentMethod,
+                status,
+                paidAt: status === PaymentStatus.PAID ? new Date() : null,
+                orderDate
+            });
+            const response = await paymentsApi.createPayment(PaymentAssembler.toResourceFromEntity(payment));
+            const created = PaymentAssembler.toEntityFromResource(response.data);
+            payments.value = [...payments.value, created];
+            return created;
+        } catch (error) {
+            errors.value.push(error);
+            return null;
+        }
+    }
+
+    return {payments, loading, errors, summary, fetchPayments, createPayment};
 });

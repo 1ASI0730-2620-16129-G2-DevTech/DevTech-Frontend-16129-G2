@@ -14,4 +14,8 @@ export class PaymentsApi extends BaseApi {
     getPayments() {
         return this.#paymentsEndpoint.getAll();
     }
+
+    createPayment(resource) {
+        return this.#paymentsEndpoint.create(resource);
+    }
 }

@@ -297,6 +297,72 @@
       "status": "paid",
       "paidAt": "2026-10-07T12:01:00-05:00",
       "orderDate": "2026-10-07T12:00:00-05:00"
+    },
+    {
+      "id": "d1000001-0000-4000-8000-000000000000",
+      "orderId": "5abe6b7d-b16f-4ecd-8fa6-6c7e8b9a0fb6",
+      "customerId": "3a9c4f5b-1f4d-4cab-8d84-4a5c6f7e8d01",
+      "customerName": "María Gómez",
+      "amount": 52,
+      "paymentMethod": "yape",
+      "status": "paid",
+      "paidAt": "2026-10-07T14:00:00.000Z",
+      "orderDate": "2026-10-07T14:00:00.000Z"
+    },
+    {
+      "id": "d1000002-0000-4000-8000-000000000000",
+      "orderId": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
+      "customerId": "1c7a2d3f-7d2b-4a8f-8b62-2e3a4d5c6b72",
+      "customerName": "Jorge Salas",
+      "amount": 25,
+      "paymentMethod": "card",
+      "status": "paid",
+      "paidAt": "2026-10-07T15:30:00.000Z",
+      "orderDate": "2026-10-07T15:30:00.000Z"
+    },
+    {
+      "id": "d1000003-0000-4000-8000-000000000000",
+      "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+      "customerId": "2d8b3e4a-8e3c-4b9a-9c73-3f4b5e6d7c83",
+      "customerName": "Ana Ruiz",
+      "amount": 96,
+      "paymentMethod": "yape",
+      "status": "pending",
+      "paidAt": null,
+      "orderDate": "2026-10-06T16:00:00.000Z"
+    },
+    {
+      "id": "d1000004-0000-4000-8000-000000000000",
+      "orderId": "8de19eaa-e49c-4bfa-9cd9-9fab1ecd3ce9",
+      "customerId": "4bad5a6c-205e-4dbc-9e95-5b6d7a8f9e02",
+      "customerName": "Luis Prado",
+      "amount": 15,
+      "paymentMethod": "cash",
+      "status": "paid",
+      "paidAt": "2026-10-06T13:15:00.000Z",
+      "orderDate": "2026-10-06T13:15:00.000Z"
+    },
+    {
+      "id": "d1000005-0000-4000-8000-000000000000",
+      "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+      "customerId": "0b6f1c2e-6c1a-4f7e-9a51-1d2f3c4b5a61",
+      "customerName": "Rosa Díaz",
+      "amount": 48,
+      "paymentMethod": "yape",
+      "status": "paid",
+      "paidAt": "2026-10-05T14:20:00.000Z",
+      "orderDate": "2026-10-05T14:20:00.000Z"
+    },
+    {
+      "id": "d1000006-0000-4000-8000-000000000000",
+      "orderId": "a0f3b0cc-06be-4dbc-9efb-b1cd3e0f5e0b",
+      "customerId": "5cbe6b7d-316f-4ecd-8fa6-6c7e8b9a0f03",
+      "customerName": "Kevin Ochoa",
+      "amount": 20,
+      "paymentMethod": "cash",
+      "status": "pending",
+      "paidAt": null,
+      "orderDate": "2026-10-05T17:45:00.000Z"
     }
   ],
   "subscription-plans": [
@@ -949,106 +1015,182 @@
   "customer-orders": [
     {
       "id": "5abe6b7d-b16f-4ecd-8fa6-6c7e8b9a0fb6",
-      "customerId": "0b6f1c2e-6c1a-4f7e-9a51-1d2f3c4b5a61",
+      "customerId": "3a9c4f5b-1f4d-4cab-8d84-4a5c6f7e8d01",
       "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
-      "status": "CREATED",
-      "deliveryMethod": "PICKUP",
-      "specialCareInstructions": "",
-      "createdAt": "2026-10-07T09:10:00.000Z",
-      "items": []
-    },
-    {
-      "id": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
-      "customerId": "0b6f1c2e-6c1a-4f7e-9a51-1d2f3c4b5a61",
-      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
-      "status": "RECEIVED",
+      "status": "IN_PROCESS",
       "deliveryMethod": "DELIVERY",
-      "specialCareInstructions": "Llamar antes de entregar",
-      "createdAt": "2026-10-06T14:30:00.000Z",
+      "serviceType": "WASHING_DRYING",
+      "estimatedDeliveryDate": "2026-10-08T22:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-07T14:00:00.000Z",
       "items": [
         {
           "id": "c3000001-0000-4000-8000-000000000000",
-          "orderId": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
+          "orderId": "5abe6b7d-b16f-4ecd-8fa6-6c7e8b9a0fb6",
           "type": "Camisa",
-          "quantity": 3,
-          "careInstructions": "Planchar sin almidón"
+          "quantity": 4,
+          "careInstructions": ""
         },
         {
           "id": "c3000002-0000-4000-8000-000000000000",
-          "orderId": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
+          "orderId": "5abe6b7d-b16f-4ecd-8fa6-6c7e8b9a0fb6",
           "type": "Pantalón",
-          "quantity": 2,
-          "careInstructions": ""
-        }
-      ]
-    },
-    {
-      "id": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
-      "customerId": "1c7a2d3f-7d2b-4a8f-8b62-2e3a4d5c6b72",
-      "laundryId": "4fad5a6c-a05e-4dbc-9e95-5b6d7a8f9ea5",
-      "status": "IN_PROCESS",
-      "deliveryMethod": "DELIVERY",
-      "specialCareInstructions": "",
-      "createdAt": "2026-10-05T11:00:00.000Z",
-      "items": [
-        {
-          "id": "c3000003-0000-4000-8000-000000000000",
-          "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
-          "type": "Edredón",
-          "quantity": 1,
-          "careInstructions": "Lavado en frío"
-        },
-        {
-          "id": "c3000004-0000-4000-8000-000000000000",
-          "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
-          "type": "Toalla",
           "quantity": 4,
           "careInstructions": ""
         }
       ]
     },
     {
-      "id": "8de19eaa-e49c-4bfa-9cd9-9fab1ecd3ce9",
+      "id": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
       "customerId": "1c7a2d3f-7d2b-4a8f-8b62-2e3a4d5c6b72",
-      "laundryId": "4fad5a6c-a05e-4dbc-9e95-5b6d7a8f9ea5",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
       "status": "READY",
       "deliveryMethod": "PICKUP",
+      "serviceType": "IRONING",
+      "estimatedDeliveryDate": "2026-10-07T23:00:00.000Z",
       "specialCareInstructions": "",
-      "createdAt": "2026-10-03T16:45:00.000Z",
+      "createdAt": "2026-10-07T15:30:00.000Z",
       "items": [
         {
-          "id": "c3000005-0000-4000-8000-000000000000",
-          "orderId": "8de19eaa-e49c-4bfa-9cd9-9fab1ecd3ce9",
+          "id": "c3000003-0000-4000-8000-000000000000",
+          "orderId": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
+          "type": "Camisa",
+          "quantity": 5,
+          "careInstructions": "Planchar sin almidón"
+        }
+      ]
+    },
+    {
+      "id": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+      "customerId": "2d8b3e4a-8e3c-4b9a-9c73-3f4b5e6d7c83",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "CLASSIFIED",
+      "deliveryMethod": "DELIVERY",
+      "serviceType": "DRY_CLEANING",
+      "estimatedDeliveryDate": "2026-10-08T22:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-06T16:00:00.000Z",
+      "items": [
+        {
+          "id": "c3000004-0000-4000-8000-000000000000",
+          "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
           "type": "Terno",
-          "quantity": 1,
+          "quantity": 2,
           "careInstructions": "Solo lavado en seco"
+        },
+        {
+          "id": "c3000005-0000-4000-8000-000000000000",
+          "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+          "type": "Vestido",
+          "quantity": 4,
+          "careInstructions": "Delicado"
+        },
+        {
+          "id": "c3000006-0000-4000-8000-000000000000",
+          "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+          "type": "Blusa",
+          "quantity": 6,
+          "careInstructions": ""
+        }
+      ]
+    },
+    {
+      "id": "8de19eaa-e49c-4bfa-9cd9-9fab1ecd3ce9",
+      "customerId": "4bad5a6c-205e-4dbc-9e95-5b6d7a8f9e02",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "DELIVERED",
+      "deliveryMethod": "PICKUP",
+      "serviceType": "WASHING",
+      "estimatedDeliveryDate": "2026-10-07T22:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-06T13:15:00.000Z",
+      "items": [
+        {
+          "id": "c3000007-0000-4000-8000-000000000000",
+          "orderId": "8de19eaa-e49c-4bfa-9cd9-9fab1ecd3ce9",
+          "type": "Polo",
+          "quantity": 3,
+          "careInstructions": ""
         }
       ]
     },
     {
       "id": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
-      "customerId": "2d8b3e4a-8e3c-4b9a-9c73-3f4b5e6d7c83",
+      "customerId": "0b6f1c2e-6c1a-4f7e-9a51-1d2f3c4b5a61",
       "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
-      "status": "DELIVERED",
+      "status": "RECEIVED",
       "deliveryMethod": "DELIVERY",
+      "serviceType": "WASHING_IRONING",
+      "estimatedDeliveryDate": "2026-10-07T22:00:00.000Z",
       "specialCareInstructions": "",
-      "createdAt": "2026-10-01T08:20:00.000Z",
+      "createdAt": "2026-10-05T14:20:00.000Z",
       "items": [
         {
-          "id": "c3000006-0000-4000-8000-000000000000",
+          "id": "c3000008-0000-4000-8000-000000000000",
           "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
-          "type": "Vestido",
-          "quantity": 2,
-          "careInstructions": "Delicado"
-        },
-        {
-          "id": "c3000007-0000-4000-8000-000000000000",
-          "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
-          "type": "Blusa",
+          "type": "Camisa",
           "quantity": 3,
           "careInstructions": ""
+        },
+        {
+          "id": "c3000009-0000-4000-8000-000000000000",
+          "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+          "type": "Pantalón",
+          "quantity": 2,
+          "careInstructions": ""
+        },
+        {
+          "id": "c3000010-0000-4000-8000-000000000000",
+          "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+          "type": "Edredón",
+          "quantity": 1,
+          "careInstructions": "Lavado en frío"
         }
       ]
+    },
+    {
+      "id": "a0f3b0cc-06be-4dbc-9efb-b1cd3e0f5e0b",
+      "customerId": "5cbe6b7d-316f-4ecd-8fa6-6c7e8b9a0f03",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "CREATED",
+      "deliveryMethod": "PICKUP",
+      "serviceType": "DRYING",
+      "estimatedDeliveryDate": "2026-10-06T22:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-05T17:45:00.000Z",
+      "items": []
+    }
+  ],
+  "order-customers": [
+    {
+      "id": "0b6f1c2e-6c1a-4f7e-9a51-1d2f3c4b5a61",
+      "fullName": "Rosa Díaz",
+      "documentNumber": "45127836"
+    },
+    {
+      "id": "1c7a2d3f-7d2b-4a8f-8b62-2e3a4d5c6b72",
+      "fullName": "Jorge Salas",
+      "documentNumber": "70214589"
+    },
+    {
+      "id": "2d8b3e4a-8e3c-4b9a-9c73-3f4b5e6d7c83",
+      "fullName": "Ana Ruiz",
+      "documentNumber": "46983012"
+    },
+    {
+      "id": "3a9c4f5b-1f4d-4cab-8d84-4a5c6f7e8d01",
+      "fullName": "María Gómez",
+      "documentNumber": "72430561"
+    },
+    {
+      "id": "4bad5a6c-205e-4dbc-9e95-5b6d7a8f9e02",
+      "fullName": "Luis Prado",
+      "documentNumber": "41875293"
+    },
+    {
+      "id": "5cbe6b7d-316f-4ecd-8fa6-6c7e8b9a0f03",
+      "fullName": "Kevin Ochoa",
+      "documentNumber": "75310984"
     }
   ]
 }

@@ -128,32 +128,71 @@
   },
   "orders": {
     "title": "Pedidos",
-    "catalog-title": "Pedidos del cliente ({count})",
-    "customer": "Cliente",
+    "catalog-title": "Todos los pedidos ({count})",
+    "new": "Nuevo pedido",
     "loading": "Cargando pedidos...",
-    "empty": "Este cliente no tiene pedidos.",
+    "empty": "Aún no hay pedidos registrados.",
     "error": "No se pudo completar la operación",
     "advance": "Pasar a {status}",
     "columns": {
-      "id": "Pedido",
-      "date": "Fecha",
-      "laundry": "Lavandería",
-      "delivery": "Entrega",
+      "id": "ID",
+      "customer": "Cliente",
+      "reception": "Recepción",
+      "estimated-delivery": "Entrega est.",
       "garments": "Prendas",
+      "service": "Servicio",
       "status": "Estado",
-      "actions": "Acciones"
+      "payment": "Pago",
+      "delivery": "Entrega"
     },
     "delivery": {
-      "PICKUP": "Recojo en tienda",
-      "DELIVERY": "Delivery"
+      "PICKUP": "Tienda",
+      "DELIVERY": "Domicilio"
+    },
+    "service": {
+      "WASHING": "Lavado",
+      "WASHING_DRYING": "Lavado + Secado",
+      "WASHING_IRONING": "Lavado + Planchado",
+      "IRONING": "Planchado",
+      "DRYING": "Secado",
+      "DRY_CLEANING": "Lavado en seco"
     },
     "status": {
       "CREATED": "Creado",
       "RECEIVED": "Recibido",
       "CLASSIFIED": "Clasificado",
       "IN_PROCESS": "En proceso",
-      "READY": "Listo",
+      "READY": "Listo entrega",
       "DELIVERED": "Entregado"
+    },
+    "payment-method": {
+      "yape": "Yape",
+      "card": "Tarjeta",
+      "cash": "Efectivo"
+    },
+    "form": {
+      "title": "Nuevo Pedido",
+      "customer": "Cliente",
+      "customer-placeholder": "Buscar por nombre o documento",
+      "customer-required": "Selecciona un cliente de la lista.",
+      "document": "DNI",
+      "reception-date": "Fecha de recepción",
+      "delivery-date": "Fecha de entrega",
+      "dates-invalid": "La entrega no puede ser antes de la recepción.",
+      "service": "Servicio",
+      "garments": "Prendas",
+      "order-status": "Estado",
+      "payment-status": "Estado de pago",
+      "delivery-method": "Tipo de entrega",
+      "payment-method": "Método de pago",
+      "delivery": {
+        "PICKUP": "Recoger en tienda",
+        "DELIVERY": "Delivery a domicilio"
+      },
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "default-garment": "Prendas varias",
+      "payment-error": "El pedido se guardó, pero no se pudo registrar su pago."
     },
     "detail": {
       "title": "Prendas del pedido {code}",

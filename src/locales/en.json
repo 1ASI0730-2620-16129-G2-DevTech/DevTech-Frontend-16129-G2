@@ -128,32 +128,71 @@
   },
   "orders": {
     "title": "Orders",
-    "catalog-title": "Customer orders ({count})",
-    "customer": "Customer",
+    "catalog-title": "All orders ({count})",
+    "new": "New order",
     "loading": "Loading orders...",
-    "empty": "This customer has no orders.",
+    "empty": "There are no orders yet.",
     "error": "The operation could not be completed",
     "advance": "Move to {status}",
     "columns": {
-      "id": "Order",
-      "date": "Date",
-      "laundry": "Laundry",
-      "delivery": "Delivery",
+      "id": "ID",
+      "customer": "Customer",
+      "reception": "Received",
+      "estimated-delivery": "Est. delivery",
       "garments": "Garments",
+      "service": "Service",
       "status": "Status",
-      "actions": "Actions"
+      "payment": "Payment",
+      "delivery": "Delivery"
     },
     "delivery": {
-      "PICKUP": "Store pickup",
-      "DELIVERY": "Delivery"
+      "PICKUP": "Store",
+      "DELIVERY": "Home"
+    },
+    "service": {
+      "WASHING": "Washing",
+      "WASHING_DRYING": "Washing + Drying",
+      "WASHING_IRONING": "Washing + Ironing",
+      "IRONING": "Ironing",
+      "DRYING": "Drying",
+      "DRY_CLEANING": "Dry cleaning"
     },
     "status": {
       "CREATED": "Created",
       "RECEIVED": "Received",
       "CLASSIFIED": "Classified",
       "IN_PROCESS": "In process",
-      "READY": "Ready",
+      "READY": "Ready for delivery",
       "DELIVERED": "Delivered"
+    },
+    "payment-method": {
+      "yape": "Yape",
+      "card": "Card",
+      "cash": "Cash"
+    },
+    "form": {
+      "title": "New Order",
+      "customer": "Customer",
+      "customer-placeholder": "Search by name or document",
+      "customer-required": "Pick a customer from the list.",
+      "document": "ID",
+      "reception-date": "Reception date",
+      "delivery-date": "Delivery date",
+      "dates-invalid": "Delivery cannot be before reception.",
+      "service": "Service",
+      "garments": "Garments",
+      "order-status": "Status",
+      "payment-status": "Payment status",
+      "delivery-method": "Delivery type",
+      "payment-method": "Payment method",
+      "delivery": {
+        "PICKUP": "Store pickup",
+        "DELIVERY": "Home delivery"
+      },
+      "cancel": "Cancel",
+      "save": "Save",
+      "default-garment": "Assorted garments",
+      "payment-error": "The order was saved, but its payment could not be registered."
     },
     "detail": {
       "title": "Garments of order {code}",
