@@ -126,6 +126,43 @@
       }
     }
   },
+  "orders": {
+    "title": "Orders",
+    "catalog-title": "Customer orders ({count})",
+    "customer": "Customer",
+    "loading": "Loading orders...",
+    "empty": "This customer has no orders.",
+    "error": "The operation could not be completed",
+    "advance": "Move to {status}",
+    "columns": {
+      "id": "Order",
+      "date": "Date",
+      "laundry": "Laundry",
+      "delivery": "Delivery",
+      "garments": "Garments",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "delivery": {
+      "PICKUP": "Store pickup",
+      "DELIVERY": "Delivery"
+    },
+    "status": {
+      "CREATED": "Created",
+      "RECEIVED": "Received",
+      "CLASSIFIED": "Classified",
+      "IN_PROCESS": "In process",
+      "READY": "Ready",
+      "DELIVERED": "Delivered"
+    },
+    "detail": {
+      "title": "Garments of order {code}",
+      "garment": "Garment",
+      "quantity": "Quantity",
+      "care": "Care",
+      "no-items": "The order has no garments yet."
+    }
+  },
   "payments": {
     "title": "Payments",
     "breadcrumb": "Home / Payments",

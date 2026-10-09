@@ -9,6 +9,7 @@ import Home from "@/shared/presentation/views/home.vue";
 import LoginView from "@/iam/presentation/views/login-view.vue";
 import RegisterView from "@/iam/presentation/views/register-view.vue";
 import paymentsRoutes from "@/payments/presentation/payments-routes.js";
+import orderManagementRoutes from "@/order-management/presentation/order-management-routes.js";
 
 const routes =
     [
@@ -70,6 +71,12 @@ const routes =
             path: '/payments',
             name: 'payments',
             children: paymentsRoutes
+        },
+        // Nested routes for order management
+        {
+            path: '/orders',
+            name: 'orders',
+            children: orderManagementRoutes
         },
     ];
 

@@ -945,5 +945,110 @@
       "status": "MAINTENANCE",
       "capacity": 10
     }
+  ],
+  "customer-orders": [
+    {
+      "id": "5abe6b7d-b16f-4ecd-8fa6-6c7e8b9a0fb6",
+      "customerId": "0b6f1c2e-6c1a-4f7e-9a51-1d2f3c4b5a61",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "CREATED",
+      "deliveryMethod": "PICKUP",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-07T09:10:00.000Z",
+      "items": []
+    },
+    {
+      "id": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
+      "customerId": "0b6f1c2e-6c1a-4f7e-9a51-1d2f3c4b5a61",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "RECEIVED",
+      "deliveryMethod": "DELIVERY",
+      "specialCareInstructions": "Llamar antes de entregar",
+      "createdAt": "2026-10-06T14:30:00.000Z",
+      "items": [
+        {
+          "id": "c3000001-0000-4000-8000-000000000000",
+          "orderId": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
+          "type": "Camisa",
+          "quantity": 3,
+          "careInstructions": "Planchar sin almidón"
+        },
+        {
+          "id": "c3000002-0000-4000-8000-000000000000",
+          "orderId": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
+          "type": "Pantalón",
+          "quantity": 2,
+          "careInstructions": ""
+        }
+      ]
+    },
+    {
+      "id": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+      "customerId": "1c7a2d3f-7d2b-4a8f-8b62-2e3a4d5c6b72",
+      "laundryId": "4fad5a6c-a05e-4dbc-9e95-5b6d7a8f9ea5",
+      "status": "IN_PROCESS",
+      "deliveryMethod": "DELIVERY",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-05T11:00:00.000Z",
+      "items": [
+        {
+          "id": "c3000003-0000-4000-8000-000000000000",
+          "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+          "type": "Edredón",
+          "quantity": 1,
+          "careInstructions": "Lavado en frío"
+        },
+        {
+          "id": "c3000004-0000-4000-8000-000000000000",
+          "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+          "type": "Toalla",
+          "quantity": 4,
+          "careInstructions": ""
+        }
+      ]
+    },
+    {
+      "id": "8de19eaa-e49c-4bfa-9cd9-9fab1ecd3ce9",
+      "customerId": "1c7a2d3f-7d2b-4a8f-8b62-2e3a4d5c6b72",
+      "laundryId": "4fad5a6c-a05e-4dbc-9e95-5b6d7a8f9ea5",
+      "status": "READY",
+      "deliveryMethod": "PICKUP",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-03T16:45:00.000Z",
+      "items": [
+        {
+          "id": "c3000005-0000-4000-8000-000000000000",
+          "orderId": "8de19eaa-e49c-4bfa-9cd9-9fab1ecd3ce9",
+          "type": "Terno",
+          "quantity": 1,
+          "careInstructions": "Solo lavado en seco"
+        }
+      ]
+    },
+    {
+      "id": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+      "customerId": "2d8b3e4a-8e3c-4b9a-9c73-3f4b5e6d7c83",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "DELIVERED",
+      "deliveryMethod": "DELIVERY",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-01T08:20:00.000Z",
+      "items": [
+        {
+          "id": "c3000006-0000-4000-8000-000000000000",
+          "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+          "type": "Vestido",
+          "quantity": 2,
+          "careInstructions": "Delicado"
+        },
+        {
+          "id": "c3000007-0000-4000-8000-000000000000",
+          "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+          "type": "Blusa",
+          "quantity": 3,
+          "careInstructions": ""
+        }
+      ]
+    }
   ]
 }

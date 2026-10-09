@@ -126,6 +126,43 @@
       }
     }
   },
+  "orders": {
+    "title": "Pedidos",
+    "catalog-title": "Pedidos del cliente ({count})",
+    "customer": "Cliente",
+    "loading": "Cargando pedidos...",
+    "empty": "Este cliente no tiene pedidos.",
+    "error": "No se pudo completar la operación",
+    "advance": "Pasar a {status}",
+    "columns": {
+      "id": "Pedido",
+      "date": "Fecha",
+      "laundry": "Lavandería",
+      "delivery": "Entrega",
+      "garments": "Prendas",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "delivery": {
+      "PICKUP": "Recojo en tienda",
+      "DELIVERY": "Delivery"
+    },
+    "status": {
+      "CREATED": "Creado",
+      "RECEIVED": "Recibido",
+      "CLASSIFIED": "Clasificado",
+      "IN_PROCESS": "En proceso",
+      "READY": "Listo",
+      "DELIVERED": "Entregado"
+    },
+    "detail": {
+      "title": "Prendas del pedido {code}",
+      "garment": "Prenda",
+      "quantity": "Cantidad",
+      "care": "Cuidados",
+      "no-items": "El pedido aún no tiene prendas registradas."
+    }
+  },
   "payments": {
     "title": "Pagos",
     "breadcrumb": "Inicio / Pagos",

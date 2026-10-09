@@ -11,7 +11,7 @@ const groups = [
       { label: 'menu.dashboard', to: null }
     ] },
   { label: 'menu.groups.operations', items: [
-      { label: 'menu.orders', to: null },
+      { label: 'menu.orders', to: '/orders' },
       { label: 'menu.customers', to: null },
       { label: 'menu.garments', to: null },
       { label: 'menu.services', to: null },
