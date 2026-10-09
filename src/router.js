@@ -8,6 +8,7 @@ import laundryOperationsRoutes from "@/laundry-operations/presentation/laundry-o
 import Home from "@/shared/presentation/views/home.vue";
 import LoginView from "@/iam/presentation/views/login-view.vue";
 import RegisterView from "@/iam/presentation/views/register-view.vue";
+import paymentsRoutes from "@/payments/presentation/payments-routes.js";
 
 const routes =
     [
@@ -63,6 +64,12 @@ const routes =
             path: '/pickups-deliveries',
             name: 'pickups-deliveries',
             children: pickupsDeliveriesRoutes
+        },
+        // Nested routes for payments
+        {
+            path: '/payments',
+            name: 'payments',
+            children: paymentsRoutes
         },
     ];
 
