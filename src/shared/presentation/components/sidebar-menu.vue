@@ -13,6 +13,7 @@ const groups = [
   { label: 'menu.groups.operations', items: [
       { label: 'menu.orders', to: '/orders' },
       { label: 'menu.customers', to: '/customers' },
+      { label: 'menu.laundry', to: '/laundry-operations' },
       { label: 'menu.garments', to: '/garments' },
       { label: 'menu.services', to: '/services' },
       { label: 'menu.payments', to: '/payments' },
