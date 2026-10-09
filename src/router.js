@@ -5,9 +5,12 @@ import pickupsDeliveriesRoutes from "@/pickups-deliveries/presentation/pickups-d
 import pageNotFound from "@/shared/presentation/views/page-not-found.vue";
 import about from "@/shared/presentation/views/about.vue";
 import laundryOperationsRoutes from "@/laundry-operations/presentation/laundry-operations-routes.js";
-import Home from "@/shared/presentation/views/home.vue";
 import LoginView from "@/iam/presentation/views/login-view.vue";
 import RegisterView from "@/iam/presentation/views/register-view.vue";
+import paymentsRoutes from "@/payments/presentation/payments-routes.js";
+import orderManagementRoutes from "@/order-management/presentation/order-management-routes.js";
+import customerManagementRoutes from "@/customer-management/presentation/customer-management-routes.js";
+import {garmentRoutes, serviceRoutes} from "@/service-catalog/presentation/service-catalog-routes.js";
 
 const routes =
     [
@@ -26,8 +29,8 @@ const routes =
         {
             path: '/home',
             name: 'home',
-            component: Home,
-            meta: { titleKey: 'option.dashboard' }
+            component: () => import("@/dashboard/presentation/views/dashboard-view.vue"),
+            meta: { titleKey: 'menu.dashboard' }
         },
         {
             path: '/about',
@@ -63,6 +66,35 @@ const routes =
             path: '/pickups-deliveries',
             name: 'pickups-deliveries',
             children: pickupsDeliveriesRoutes
+        },
+        // Nested routes for payments
+        {
+            path: '/payments',
+            name: 'payments',
+            children: paymentsRoutes
+        },
+        // Nested routes for order management
+        {
+            path: '/orders',
+            name: 'orders',
+            children: orderManagementRoutes
+        },
+        // Nested routes for customer management
+        {
+            path: '/customers',
+            name: 'customers',
+            children: customerManagementRoutes
+        },
+        // Nested routes for the service catalog (services and garments)
+        {
+            path: '/services',
+            name: 'services',
+            children: serviceRoutes
+        },
+        {
+            path: '/garments',
+            name: 'garments',
+            children: garmentRoutes
         },
     ];
 

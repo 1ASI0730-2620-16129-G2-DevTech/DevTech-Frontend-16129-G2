@@ -2,12 +2,12 @@
 import {computed, onMounted} from "vue";
 import {useI18n} from "vue-i18n";
 import {storeToRefs} from "pinia";
-import useLaundryOperationsStore from "@/laundry-operations/application/laundry-operations.store.js";
+import useResourceStore from "@/laundry-operations/application/resource.store.js";
 import {ResourceStatus} from "@/laundry-operations/domain/model/resource-status.js";
 import LaundryOperationsMenu from "@/laundry-operations/presentation/components/laundry-operations-menu.vue";
 
 const {t} = useI18n();
-const store = useLaundryOperationsStore();
+const store = useResourceStore();
 const {laundryResources, laundryResourcesLoaded, errors} = storeToRefs(store);
 
 const severityByStatus = {AVAILABLE: 'success', BUSY: 'warn', MAINTENANCE: 'danger'};
@@ -29,7 +29,11 @@ onMounted(() => {
 
 <template>
   <div>
-    <laundry-operations-menu class="mb-4"/>
+    <div class="flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+      <laundry-operations-menu/>
+      <pv-button :label="t('laundry-operations.resources.sync')" icon="pi pi-refresh" severity="secondary" outlined
+                 @click="store.syncResourceStatuses()"/>
+    </div>
 
     <div class="status-cards mb-4">
       <div v-for="item in countByStatus" :key="item.status" class="status-card">

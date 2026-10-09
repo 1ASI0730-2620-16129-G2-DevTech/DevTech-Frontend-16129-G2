@@ -1,19 +1,37 @@
 import { NotFoundError, ValidationError } from "../../shared/domain/model/errors.js";
 import { GarmentItem } from "../domain/model/garment-item.js";
 import { Order } from "../domain/model/order.js";
+import { ORDER_STATUS_SEQUENCE } from "../domain/model/order-status.js";
 
 /**
  * Application service orchestrating the order use cases.
  */
 export class OrderService {
     #orderRepository;
+    #customerRepository;
 
     /**
      * @param {Object} params
      * @param {import("../domain/model/order-repository.js").OrderRepository} params.orderRepository
+     * @param {import("../domain/model/customer-repository.js").CustomerRepository} [params.customerRepository]
      */
-    constructor({ orderRepository }) {
+    constructor({ orderRepository, customerRepository }) {
         this.#orderRepository = orderRepository;
+        this.#customerRepository = customerRepository;
+    }
+
+    /**
+     * @returns {Promise<Order[]>}
+     */
+    async getAllOrders() {
+        return this.#orderRepository.findAll();
+    }
+
+    /**
+     * @returns {Promise<import("../domain/model/customer.js").Customer[]>}
+     */
+    async getAllCustomers() {
+        return this.#customerRepository.findAll();
     }
 
     /**
@@ -25,6 +43,49 @@ export class OrderService {
             throw new ValidationError("order must be an Order");
         }
         return this.#orderRepository.save(order);
+    }
+
+    /**
+     * Builds a new order and its garment items from a plain request and saves it.
+     * Orders that start further along the lifecycle walk through each step,
+     * so every transition rule of the aggregate still applies.
+     * @param {Object} request
+     * @param {string} request.customerId
+     * @param {string} request.laundryId
+     * @param {string} request.deliveryMethod
+     * @param {string} request.serviceType
+     * @param {Date} request.estimatedDeliveryDate
+     * @param {Date} [request.receptionDate] - Now by default.
+     * @param {string} [request.status] - Initial status; CREATED by default.
+     * @param {string} [request.specialCareInstructions]
+     * @param {{type: string, quantity: number, careInstructions?: string}[]} [request.items]
+     * @returns {Promise<Order>}
+     */
+    async placeOrder(request) {
+        const order = new Order({
+            customerId: request.customerId,
+            laundryId: request.laundryId,
+            deliveryMethod: request.deliveryMethod,
+            serviceType: request.serviceType,
+            estimatedDeliveryDate: request.estimatedDeliveryDate,
+            createdAt: request.receptionDate,
+            specialCareInstructions: request.specialCareInstructions,
+        });
+        for (const item of request.items ?? []) {
+            order.addGarmentItem(
+                new GarmentItem({
+                    orderId: order.id,
+                    type: item.type,
+                    quantity: item.quantity,
+                    careInstructions: item.careInstructions,
+                }),
+            );
+        }
+        const target = ORDER_STATUS_SEQUENCE.indexOf(request.status ?? order.status);
+        for (let step = ORDER_STATUS_SEQUENCE.indexOf(order.status) + 1; step <= target; step++) {
+            order.changeStatus(ORDER_STATUS_SEQUENCE[step]);
+        }
+        return this.createOrder(order);
     }
 
     /**

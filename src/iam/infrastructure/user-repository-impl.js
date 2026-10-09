@@ -53,8 +53,9 @@ export class UserRepositoryImpl extends UserRepository {
      * @returns {Promise<import("../domain/model/user.js").User>}
      */
     async save(user, credentials) {
+        const code = await this.#api.getNextUserCode(user.role === "customer" ? "CL" : "VN");
         const response = await this.#api.createUser(
-            this.#assembler.toResourceFromEntity(user, credentials),
+            this.#assembler.toResourceFromEntity(user, credentials, code),
         );
         return this.#assembler.toEntityFromResource(response.data);
     }

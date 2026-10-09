@@ -1,6 +1,7 @@
 <script setup>
 import {useI18n} from "vue-i18n";
 import {formatDateTime, getStatusSeverity} from "../delivery-helpers.js";
+import {useBoardSearch} from "@/shared/presentation/board-search.js";
 
 defineProps({
   deliveries: { type: Array, default: () => [] },
@@ -8,13 +9,16 @@ defineProps({
 });
 
 const { t } = useI18n();
+const { query } = useBoardSearch();
 </script>
 
 <template>
   <pv-data-table :value="deliveries" :loading="loading" data-key="id" paginator :rows="10"
-                 scrollable table-style="min-width: 50rem">
-    <template #empty>{{ t('deliveries.empty') }}</template>
-    <pv-column field="id" :header="t('deliveries.table.id')" />
+                 scrollable table-style="min-width: 48rem" class="wt-board-datatable">
+    <template #empty>{{ query ? t('board-search.no-results', { query }) : t('deliveries.empty') }}</template>
+    <pv-column :header="t('deliveries.table.id')" body-class="wt-board-id">
+      <template #body="{ data }">#{{ data.id }}</template>
+    </pv-column>
     <pv-column :header="t('deliveries.table.type')">
       <template #body="{ data }">
         <pv-tag :value="t(`deliveries.types.${data.type}`)" severity="secondary" />

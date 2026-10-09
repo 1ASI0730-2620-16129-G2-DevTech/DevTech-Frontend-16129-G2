@@ -12,4 +12,12 @@ export class OrderRepository extends Repository {
     async findByCustomer(customerId) {
         throw new Error("OrderRepository.findByCustomer must be implemented");
     }
+
+    /**
+     * Finds every order.
+     * @returns {Promise<import("./order.js").Order[]>}
+     */
+    async findAll() {
+        throw new Error("OrderRepository.findAll must be implemented");
+    }
 }
