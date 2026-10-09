@@ -7,6 +7,7 @@
     },
     "orders": "Pedidos",
     "customers": "Clientes",
+    "laundry": "Operaciones de lavanderia",
     "garments": "Prendas",
     "services": "Servicios",
     "payments": "Pagos",
@@ -17,6 +18,37 @@
     "logout": "Cerrar sesión",
     "open": "Abrir menú",
     "coming-soon": "Próximamente"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "description": "Ingresa a tu cuenta de WashTrack.",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Ingresar",
+    "submitting": "Ingresando...",
+    "invalid-credentials": "El correo o la contraseña no son correctos.",
+    "connection-error": "No se pudo conectar con el servicio de autenticación.",
+    "registration-success": "Cuenta creada. Ya puedes iniciar sesión.",
+    "no-account": "¿No tienes una cuenta?",
+    "register": "Regístrate",
+    "demo-hint": "Credenciales de prueba:",
+    "demo-email": "Correo:",
+    "demo-password": "Contraseña:"
+  },
+  "register": {
+    "title": "Crear cuenta",
+    "description": "Completa tus datos para registrarte en WashTrack.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña (mínimo 6 caracteres)",
+    "confirm-password": "Confirmar contraseña",
+    "submit": "Crear cuenta",
+    "submitting": "Creando cuenta...",
+    "passwords-do-not-match": "Las contraseñas no coinciden.",
+    "email-already-registered": "Ya existe una cuenta con ese correo.",
+    "connection-error": "No se pudo crear la cuenta. Inténtalo nuevamente.",
+    "has-account": "¿Ya tienes una cuenta?",
+    "sign-in": "Inicia sesión"
   },
   "roles": {
     "customer": "Cliente",
@@ -61,6 +93,7 @@
     "progress": "Etapa {done} de {total}"
   },
   "trackings": {
+    "columns": {"order":"Pedido","stage":"Etapa","progress":"Progreso"},
     "title": "Pedidos en seguimiento",
     "search": "Buscar por código (ej. WT-001)",
     "estimated-delivery": "Entrega estimada",
@@ -69,6 +102,8 @@
     "empty": "No se encontraron pedidos."
   },
   "tracker": {
+    "back": "Volver a seguimiento",
+    "map-alt": "Mapa del recorrido del repartidor hacia la dirección del cliente",
     "title": "Seguimiento del pedido {code}",
     "not-found": "No se encontró seguimiento para este pedido.",
     "progress": "Progreso del pedido",
@@ -94,6 +129,168 @@
         "detail": "El delivery de recojo del pedido {code} ya está en ruta."
       }
     }
+  },
+  "laundry-operations": {
+    "menu": {
+      "production-board": "Tablero de Producción",
+      "resources": "Recursos",
+      "washing-cycles": "Ciclos de Lavado"
+    },
+    "board": {
+      "title": "Tablero de Producción",
+      "receive": "Recibir pedido",
+      "order-id": "ID del pedido",
+      "dismiss": "Cerrar"
+    },
+    "stages": {
+      "RECEPTION": "Recepción",
+      "CLASSIFICATION": "Clasificación",
+      "WASHING": "Lavado",
+      "DRYING_IRONING": "Secado/Planchado",
+      "PACKAGING": "Empaquetado",
+      "READY": "Listo"
+    },
+    "priority": {
+      "NORMAL": "Normal",
+      "VIP": "VIP"
+    },
+    "card": {
+      "expected": "Entrega estimada",
+      "cycle": "Ciclo",
+      "resource": "Recurso",
+      "at-risk": "Riesgo de entrega",
+      "classify": "Clasificar",
+      "assign": "Asignar",
+      "advance": "Avanzar"
+    },
+    "assign": {
+      "title": "Asignar ciclo y recurso",
+      "cycle": "Ciclo de lavado",
+      "resource": "Recurso"
+    },
+    "resources": {
+      "title": "Recursos de la Lavandería",
+      "name": "Nombre",
+      "capacity": "Capacidad",
+      "status": "Estado",
+      "sync": "Sincronizar con sensores"
+    },
+    "resource-status": {
+      "AVAILABLE": "Disponible",
+      "BUSY": "Ocupado",
+      "MAINTENANCE": "Mantenimiento"
+    },
+    "cycles": {
+      "title": "Ciclos de Lavado",
+      "name": "Nombre",
+      "duration": "Duración (min)",
+      "compatible-type": "Tipo de prenda compatible"
+    },
+    "common": {
+      "save": "Guardar",
+      "cancel": "Cancelar"
+    },
+    "summary": {
+      "pending": "Pendientes",
+      "inProcess": "En proceso",
+      "ready": "Listos para entrega",
+      "vip": "VIP en curso",
+      "atRisk": "En riesgo"
+    }
+  },
+  "orders": {
+    "title": "Pedidos",
+    "catalog-title": "Todos los pedidos ({count})",
+    "new": "Nuevo pedido",
+    "loading": "Cargando pedidos...",
+    "empty": "Aún no hay pedidos registrados.",
+    "error": "No se pudo completar la operación",
+    "advance": "Pasar a {status}",
+    "columns": {
+      "id": "ID",
+      "customer": "Cliente",
+      "reception": "Recepción",
+      "estimated-delivery": "Entrega est.",
+      "garments": "Prendas",
+      "service": "Servicio",
+      "status": "Estado",
+      "payment": "Pago",
+      "delivery": "Entrega"
+    },
+    "delivery": {
+      "PICKUP": "Tienda",
+      "DELIVERY": "Domicilio"
+    },
+    "service": {
+      "WASHING": "Lavado",
+      "WASHING_DRYING": "Lavado + Secado",
+      "WASHING_IRONING": "Lavado + Planchado",
+      "IRONING": "Planchado",
+      "DRYING": "Secado",
+      "DRY_CLEANING": "Lavado en seco"
+    },
+    "status": {
+      "CREATED": "Creado",
+      "RECEIVED": "Recibido",
+      "CLASSIFIED": "Clasificado",
+      "IN_PROCESS": "En proceso",
+      "READY": "Listo entrega",
+      "DELIVERED": "Entregado"
+    },
+    "payment-method": {
+      "yape": "Yape",
+      "card": "Tarjeta",
+      "cash": "Efectivo"
+    },
+    "form": {
+      "title": "Nuevo Pedido",
+      "customer": "Cliente",
+      "customer-placeholder": "Buscar por nombre o documento",
+      "customer-required": "Selecciona un cliente de la lista.",
+      "document": "DNI",
+      "reception-date": "Fecha de recepción",
+      "delivery-date": "Fecha de entrega",
+      "dates-invalid": "La entrega no puede ser antes de la recepción.",
+      "service": "Servicio",
+      "garments": "Prendas",
+      "order-status": "Estado",
+      "payment-status": "Estado de pago",
+      "delivery-method": "Tipo de entrega",
+      "payment-method": "Método de pago",
+      "delivery": {
+        "PICKUP": "Recoger en tienda",
+        "DELIVERY": "Delivery a domicilio"
+      },
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "default-garment": "Prendas varias",
+      "payment-error": "El pedido se guardó, pero no se pudo registrar su pago."
+    },
+    "detail": {
+      "title": "Prendas del pedido {code}",
+      "garment": "Prenda",
+      "quantity": "Cantidad",
+      "care": "Cuidados",
+      "no-items": "El pedido aún no tiene prendas registradas."
+    }
+  },
+  "payments": {
+    "title": "Pagos",
+    "breadcrumb": "Inicio / Pagos",
+    "catalog-title": "Catálogo de pagos ({count})",
+    "table-title": "Pagos de clientes",
+    "search": "Buscar por cliente u orden",
+    "summary": "Resumen de pagos",
+    "results": "resultados",
+    "loading": "Cargando pagos...",
+    "error": "No se pudo cargar el catálogo de pagos.",
+    "empty": "No hay pagos que coincidan con la búsqueda.",
+    "filters": {"all": "Todos", "paid": "Pagaron", "pending": "Falta pagar", "cancelled": "Orden cancelada"},
+    "status": {"paid": "Pagado", "pending": "Falta pagar", "cancelled": "Cancelado"},
+    "columns": {"id": "ID", "order": "Pedido", "customer": "Cliente", "amount": "Monto", "method": "Método", "status": "Estado", "date": "Fecha"},
+    "chart-title": "Prendas más solicitadas - últimas 24 horas",
+    "periods": {"hour": "Última hora", "day": "24 horas", "week": "7 días", "month": "30 días"},
+    "detail": {"title": "Detalle de pago", "back": "Volver a pagos"}
   },
   "deliveries": {
     "title": "Recojos y entregas",
@@ -167,5 +364,126 @@
     },
     "empty": "No se encontraron recojos ni entregas.",
     "unassigned": "Sin asignar"
+  },
+  "customers": {
+    "title": "Clientes",
+    "catalog-title": "Todos los clientes ({count})",
+    "new": "Agregar Nuevo Cliente",
+    "loading": "Cargando clientes...",
+    "empty": "No hay clientes registrados.",
+    "error": "No se pudieron cargar los clientes",
+    "columns": {
+      "id": "ID",
+      "customer": "CLIENTE",
+      "phone": "Teléfono",
+      "document-type": "Tipo de Documento",
+      "document": "Documento"
+    },
+    "form": {
+      "title": "Nuevo cliente",
+      "full-name": "Nombre completo",
+      "full-name-required": "Ingresa el nombre del cliente.",
+      "phone": "Teléfono",
+      "phone-invalid": "El teléfono debe tener 9 dígitos.",
+      "document-type": "Tipo de documento",
+      "document": "Número de documento",
+      "document-invalid": "El {type} debe tener {length} dígitos.",
+      "address": "Dirección",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    }
+  },
+  "catalog": {
+    "loading": "Cargando catálogo...",
+    "error": "No se pudo cargar el catálogo",
+    "columns": {
+      "id": "ID",
+      "category": "Categoría",
+      "base-price": "Precio Base",
+      "estimated-time": "Tiempo Estimado",
+      "status": "Estado"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "periods": {
+      "hour": "Última hora",
+      "day": "24 horas",
+      "week": "7 días",
+      "month": "30 días"
+    },
+    "period-titles": {
+      "hour": "última hora",
+      "day": "últimas 24 horas",
+      "week": "últimos 7 días",
+      "month": "últimos 30 días"
+    },
+    "chart-top": "{name}: {total} solicitudes",
+    "chart-empty": "No hubo solicitudes en este periodo.",
+    "form": {
+      "name": "Nombre",
+      "category": "Categoría",
+      "base-price": "Precio base",
+      "estimated-hours": "Tiempo estimado",
+      "status": "Estado",
+      "name-required": "Ingresa el nombre.",
+      "category-required": "Elige o escribe una categoría.",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    }
+  },
+  "services": {
+    "title": "Servicios",
+    "catalog-title": "Catálogo de Servicios ({count})",
+    "new": "Agregar Servicio",
+    "name-column": "Servicio",
+    "empty": "No hay servicios registrados.",
+    "chart-title": "Servicio más solicitado - {period}",
+    "form-title": "Nuevo servicio"
+  },
+  "garments": {
+    "title": "Prendas",
+    "catalog-title": "Catálogo de Prendas ({count})",
+    "new": "Agregar Prenda",
+    "name-column": "Prenda",
+    "empty": "No hay prendas registradas.",
+    "chart-title": "Prenda más solicitada - {period}",
+    "form-title": "Nueva prenda"
+  },
+  "board-search": {
+    "placeholder": "Buscar pedido, cliente…",
+    "no-results": "No hay resultados para \"{query}\"."
+  },
+  "dashboard": {
+    "error": "No se pudo cargar el dashboard",
+    "kpis": {
+      "orders": "Pedidos del día",
+      "in-process": "En proceso",
+      "ready": "Listos entrega",
+      "pending": "Pendientes",
+      "revenue-today": "Ingresos hoy",
+      "customers": "Clientes registrados"
+    },
+    "machines": {
+      "title": "Estado de las máquinas",
+      "normal": "Normal",
+      "warning": "Advertencia",
+      "review": "Revisión",
+      "offline": "Sin conexión"
+    },
+    "alerts": {
+      "title": "Alertas recientes",
+      "maintenance": "Revisión recomendada",
+      "maintenance-detail": "{name} · en mantenimiento",
+      "empty": "No hay alertas recientes."
+    },
+    "charts": {
+      "orders-per-day": "Pedidos por día",
+      "revenue": "Ingresos",
+      "top-services": "Servicios más solicitados",
+      "status-distribution": "Distribución de estados",
+      "empty": "Sin datos todavía."
+    }
   }
 }

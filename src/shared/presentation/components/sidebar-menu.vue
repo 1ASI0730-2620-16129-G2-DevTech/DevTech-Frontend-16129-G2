@@ -8,14 +8,15 @@ const { t } = useI18n();
 // Entries with `to: null` belong to modules that are not built yet.
 const groups = [
   { label: null, items: [
-      { label: 'menu.dashboard', to: null }
+      { label: 'menu.dashboard', to: '/home' }
     ] },
   { label: 'menu.groups.operations', items: [
-      { label: 'menu.orders', to: null },
-      { label: 'menu.customers', to: null },
-      { label: 'menu.garments', to: null },
-      { label: 'menu.services', to: null },
-      { label: 'menu.payments', to: null },
+      { label: 'menu.orders', to: '/orders' },
+      { label: 'menu.customers', to: '/customers' },
+      { label: 'menu.laundry', to: '/laundry-operations' },
+      { label: 'menu.garments', to: '/garments' },
+      { label: 'menu.services', to: '/services' },
+      { label: 'menu.payments', to: '/payments' },
       { label: 'menu.deliveries', to: '/pickups-deliveries/deliveries' },
       { label: 'menu.tracking', to: '/tracking-notifications/trackings' }
     ] },
@@ -26,7 +27,7 @@ const groups = [
 ];
 
 // TODO: take the signed-in user from the IAM store once the IAM context exists.
-const currentUser = { name: 'Carla Reyes', role: 'shift-manager' };
+const currentUser = { name: 'Rosa Diaz', role: 'shift-manager' };
 
 // TODO: call the IAM store sign-out once the IAM context exists.
 const signOut = () => {};

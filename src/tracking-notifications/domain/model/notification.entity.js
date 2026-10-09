@@ -17,7 +17,7 @@ export class Notification {
     /**
      * @param {Object} props
      * @param {number|null} props.id - Notification identifier.
-     * @param {number|null} props.userId - Identifier of the user who receives it.
+     * @param {string|null} props.userId - Customer code (e.g. CL001) of the user who receives it.
      * @param {string} props.type - One of the NotificationType values.
      * @param {Object} props.parameters - Values used to build the message (e.g. orderId, stage).
      * @param {boolean} props.isRead - Whether the user has already been shown it.

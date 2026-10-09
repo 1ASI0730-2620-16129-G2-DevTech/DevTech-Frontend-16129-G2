@@ -1,4 +1,3 @@
-import { GarmentItem } from "../domain/model/garment-item.js";
 import { Order } from "../domain/model/order.js";
 
 /**
@@ -21,28 +20,16 @@ export class OrderController {
      * @param {string} request.customerId
      * @param {string} request.laundryId
      * @param {string} request.deliveryMethod
+     * @param {string} request.serviceType
+     * @param {Date} request.estimatedDeliveryDate
+     * @param {Date} [request.receptionDate] - Now by default.
+     * @param {string} [request.status] - Initial status; CREATED by default.
      * @param {string} [request.specialCareInstructions]
      * @param {{type: string, quantity: number, careInstructions?: string}[]} [request.items]
      * @returns {Promise<Object>} The created order.
      */
     async create(request) {
-        const order = new Order({
-            customerId: request.customerId,
-            laundryId: request.laundryId,
-            deliveryMethod: request.deliveryMethod,
-            specialCareInstructions: request.specialCareInstructions,
-        });
-        for (const item of request.items ?? []) {
-            order.addGarmentItem(
-                new GarmentItem({
-                    orderId: order.id,
-                    type: item.type,
-                    quantity: item.quantity,
-                    careInstructions: item.careInstructions,
-                }),
-            );
-        }
-        return toResponse(await this.#orderService.createOrder(order));
+        return toResponse(await this.#orderService.placeOrder(request));
     }
 
     /**
@@ -68,6 +55,8 @@ export class OrderController {
             customerId: current.customerId,
             laundryId: current.laundryId,
             deliveryMethod: request.deliveryMethod ?? current.deliveryMethod,
+            serviceType: request.serviceType ?? current.serviceType,
+            estimatedDeliveryDate: request.estimatedDeliveryDate ?? current.estimatedDeliveryDate,
             specialCareInstructions: request.specialCareInstructions ?? current.specialCareInstructions,
             status: current.status,
             createdAt: current.createdAt,
@@ -97,6 +86,8 @@ function toResponse(order) {
         laundryId: order.laundryId,
         status: order.status,
         deliveryMethod: order.deliveryMethod,
+        serviceType: order.serviceType,
+        estimatedDeliveryDate: order.estimatedDeliveryDate.toISOString(),
         specialCareInstructions: order.specialCareInstructions,
         createdAt: order.createdAt.toISOString(),
         items: order.items.map((item) => ({

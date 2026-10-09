@@ -1,32 +1,68 @@
 {
   "customer-profiles": [
     {
-      "id": 1,
-      "userId": 1,
-      "fullName": "Rosa Díaz",
+      "id": "CL001",
+      "fullName": "Carmen Torres",
       "phone": "987 654 321",
+      "documentType": "DNI",
+      "documentNumber": "45127836",
       "address": "Jr. Puno 029, Breña"
     },
     {
-      "id": 2,
-      "userId": 2,
+      "id": "CL002",
       "fullName": "Jorge Salas",
       "phone": "986 543 210",
+      "documentType": "DNI",
+      "documentNumber": "70214589",
       "address": "Av. Larco 245, Miraflores"
     },
     {
-      "id": 3,
-      "userId": 3,
+      "id": "CL003",
       "fullName": "Ana Ruiz",
       "phone": "985 432 109",
+      "documentType": "DNI",
+      "documentNumber": "46983012",
       "address": "Av. Marino 12, San Miguel"
     },
     {
-      "id": 4,
-      "userId": 4,
+      "id": "CL004",
       "fullName": "Lucía Prado",
       "phone": "984 321 098",
+      "documentType": "DNI",
+      "documentNumber": "60192834",
       "address": "Av. Arequipa 238, Lince"
+    },
+    {
+      "id": "CL005",
+      "fullName": "María Gómez",
+      "phone": "935 472 816",
+      "documentType": "DNI",
+      "documentNumber": "72430561",
+      "address": "Av. Brasil 1320, Jesús María"
+    },
+    {
+      "id": "CL006",
+      "fullName": "Luis Prado",
+      "phone": "954 123 890",
+      "documentType": "DNI",
+      "documentNumber": "41875293",
+      "address": "Calle Los Pinos 145, Surco"
+    },
+    {
+      "id": "CL007",
+      "fullName": "Kevin Ochoa",
+      "phone": "976 543 210",
+      "documentType": "DNI",
+      "documentNumber": "75310984",
+      "address": "Av. Universitaria 2650, Los Olivos"
+    },
+    {
+      "id": "CL008",
+      "fullName": "Luis",
+      "phone": "993 223 512",
+      "documentType": "DNI",
+      "documentNumber": "73139401",
+      "address": "MZ C LOTE 23 URB LOS DIBUJITOS"
     }
   ],
   "laundry-businesses": [
@@ -54,46 +90,11 @@
   ],
   "users": [
     {
-      "id": 1,
+      "id": "VN001",
       "username": "rosa.diaz",
       "email": "rosa.diaz@example.com",
-      "role": "customer"
-    },
-    {
-      "id": 2,
-      "username": "jorge.salas",
-      "email": "jorge.salas@example.com",
-      "role": "customer"
-    },
-    {
-      "id": 3,
-      "username": "ana.ruiz",
-      "email": "ana.ruiz@example.com",
-      "role": "customer"
-    },
-    {
-      "id": 4,
-      "username": "lucia.prado",
-      "email": "lucia.prado@example.com",
-      "role": "customer"
-    },
-    {
-      "id": 5,
-      "username": "carla.reyes",
-      "email": "carla.reyes@example.com",
-      "role": "shift-manager"
-    },
-    {
-      "id": 6,
-      "username": "katia.leon",
-      "email": "katia.leon@example.com",
-      "role": "staff"
-    },
-    {
-      "id": 7,
-      "username": "miguel.ramos",
-      "email": "miguel.ramos@example.com",
-      "role": "staff"
+      "role": "shift-manager",
+      "password": "123456"
     }
   ],
   "operation-tasks": [
@@ -173,7 +174,7 @@
   "orders": [
     {
       "id": 1,
-      "customerId": 1,
+      "customerId": "CL001",
       "laundryId": 1,
       "serviceType": "washing-ironing",
       "totalAmount": 45,
@@ -182,7 +183,7 @@
     },
     {
       "id": 2,
-      "customerId": 2,
+      "customerId": "CL002",
       "laundryId": 3,
       "serviceType": "washing",
       "totalAmount": 28.5,
@@ -191,7 +192,7 @@
     },
     {
       "id": 3,
-      "customerId": 3,
+      "customerId": "CL003",
       "laundryId": 1,
       "serviceType": "dry-cleaning",
       "totalAmount": 72,
@@ -200,7 +201,7 @@
     },
     {
       "id": 4,
-      "customerId": 4,
+      "customerId": "CL004",
       "laundryId": 2,
       "serviceType": "ironing",
       "totalAmount": 18,
@@ -209,7 +210,7 @@
     },
     {
       "id": 5,
-      "customerId": 1,
+      "customerId": "CL001",
       "laundryId": 1,
       "serviceType": "washing",
       "totalAmount": 33,
@@ -218,7 +219,7 @@
     },
     {
       "id": 6,
-      "customerId": 2,
+      "customerId": "CL002",
       "laundryId": 3,
       "serviceType": "washing-ironing",
       "totalAmount": 54.5,
@@ -227,7 +228,7 @@
     },
     {
       "id": 7,
-      "customerId": 3,
+      "customerId": "CL003",
       "laundryId": 1,
       "serviceType": "washing",
       "totalAmount": 25,
@@ -236,12 +237,168 @@
     },
     {
       "id": 8,
-      "customerId": 4,
+      "customerId": "CL004",
       "laundryId": 2,
       "serviceType": "washing",
       "totalAmount": 40,
       "status": "pending",
       "createdAt": "2026-10-07T12:00:00-05:00"
+    }
+  ],
+  "payments": [
+    {
+      "id": "PG001",
+      "orderId": 1,
+      "customerId": "CL001",
+      "customerName": "Carmen Torres",
+      "amount": 45,
+      "paymentMethod": "yape",
+      "status": "paid",
+      "paidAt": "2026-10-01T09:16:00-05:00",
+      "orderDate": "2026-10-01T09:15:00-05:00"
+    },
+    {
+      "id": "PG002",
+      "orderId": 2,
+      "customerId": "CL002",
+      "customerName": "Jorge Salas",
+      "amount": 28.5,
+      "paymentMethod": "card",
+      "status": "paid",
+      "paidAt": "2026-10-03T10:31:00-05:00",
+      "orderDate": "2026-10-03T10:30:00-05:00"
+    },
+    {
+      "id": "PG003",
+      "orderId": 3,
+      "customerId": "CL003",
+      "customerName": "Ana Ruiz",
+      "amount": 72,
+      "paymentMethod": "yape",
+      "status": "pending",
+      "paidAt": null,
+      "orderDate": "2026-10-05T11:05:00-05:00"
+    },
+    {
+      "id": "PG004",
+      "orderId": 4,
+      "customerId": "CL004",
+      "customerName": "Lucía Prado",
+      "amount": 18,
+      "paymentMethod": "cash",
+      "status": "cancelled",
+      "paidAt": null,
+      "orderDate": "2026-10-06T08:45:00-05:00"
+    },
+    {
+      "id": "PG005",
+      "orderId": 5,
+      "customerId": "CL001",
+      "customerName": "Carmen Torres",
+      "amount": 33,
+      "paymentMethod": "card",
+      "status": "paid",
+      "paidAt": "2026-10-06T15:21:00-05:00",
+      "orderDate": "2026-10-06T15:20:00-05:00"
+    },
+    {
+      "id": "PG006",
+      "orderId": 6,
+      "customerId": "CL002",
+      "customerName": "Jorge Salas",
+      "amount": 54.5,
+      "paymentMethod": "card",
+      "status": "pending",
+      "paidAt": null,
+      "orderDate": "2026-10-07T08:10:00-05:00"
+    },
+    {
+      "id": "PG007",
+      "orderId": 7,
+      "customerId": "CL003",
+      "customerName": "Ana Ruiz",
+      "amount": 25,
+      "paymentMethod": "cash",
+      "status": "cancelled",
+      "paidAt": null,
+      "orderDate": "2026-10-07T10:40:00-05:00"
+    },
+    {
+      "id": "PG008",
+      "orderId": 8,
+      "customerId": "CL004",
+      "customerName": "Lucía Prado",
+      "amount": 40,
+      "paymentMethod": "yape",
+      "status": "paid",
+      "paidAt": "2026-10-07T12:01:00-05:00",
+      "orderDate": "2026-10-07T12:00:00-05:00"
+    },
+    {
+      "id": "PG009",
+      "orderId": "5abe6b7d-b16f-4ecd-8fa6-6c7e8b9a0fb6",
+      "customerId": "CL005",
+      "customerName": "María Gómez",
+      "amount": 52,
+      "paymentMethod": "yape",
+      "status": "paid",
+      "paidAt": "2026-10-07T14:00:00.000Z",
+      "orderDate": "2026-10-07T14:00:00.000Z"
+    },
+    {
+      "id": "PG010",
+      "orderId": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
+      "customerId": "CL002",
+      "customerName": "Jorge Salas",
+      "amount": 25,
+      "paymentMethod": "card",
+      "status": "paid",
+      "paidAt": "2026-10-07T15:30:00.000Z",
+      "orderDate": "2026-10-07T15:30:00.000Z"
+    },
+    {
+      "id": "PG011",
+      "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+      "customerId": "CL003",
+      "customerName": "Ana Ruiz",
+      "amount": 96,
+      "paymentMethod": "yape",
+      "status": "pending",
+      "paidAt": null,
+      "orderDate": "2026-10-06T16:00:00.000Z"
+    },
+    {
+      "id": "PG012",
+      "orderId": "8de19eaa-e49c-4bfa-9cd9-9fab1ecd3ce9",
+      "customerId": "CL006",
+      "customerName": "Luis Prado",
+      "amount": 15,
+      "paymentMethod": "cash",
+      "status": "paid",
+      "paidAt": "2026-10-06T13:15:00.000Z",
+      "orderDate": "2026-10-06T13:15:00.000Z"
+    },
+    {
+      "id": "PG013",
+      "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+      "customerId": "CL001",
+      "customerName": "Carmen Torres",
+      "amount": 48,
+      "paymentMethod": "yape",
+      "status": "paid",
+      "paidAt": "2026-10-05T14:20:00.000Z",
+      "orderDate": "2026-10-05T14:20:00.000Z"
+    },
+    {
+      "id": "PG014",
+      "orderId": "a0f3b0cc-06be-4dbc-9efb-b1cd3e0f5e0b",
+      "customerId": "CL007",
+      "customerName": "Kevin Ochoa",
+      "amount": 20,
+      "paymentMethod": "cash",
+      "status": "pending",
+      "paidAt": null,
+      "orderDate": "2026-10-05T17:45:00.000Z"
     }
   ],
   "subscription-plans": [
@@ -282,7 +439,7 @@
   "subscriptions": [
     {
       "id": 1,
-      "userId": 1,
+      "customerId": "CL001",
       "planId": 2,
       "paymentMethodId": "pm_rosa_card",
       "status": "active",
@@ -290,7 +447,7 @@
     },
     {
       "id": 2,
-      "userId": 3,
+      "customerId": "CL003",
       "planId": 3,
       "paymentMethodId": "pm_ana_yape",
       "status": "active",
@@ -300,7 +457,7 @@
   "payment-transactions": [
     {
       "id": 1,
-      "userId": 1,
+      "customerId": "CL001",
       "amount": 59.9,
       "paymentMethod": "card",
       "status": "completed",
@@ -308,7 +465,7 @@
     },
     {
       "id": 2,
-      "userId": 3,
+      "customerId": "CL003",
       "amount": 99.9,
       "paymentMethod": "yape",
       "status": "completed",
@@ -316,7 +473,7 @@
     },
     {
       "id": 3,
-      "userId": 1,
+      "customerId": "CL001",
       "amount": 59.9,
       "paymentMethod": "card",
       "status": "completed",
@@ -324,7 +481,7 @@
     },
     {
       "id": 4,
-      "userId": 2,
+      "customerId": "CL002",
       "amount": 28.5,
       "paymentMethod": "cash",
       "status": "completed",
@@ -332,7 +489,7 @@
     },
     {
       "id": 5,
-      "userId": 4,
+      "customerId": "CL004",
       "amount": 18,
       "paymentMethod": "plin",
       "status": "pending",
@@ -340,7 +497,7 @@
     },
     {
       "id": 6,
-      "userId": 2,
+      "customerId": "CL002",
       "amount": 54.5,
       "paymentMethod": "card",
       "status": "failed",
@@ -528,7 +685,7 @@
   "notifications": [
     {
       "id": 1,
-      "userId": 1,
+      "userId": "CL001",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 1,
@@ -539,7 +696,7 @@
     },
     {
       "id": 2,
-      "userId": 1,
+      "userId": "CL001",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 1,
@@ -550,7 +707,7 @@
     },
     {
       "id": 3,
-      "userId": 2,
+      "userId": "CL002",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 2,
@@ -561,7 +718,7 @@
     },
     {
       "id": 4,
-      "userId": 2,
+      "userId": "CL002",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 2,
@@ -572,7 +729,7 @@
     },
     {
       "id": 5,
-      "userId": 3,
+      "userId": "CL003",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 3,
@@ -583,7 +740,7 @@
     },
     {
       "id": 6,
-      "userId": 3,
+      "userId": "CL003",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 3,
@@ -594,7 +751,7 @@
     },
     {
       "id": 7,
-      "userId": 4,
+      "userId": "CL004",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 4,
@@ -605,7 +762,7 @@
     },
     {
       "id": 8,
-      "userId": 1,
+      "userId": "CL001",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 5,
@@ -616,7 +773,7 @@
     },
     {
       "id": 9,
-      "userId": 4,
+      "userId": "CL004",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 4,
@@ -627,18 +784,18 @@
     },
     {
       "id": 10,
-      "userId": 1,
+      "userId": "CL001",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 5,
         "stage": "washing"
       },
-      "isRead": false,
+      "isRead": true,
       "createdAt": "2026-10-06T18:20:00-05:00"
     },
     {
       "id": 11,
-      "userId": 2,
+      "userId": "CL002",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 6,
@@ -649,7 +806,7 @@
     },
     {
       "id": 12,
-      "userId": 2,
+      "userId": "CL002",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 6,
@@ -660,7 +817,7 @@
     },
     {
       "id": 13,
-      "userId": 3,
+      "userId": "CL003",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 7,
@@ -671,7 +828,7 @@
     },
     {
       "id": 14,
-      "userId": 4,
+      "userId": "CL004",
       "type": "order-stage-changed",
       "parameters": {
         "orderId": 8,
@@ -682,22 +839,22 @@
     },
     {
       "id": 15,
-      "userId": 1,
+      "userId": "CL001",
       "type": "order-on-the-way",
       "parameters": {
         "orderId": 1
       },
-      "isRead": false,
+      "isRead": true,
       "createdAt": "2026-10-07T20:30:00-05:00"
     },
     {
       "id": 16,
-      "userId": 1,
+      "userId": "CL001",
       "type": "pickup-on-the-way",
       "parameters": {
         "orderId": 5
       },
-      "isRead": false,
+      "isRead": true,
       "createdAt": "2026-10-07T20:45:00-05:00"
     }
   ],
@@ -706,7 +863,7 @@
       "id": 1,
       "orderId": 1,
       "type": "pickup",
-      "customerName": "Rosa Díaz",
+      "customerName": "Carmen Torres",
       "address": "Jr. Puno 029, Breña",
       "driverName": "Luis Paredes",
       "status": "completed",
@@ -716,7 +873,7 @@
       "id": 2,
       "orderId": 1,
       "type": "delivery",
-      "customerName": "Rosa Díaz",
+      "customerName": "Carmen Torres",
       "address": "Jr. Puno 029, Breña",
       "driverName": "María Quispe",
       "status": "completed",
@@ -766,7 +923,7 @@
       "id": 7,
       "orderId": 5,
       "type": "pickup",
-      "customerName": "Rosa Díaz",
+      "customerName": "Carmen Torres",
       "address": "Jr. Puno 029, Breña",
       "driverName": "Luis Paredes",
       "status": "completed",
@@ -889,6 +1046,384 @@
       "name": "Washer 3",
       "status": "MAINTENANCE",
       "capacity": 10
+    }
+  ],
+  "customer-orders": [
+    {
+      "id": "5abe6b7d-b16f-4ecd-8fa6-6c7e8b9a0fb6",
+      "customerId": "CL005",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "IN_PROCESS",
+      "deliveryMethod": "DELIVERY",
+      "serviceType": "WASHING_DRYING",
+      "estimatedDeliveryDate": "2026-10-08T22:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-07T14:00:00.000Z",
+      "items": [
+        {
+          "id": "c3000001-0000-4000-8000-000000000000",
+          "orderId": "5abe6b7d-b16f-4ecd-8fa6-6c7e8b9a0fb6",
+          "type": "Camisa",
+          "quantity": 4,
+          "careInstructions": ""
+        },
+        {
+          "id": "c3000002-0000-4000-8000-000000000000",
+          "orderId": "5abe6b7d-b16f-4ecd-8fa6-6c7e8b9a0fb6",
+          "type": "Pantalón",
+          "quantity": 4,
+          "careInstructions": ""
+        }
+      ]
+    },
+    {
+      "id": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
+      "customerId": "CL002",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "READY",
+      "deliveryMethod": "PICKUP",
+      "serviceType": "IRONING",
+      "estimatedDeliveryDate": "2026-10-07T23:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-07T15:30:00.000Z",
+      "items": [
+        {
+          "id": "c3000003-0000-4000-8000-000000000000",
+          "orderId": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
+          "type": "Camisa",
+          "quantity": 5,
+          "careInstructions": "Planchar sin almidón"
+        }
+      ]
+    },
+    {
+      "id": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+      "customerId": "CL003",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "CLASSIFIED",
+      "deliveryMethod": "DELIVERY",
+      "serviceType": "DRY_CLEANING",
+      "estimatedDeliveryDate": "2026-10-08T22:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-06T16:00:00.000Z",
+      "items": [
+        {
+          "id": "c3000004-0000-4000-8000-000000000000",
+          "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+          "type": "Terno",
+          "quantity": 2,
+          "careInstructions": "Solo lavado en seco"
+        },
+        {
+          "id": "c3000005-0000-4000-8000-000000000000",
+          "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+          "type": "Vestido",
+          "quantity": 4,
+          "careInstructions": "Delicado"
+        },
+        {
+          "id": "c3000006-0000-4000-8000-000000000000",
+          "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
+          "type": "Blusa",
+          "quantity": 6,
+          "careInstructions": ""
+        }
+      ]
+    },
+    {
+      "id": "8de19eaa-e49c-4bfa-9cd9-9fab1ecd3ce9",
+      "customerId": "CL006",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "DELIVERED",
+      "deliveryMethod": "PICKUP",
+      "serviceType": "WASHING",
+      "estimatedDeliveryDate": "2026-10-07T22:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-06T13:15:00.000Z",
+      "items": [
+        {
+          "id": "c3000007-0000-4000-8000-000000000000",
+          "orderId": "8de19eaa-e49c-4bfa-9cd9-9fab1ecd3ce9",
+          "type": "Polo",
+          "quantity": 3,
+          "careInstructions": ""
+        }
+      ]
+    },
+    {
+      "id": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+      "customerId": "CL001",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "RECEIVED",
+      "deliveryMethod": "DELIVERY",
+      "serviceType": "WASHING_IRONING",
+      "estimatedDeliveryDate": "2026-10-07T22:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-05T14:20:00.000Z",
+      "items": [
+        {
+          "id": "c3000008-0000-4000-8000-000000000000",
+          "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+          "type": "Camisa",
+          "quantity": 3,
+          "careInstructions": ""
+        },
+        {
+          "id": "c3000009-0000-4000-8000-000000000000",
+          "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+          "type": "Pantalón",
+          "quantity": 2,
+          "careInstructions": ""
+        },
+        {
+          "id": "c3000010-0000-4000-8000-000000000000",
+          "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
+          "type": "Edredón",
+          "quantity": 1,
+          "careInstructions": "Lavado en frío"
+        }
+      ]
+    },
+    {
+      "id": "a0f3b0cc-06be-4dbc-9efb-b1cd3e0f5e0b",
+      "customerId": "CL007",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "CREATED",
+      "deliveryMethod": "PICKUP",
+      "serviceType": "DRYING",
+      "estimatedDeliveryDate": "2026-10-06T22:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-05T17:45:00.000Z",
+      "items": []
+    }
+  ],
+  "sensorData": [
+    {
+      "id": "1",
+      "deviceId": "0192a1e0-0000-7000-8000-000000000001",
+      "rawStatusCode": 1,
+      "humidity": 38,
+      "vibration": 22,
+      "electricCurrent": 4.2,
+      "timestamp": "2026-10-07T20:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "deviceId": "0192a1e0-0000-7000-8000-000000000002",
+      "rawStatusCode": 0,
+      "humidity": 20,
+      "vibration": 0,
+      "electricCurrent": 0.1,
+      "timestamp": "2026-10-07T20:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "deviceId": "0192a1e0-0000-7000-8000-000000000003",
+      "rawStatusCode": 0,
+      "humidity": 18,
+      "vibration": 0,
+      "electricCurrent": 0.1,
+      "timestamp": "2026-10-07T20:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "deviceId": "0192a1e0-0000-7000-8000-000000000004",
+      "rawStatusCode": 2,
+      "humidity": 45,
+      "vibration": 31,
+      "electricCurrent": 6.8,
+      "timestamp": "2026-10-07T20:00:00.000Z"
+    }
+  ],
+  "services": [
+    {
+      "id": "S104",
+      "name": "Lavado Estándar",
+      "category": "Lavado",
+      "basePrice": 8,
+      "estimatedHours": 24,
+      "active": true,
+      "orderServiceType": "WASHING"
+    },
+    {
+      "id": "S105",
+      "name": "Lavado Express",
+      "category": "Lavado",
+      "basePrice": 10,
+      "estimatedHours": 6,
+      "active": true,
+      "orderServiceType": null
+    },
+    {
+      "id": "S106",
+      "name": "Lavado en Seco",
+      "category": "Tintorería",
+      "basePrice": 15,
+      "estimatedHours": 48,
+      "active": true,
+      "orderServiceType": "DRY_CLEANING"
+    },
+    {
+      "id": "S107",
+      "name": "Planchado",
+      "category": "Acabado",
+      "basePrice": 18,
+      "estimatedHours": 48,
+      "active": true,
+      "orderServiceType": "IRONING"
+    },
+    {
+      "id": "S108",
+      "name": "Lavado + Planchado",
+      "category": "Combinado",
+      "basePrice": 25,
+      "estimatedHours": 72,
+      "active": false,
+      "orderServiceType": "WASHING_IRONING"
+    },
+    {
+      "id": "S109",
+      "name": "Desmanchado Especial",
+      "category": "Tratamiento",
+      "basePrice": 32,
+      "estimatedHours": 72,
+      "active": true,
+      "orderServiceType": null
+    },
+    {
+      "id": "S110",
+      "name": "Lavado de Edredones",
+      "category": "Lavado",
+      "basePrice": 20,
+      "estimatedHours": 72,
+      "active": true,
+      "orderServiceType": null
+    },
+    {
+      "id": "S111",
+      "name": "Planchado Express",
+      "category": "Acabado",
+      "basePrice": 20,
+      "estimatedHours": 48,
+      "active": false,
+      "orderServiceType": null
+    },
+    {
+      "id": "S112",
+      "name": "Tintorería Premium",
+      "category": "Tintorería",
+      "basePrice": 5,
+      "estimatedHours": 24,
+      "active": true,
+      "orderServiceType": null
+    },
+    {
+      "id": "S113",
+      "name": "Impermeabilizable",
+      "category": "Tratamiento",
+      "basePrice": 9,
+      "estimatedHours": 24,
+      "active": true,
+      "orderServiceType": null
+    },
+    {
+      "id": "S114",
+      "name": "Lavado de calzado",
+      "category": "Lavado",
+      "basePrice": 14,
+      "estimatedHours": 24,
+      "active": true,
+      "orderServiceType": null
+    }
+  ],
+  "garments": [
+    {
+      "id": "P104",
+      "name": "Pantalón",
+      "category": "Ropa Formal",
+      "basePrice": 8,
+      "estimatedHours": 24,
+      "active": true
+    },
+    {
+      "id": "P105",
+      "name": "Camisa",
+      "category": "Ropa Casual",
+      "basePrice": 10,
+      "estimatedHours": 24,
+      "active": true
+    },
+    {
+      "id": "P106",
+      "name": "Vestido",
+      "category": "Ropa Formal",
+      "basePrice": 15,
+      "estimatedHours": 48,
+      "active": true
+    },
+    {
+      "id": "P107",
+      "name": "Chaqueta",
+      "category": "Abrigos",
+      "basePrice": 18,
+      "estimatedHours": 48,
+      "active": true
+    },
+    {
+      "id": "P108",
+      "name": "Edredón 1 plaza",
+      "category": "Ropa de cama",
+      "basePrice": 25,
+      "estimatedHours": 72,
+      "active": true
+    },
+    {
+      "id": "P109",
+      "name": "Edredón 2 plazas",
+      "category": "Ropa de cama",
+      "basePrice": 32,
+      "estimatedHours": 72,
+      "active": true
+    },
+    {
+      "id": "P110",
+      "name": "Cortina",
+      "category": "Hogar",
+      "basePrice": 20,
+      "estimatedHours": 72,
+      "active": true
+    },
+    {
+      "id": "P111",
+      "name": "Terno",
+      "category": "Ropa Formal",
+      "basePrice": 20,
+      "estimatedHours": 48,
+      "active": false
+    },
+    {
+      "id": "P112",
+      "name": "Corbata",
+      "category": "Accesorio",
+      "basePrice": 5,
+      "estimatedHours": 24,
+      "active": true
+    },
+    {
+      "id": "P113",
+      "name": "Falda",
+      "category": "Ropa Casual",
+      "basePrice": 9,
+      "estimatedHours": 24,
+      "active": true
+    },
+    {
+      "id": "P114",
+      "name": "Zapatillas",
+      "category": "Calzado",
+      "basePrice": 14,
+      "estimatedHours": 24,
+      "active": false
     }
   ]
 }

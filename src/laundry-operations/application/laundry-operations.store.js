@@ -3,34 +3,31 @@ import {computed, ref} from "vue";
 import {LaundryOperationsApi} from "@/laundry-operations/infrastructure/laundry-operations-api.js";
 import {LaundryOrderAssembler} from "@/laundry-operations/infrastructure/laundry-order.assembler.js";
 import {WashingCycleAssembler} from "@/laundry-operations/infrastructure/washing-cycle.assembler.js";
-import {LaundryResourceAssembler} from "@/laundry-operations/infrastructure/laundry-resource.assembler.js";
 import {LaundryOrder} from "@/laundry-operations/domain/model/laundry-order.entity.js";
-import {LaundryResource} from "@/laundry-operations/domain/model/laundry-resource.entity.js";
 import {PROCESSING_STAGES, ProcessingStage} from "@/laundry-operations/domain/model/processing-stage.js";
 import {Priority} from "@/laundry-operations/domain/model/priority.js";
-import {ResourceStatus} from "@/laundry-operations/domain/model/resource-status.js";
+import useResourceStore from "@/laundry-operations/application/resource.store.js";
 import {generateUuid} from "@/shared/domain/model/uuid.js";
 import {ValidationError} from "@/shared/domain/model/errors.js";
 
 const laundryOperationsApi = new LaundryOperationsApi();
 
-const useLaundryOperationsStore = defineStore("laundry-operations", () => {
+/** LaundryOperationService: use cases of the processing of an order inside the laundry. */
+const useLaundryOperationStore = defineStore("laundry-operation", () => {
+    const resourceStore = useResourceStore();
+
     const laundryOrders = ref([]);
     const washingCycles = ref([]);
-    const laundryResources = ref([]);
     const errors = ref([]);
     const laundryOrdersLoaded = ref(false);
     const washingCyclesLoaded = ref(false);
-    const laundryResourcesLoaded = ref(false);
 
-    /** Orders grouped by processing stage (used by the production board). */
+    /** Orders grouped by processing stage (used by the dashboard). */
     const ordersByStage = computed(() => {
         const groups = Object.fromEntries(PROCESSING_STAGES.map(stage => [stage, []]));
         laundryOrders.value.forEach(order => groups[order.currentStage].push(order));
         return groups;
     });
-
-    const availableResources = computed(() => laundryResources.value.filter(resource => resource.isAvailable()));
 
     const vipOrders = computed(() => laundryOrders.value.filter(order => order.isVip && !order.isReady));
 
@@ -54,13 +51,14 @@ const useLaundryOperationsStore = defineStore("laundry-operations", () => {
         };
     });
 
-    /** Runs a use case, collecting any error (domain or HTTP) in `errors`. */
+    /** Runs a use case, collecting any error (domain or HTTP) in `errors`. Returns true if it succeeded. */
     async function run(useCase) {
         try {
-            return await useCase();
+            await useCase();
+            return true;
         } catch (error) {
             errors.value.push(error);
-            return null;
+            return false;
         }
     }
 
@@ -86,12 +84,15 @@ const useLaundryOperationsStore = defineStore("laundry-operations", () => {
         });
     }
 
-    function fetchLaundryResources() {
-        return run(async () => {
-            const response = await laundryOperationsApi.getLaundryResources();
-            laundryResources.value = LaundryResourceAssembler.toEntitiesFromResponse(response);
-            laundryResourcesLoaded.value = true;
-        });
+    /** WashingCycleRepository.findCompatible(type) */
+    async function findCompatibleWashingCycles(type) {
+        try {
+            const response = await laundryOperationsApi.getCompatibleWashingCycles(type);
+            return WashingCycleAssembler.toEntitiesFromResponse(response);
+        } catch (error) {
+            errors.value.push(error);
+            return [];
+        }
     }
 
     function getLaundryOrderById(id) {
@@ -102,22 +103,12 @@ const useLaundryOperationsStore = defineStore("laundry-operations", () => {
         return washingCycles.value.find(cycle => cycle.id === id);
     }
 
-    function getLaundryResourceById(id) {
-        return laundryResources.value.find(resource => resource.id === id);
-    }
-
     // ---------- Internal helpers ----------
 
     function requireOrder(id) {
         const order = getLaundryOrderById(id);
         if (!order) throw new ValidationError(`Laundry order not found: ${id}`);
         return new LaundryOrder({...order});
-    }
-
-    function requireResource(id) {
-        const resource = getLaundryResourceById(id);
-        if (!resource) throw new ValidationError(`Laundry resource not found: ${id}`);
-        return new LaundryResource({...resource});
     }
 
     async function persistOrder(order) {
@@ -129,78 +120,74 @@ const useLaundryOperationsStore = defineStore("laundry-operations", () => {
         return saved;
     }
 
-    async function persistResource(resource) {
-        const response = await laundryOperationsApi.updateLaundryResource(
-            resource.id, LaundryResourceAssembler.toResourceFromEntity(resource));
-        const saved = LaundryResourceAssembler.toEntityFromResource(response.data);
-        const index = laundryResources.value.findIndex(r => r.id === saved.id);
-        if (index !== -1) laundryResources.value[index] = saved;
-        return saved;
-    }
+    // ---------- Use cases ----------
 
-    async function releaseBusyResource(resourceId) {
-        const resource = requireResource(resourceId);
-        if (resource.status !== ResourceStatus.BUSY) return;
-        resource.release();
-        await persistResource(resource);
-    }
-
-    // ---------- Commands (use cases) ----------
-
-    /** Receive Order: creates the laundry order for an order coming from Order Management. */
+    /** receiveOrder(orderId): creates the laundry order for an order coming from Order Management. */
     function receiveOrder(orderId, expectedCompletion = null) {
         return run(async () => {
+            if (!orderId) throw new ValidationError("A laundry order must reference an order");
             const order = new LaundryOrder({id: generateUuid(), orderId, expectedCompletion});
-            order.receive();
             const response = await laundryOperationsApi.createLaundryOrder(
                 LaundryOrderAssembler.toResourceFromEntity(order));
             laundryOrders.value.push(LaundryOrderAssembler.toEntityFromResource(response.data));
         });
     }
 
-    /** Classify Order. */
-    function classifyOrder(id) {
-        return run(async () => {
-            const order = requireOrder(id);
-            order.classify();
-            await persistOrder(order);
-        });
-    }
-
-    /** Assign Washing Cycle + Assign Resource (both required before washing). */
-    function assignCycleAndResource(orderId, cycleId, resourceId) {
+    /** classifyOrder(orderId): RECEPTION -> CLASSIFICATION. */
+    function classifyOrder(orderId) {
         return run(async () => {
             const order = requireOrder(orderId);
-            const cycle = getWashingCycleById(cycleId);
-            if (!cycle) throw new ValidationError(`Washing cycle not found: ${cycleId}`);
-            const resource = requireResource(resourceId);
-            const previousResourceId = order.resourceId;
-            const sameResource = previousResourceId === resourceId;
-
-            order.assignCycle(cycle);
-            order.assignResource(resource);
-            if (!sameResource) resource.assign();
-
-            if (!sameResource) await persistResource(resource);
+            order.advanceStage(ProcessingStage.CLASSIFICATION);
             await persistOrder(order);
-            if (previousResourceId && !sameResource) await releaseBusyResource(previousResourceId);
         });
     }
 
-    /** Advance Stage. When the order becomes READY its resource is released. */
-    function advanceStage(id) {
+    /** assignWashingCycle(orderId, cycleId) */
+    function assignWashingCycle(orderId, cycleId) {
         return run(async () => {
-            const order = requireOrder(id);
-            order.advanceStage();
+            const order = requireOrder(orderId);
+            if (!getWashingCycleById(cycleId)) throw new ValidationError(`Washing cycle not found: ${cycleId}`);
+            order.assignWashingCycle(cycleId);
+            await persistOrder(order);
+        });
+    }
+
+    /**
+     * assignResource(orderId, resourceId): reserves the resource and links it to the order.
+     * If the order already had another resource, that one is released.
+     */
+    function assignResource(orderId, resourceId) {
+        return run(async () => {
+            const order = requireOrder(orderId);
+            const previousResourceId = order.resourceId;
+            if (previousResourceId === resourceId) return;
+
+            order.assignResource(resourceId);
+            await resourceStore.assignResource(resourceId);
+            try {
+                await persistOrder(order);
+            } catch (error) {
+                await resourceStore.releaseResource(resourceId).catch(() => {});
+                throw error;
+            }
+            if (previousResourceId) await resourceStore.releaseResource(previousResourceId);
+        });
+    }
+
+    /** advanceStage(orderId, stage): when the order becomes READY, its resource is released. */
+    function advanceStage(orderId, stage = null) {
+        return run(async () => {
+            const order = requireOrder(orderId);
+            order.advanceStage(stage);
             const saved = await persistOrder(order);
-            if (saved.isReady && saved.resourceId) await releaseBusyResource(saved.resourceId);
+            if (saved.isReady && saved.resourceId) await resourceStore.releaseResource(saved.resourceId);
         });
     }
 
-    /** Prioritize VIP Order. */
-    function prioritizeOrder(id) {
+    /** prioritizeOrder(orderId): marks the order as VIP. */
+    function prioritizeOrder(orderId) {
         return run(async () => {
-            const order = requireOrder(id);
+            const order = requireOrder(orderId);
             order.setPriority(Priority.VIP);
             await persistOrder(order);
         });
@@ -209,29 +196,26 @@ const useLaundryOperationsStore = defineStore("laundry-operations", () => {
     return {
         laundryOrders,
         washingCycles,
-        laundryResources,
         errors,
         laundryOrdersLoaded,
         washingCyclesLoaded,
-        laundryResourcesLoaded,
         ordersByStage,
-        availableResources,
         vipOrders,
         atRiskOrders,
         summary,
         clearErrors,
         fetchLaundryOrders,
         fetchWashingCycles,
-        fetchLaundryResources,
+        findCompatibleWashingCycles,
         getLaundryOrderById,
         getWashingCycleById,
-        getLaundryResourceById,
         receiveOrder,
         classifyOrder,
-        assignCycleAndResource,
+        assignWashingCycle,
+        assignResource,
         advanceStage,
         prioritizeOrder
     };
 });
 
-export default useLaundryOperationsStore;
+export default useLaundryOperationStore;

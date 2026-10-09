@@ -1,5 +1,6 @@
 <script setup>
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
+import {useBoardSearch} from "../board-search.js";
 import {useRoute} from "vue-router";
 import {useI18n} from "vue-i18n";
 import LanguageSwitcher from "./language-switcher.vue";
@@ -18,6 +19,10 @@ const toggleDrawer = () => {
 }
 
 const pageTitle = computed(() => route.meta.titleKey ? t(route.meta.titleKey) : '');
+
+// The header search filters the board on screen; start empty on every page.
+const { query } = useBoardSearch();
+watch(() => route.path, () => { query.value = ''; });
 </script>
 
 <template>
@@ -39,6 +44,11 @@ const pageTitle = computed(() => route.meta.titleKey ? t(route.meta.titleKey) : 
             <span v-if="pageTitle"> / {{ pageTitle }}</span>
           </nav>
         </div>
+        <pv-icon-field class="board-search">
+          <pv-input-icon class="pi pi-search" />
+          <pv-input-text v-model="query" type="search" :placeholder="t('board-search.placeholder')"
+                         :aria-label="t('board-search.placeholder')" fluid />
+        </pv-icon-field>
         <language-switcher />
       </header>
       <main class="main">
@@ -114,6 +124,23 @@ const pageTitle = computed(() => route.meta.titleKey ? t(route.meta.titleKey) : 
 
 .main {
   flex: 1;
+}
+
+.board-search {
+  width: 16rem;
+}
+
+.board-search :deep(.p-inputtext) {
+  border-color: #c9d8ea;
+  border-radius: .5rem;
+  background: #f8fbfe;
+  font-size: .8rem;
+}
+
+@media (max-width: 640px) {
+  .board-search {
+    width: 9rem;
+  }
 }
 
 .menu-button {

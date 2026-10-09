@@ -15,6 +15,7 @@ export const navigationGroups = [
         items: [
             {labelKey: 'option.orders', to: '/orders'},
             {labelKey: 'option.customers', to: '/customers'},
+            {labelKey: 'option.laundry', to: '/laundry-operations'},
             {labelKey: 'option.garments', to: '/garments'},
             {labelKey: 'option.services', to: '/services'},
             {labelKey: 'option.payments', to: '/payments'},

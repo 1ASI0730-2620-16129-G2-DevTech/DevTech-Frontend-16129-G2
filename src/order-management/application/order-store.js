@@ -1,9 +1,13 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { CustomerRepositoryImpl } from "../infrastructure/customer-repository-impl.js";
 import { OrderRepositoryImpl } from "../infrastructure/order-repository-impl.js";
 import { OrderService } from "./order-service.js";
 
-const orderService = new OrderService({ orderRepository: new OrderRepositoryImpl() });
+const orderService = new OrderService({
+    orderRepository: new OrderRepositoryImpl(),
+    customerRepository: new CustomerRepositoryImpl(),
+});
 
 /**
  * Pinia store with the order use cases and their state.
@@ -14,6 +18,8 @@ export const useOrderStore = defineStore("order", () => {
     const orders = ref([]);
     /** @type {import("vue").Ref<import("../domain/model/order.js").Order|null>} */
     const currentOrder = ref(null);
+    /** @type {import("vue").Ref<import("../domain/model/customer.js").Customer[]>} */
+    const customers = ref([]);
     const loading = ref(false);
     const errors = ref([]);
 
@@ -43,6 +49,20 @@ export const useOrderStore = defineStore("order", () => {
         replaceInState(await orderService.getOrderById(orderId));
     }
 
+    function fetchAllOrders() {
+        return run(async () => {
+            orders.value = await orderService.getAllOrders();
+            return orders.value;
+        });
+    }
+
+    function fetchCustomers() {
+        return run(async () => {
+            customers.value = await orderService.getAllCustomers();
+            return customers.value;
+        });
+    }
+
     function fetchOrdersByCustomer(customerId) {
         return run(async () => {
             orders.value = await orderService.getOrdersByCustomer(customerId);
@@ -54,6 +74,18 @@ export const useOrderStore = defineStore("order", () => {
         return run(async () => {
             currentOrder.value = await orderService.getOrderById(id);
             return currentOrder.value;
+        });
+    }
+
+    /**
+     * Places a new order from a plain request (see OrderService.placeOrder).
+     * @returns {Promise<import("../domain/model/order.js").Order|null>}
+     */
+    function placeOrder(request) {
+        return run(async () => {
+            const order = await orderService.placeOrder(request);
+            replaceInState(order);
+            return order;
         });
     }
 
@@ -108,10 +140,14 @@ export const useOrderStore = defineStore("order", () => {
     return {
         orders,
         currentOrder,
+        customers,
         loading,
         errors,
+        fetchAllOrders,
+        fetchCustomers,
         fetchOrdersByCustomer,
         fetchOrderById,
+        placeOrder,
         createOrder,
         updateOrder,
         changeOrderStatus,
