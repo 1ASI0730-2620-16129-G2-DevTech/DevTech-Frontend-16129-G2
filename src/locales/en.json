@@ -126,6 +126,74 @@
       }
     }
   },
+  "laundry-operations": {
+    "menu": {
+      "production-board": "Production Board",
+      "resources": "Resources",
+      "washing-cycles": "Washing Cycles"
+    },
+    "board": {
+      "title": "Production Board",
+      "receive": "Receive order",
+      "order-id": "Order ID",
+      "dismiss": "Dismiss"
+    },
+    "stages": {
+      "RECEPTION": "Reception",
+      "CLASSIFICATION": "Classification",
+      "WASHING": "Washing",
+      "DRYING_IRONING": "Drying/Ironing",
+      "PACKAGING": "Packaging",
+      "READY": "Ready"
+    },
+    "priority": {
+      "NORMAL": "Normal",
+      "VIP": "VIP"
+    },
+    "card": {
+      "expected": "Expected",
+      "cycle": "Cycle",
+      "resource": "Resource",
+      "at-risk": "Delivery risk",
+      "classify": "Classify",
+      "assign": "Assign",
+      "advance": "Advance"
+    },
+    "assign": {
+      "title": "Assign cycle and resource",
+      "cycle": "Washing cycle",
+      "resource": "Resource"
+    },
+    "resources": {
+      "title": "Laundry Resources",
+      "name": "Name",
+      "capacity": "Capacity",
+      "status": "Status",
+      "sync": "Sync with sensors"
+    },
+    "resource-status": {
+      "AVAILABLE": "Available",
+      "BUSY": "Busy",
+      "MAINTENANCE": "Maintenance"
+    },
+    "cycles": {
+      "title": "Washing Cycles",
+      "name": "Name",
+      "duration": "Duration (min)",
+      "compatible-type": "Compatible garment type"
+    },
+    "common": {
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "summary": {
+      "pending": "Pending",
+      "inProcess": "In process",
+      "ready": "Ready for delivery",
+      "vip": "VIP in progress",
+      "atRisk": "At risk"
+    }
+  },
   "orders": {
     "title": "Orders",
     "catalog-title": "All orders ({count})",

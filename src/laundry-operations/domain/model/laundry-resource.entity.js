@@ -38,4 +38,17 @@ export class LaundryResource {
         }
         this.status = ResourceStatus.AVAILABLE;
     }
+
+    /**
+     * Applies the status reported by the monitoring (already translated by the anti-corruption layer).
+     * A resource reserved for an order stays BUSY while its sensor reports it idle.
+     * @param {string} status - A value of {@link ResourceStatus}.
+     */
+    applyMonitoredStatus(status) {
+        if (!Object.values(ResourceStatus).includes(status)) {
+            throw new ValidationError(`Invalid resource status: ${status}`);
+        }
+        if (this.status === ResourceStatus.BUSY && status === ResourceStatus.AVAILABLE) return;
+        this.status = status;
+    }
 }

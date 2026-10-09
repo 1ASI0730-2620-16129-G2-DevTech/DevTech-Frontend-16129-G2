@@ -126,6 +126,74 @@
       }
     }
   },
+  "laundry-operations": {
+    "menu": {
+      "production-board": "Tablero de Producción",
+      "resources": "Recursos",
+      "washing-cycles": "Ciclos de Lavado"
+    },
+    "board": {
+      "title": "Tablero de Producción",
+      "receive": "Recibir pedido",
+      "order-id": "ID del pedido",
+      "dismiss": "Cerrar"
+    },
+    "stages": {
+      "RECEPTION": "Recepción",
+      "CLASSIFICATION": "Clasificación",
+      "WASHING": "Lavado",
+      "DRYING_IRONING": "Secado/Planchado",
+      "PACKAGING": "Empaquetado",
+      "READY": "Listo"
+    },
+    "priority": {
+      "NORMAL": "Normal",
+      "VIP": "VIP"
+    },
+    "card": {
+      "expected": "Entrega estimada",
+      "cycle": "Ciclo",
+      "resource": "Recurso",
+      "at-risk": "Riesgo de entrega",
+      "classify": "Clasificar",
+      "assign": "Asignar",
+      "advance": "Avanzar"
+    },
+    "assign": {
+      "title": "Asignar ciclo y recurso",
+      "cycle": "Ciclo de lavado",
+      "resource": "Recurso"
+    },
+    "resources": {
+      "title": "Recursos de la Lavandería",
+      "name": "Nombre",
+      "capacity": "Capacidad",
+      "status": "Estado",
+      "sync": "Sincronizar con sensores"
+    },
+    "resource-status": {
+      "AVAILABLE": "Disponible",
+      "BUSY": "Ocupado",
+      "MAINTENANCE": "Mantenimiento"
+    },
+    "cycles": {
+      "title": "Ciclos de Lavado",
+      "name": "Nombre",
+      "duration": "Duración (min)",
+      "compatible-type": "Tipo de prenda compatible"
+    },
+    "common": {
+      "save": "Guardar",
+      "cancel": "Cancelar"
+    },
+    "summary": {
+      "pending": "Pendientes",
+      "inProcess": "En proceso",
+      "ready": "Listos para entrega",
+      "vip": "VIP en curso",
+      "atRisk": "En riesgo"
+    }
+  },
   "orders": {
     "title": "Pedidos",
     "catalog-title": "Todos los pedidos ({count})",
