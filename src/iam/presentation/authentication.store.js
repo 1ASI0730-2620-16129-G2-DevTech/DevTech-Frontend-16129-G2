@@ -54,9 +54,30 @@ export const useAuthenticationStore = defineStore("authentication", () => {
         }
     }
 
+    async function resetPassword(email, password) {
+        loading.value = true;
+        error.value = "";
+        try {
+            await authenticationController.resetPassword({
+                email: email.trim().toLowerCase(),
+                password,
+            });
+            return true;
+        } catch (requestError) {
+            error.value = requestError.message === "USER_NOT_FOUND"
+                ? "password-recovery.email-not-found"
+                : requestError.message === "PASSWORD_RESET_DEVELOPMENT_ONLY"
+                  ? "password-recovery.development-only"
+                  : "password-recovery.connection-error";
+            return false;
+        } finally {
+            loading.value = false;
+        }
+    }
+
     async function getUserById(id) {
         return authenticationController.getUserById(id);
     }
 
-    return { user, loading, error, signIn, register, getUserById };
+    return { user, loading, error, signIn, register, resetPassword, getUserById };
 });

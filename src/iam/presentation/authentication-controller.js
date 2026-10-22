@@ -33,6 +33,14 @@ export class AuthenticationController {
     }
 
     /**
+     * @param {{email: string, password: string}} request
+     * @returns {Promise<void>}
+     */
+    async resetPassword(request) {
+        return this.#identityService.resetPassword(request);
+    }
+
+    /**
      * @param {string} id
      * @returns {Promise<{id: string, email: string, role: string}>}
      */
