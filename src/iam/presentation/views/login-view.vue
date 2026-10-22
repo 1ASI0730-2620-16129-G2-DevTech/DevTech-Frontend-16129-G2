@@ -58,6 +58,9 @@ async function submit() {
         {{ t("login.no-account") }}
         <router-link to="/register">{{ t("login.register") }}</router-link>
       </p>
+      <p class="register-link">
+        <router-link to="/password-recovery">{{ t("login.forgot-password") }}</router-link>
+      </p>
 
       <small>{{ t("login.demo-hint") }}</small>
       <small><strong>{{ t("login.demo-email") }}</strong> rosa.diaz@example.com</small>
