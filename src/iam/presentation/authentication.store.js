@@ -34,7 +34,7 @@ export const useAuthenticationStore = defineStore("authentication", () => {
         }
     }
 
-    async function register(username, email, password) {
+    async function register(username, email, password, role = "customer") {
         loading.value = true;
         error.value = "";
         try {
@@ -42,6 +42,7 @@ export const useAuthenticationStore = defineStore("authentication", () => {
                 username: username.trim(),
                 email: email.trim().toLowerCase(),
                 password,
+                role,
             });
             return true;
         } catch (requestError) {
