@@ -38,6 +38,9 @@
   "register": {
     "title": "Crear cuenta",
     "description": "Completa tus datos para registrarte en WashTrack.",
+    "role-label": "Tipo de cuenta",
+    "customer": "Cliente",
+    "administrator": "Administrador",
     "name": "Nombre",
     "email": "Correo electrónico",
     "password": "Contraseña (mínimo 6 caracteres)",
