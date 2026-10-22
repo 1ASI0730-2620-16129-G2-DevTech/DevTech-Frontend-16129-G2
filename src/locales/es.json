@@ -31,6 +31,7 @@
     "registration-success": "Cuenta creada. Ya puedes iniciar sesión.",
     "no-account": "¿No tienes una cuenta?",
     "register": "Regístrate",
+    "forgot-password": "¿Olvidaste tu contraseña?",
     "demo-hint": "Credenciales de prueba:",
     "demo-email": "Correo:",
     "demo-password": "Contraseña:"
@@ -52,6 +53,21 @@
     "connection-error": "No se pudo crear la cuenta. Inténtalo nuevamente.",
     "has-account": "¿Ya tienes una cuenta?",
     "sign-in": "Inicia sesión"
+  },
+  "password-recovery": {
+    "title": "Recuperar contraseña",
+    "description": "Ingresa tu correo y escribe tu nueva contraseña dos veces.",
+    "development-only": "Esta función de prueba solo cambia la contraseña en el servidor mock de desarrollo.",
+    "email": "Correo electrónico",
+    "new-password": "Nueva contraseña",
+    "confirm-password": "Confirmar nueva contraseña",
+    "passwords-do-not-match": "Las contraseñas no coinciden.",
+    "email-not-found": "No se encontró una cuenta con ese correo.",
+    "connection-error": "No se pudo cambiar la contraseña. Inténtalo nuevamente.",
+    "submit": "Cambiar contraseña",
+    "submitting": "Cambiando contraseña...",
+    "success": "La contraseña se cambió correctamente.",
+    "back-to-login": "Volver al inicio de sesión"
   },
   "roles": {
     "customer": "Cliente",

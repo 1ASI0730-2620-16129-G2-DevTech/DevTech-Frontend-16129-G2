@@ -31,6 +31,7 @@
     "registration-success": "Account created. You can now sign in.",
     "no-account": "Don't have an account?",
     "register": "Sign up",
+    "forgot-password": "Forgot your password?",
     "demo-hint": "Demo credentials:",
     "demo-email": "Email:",
     "demo-password": "Password:"
@@ -52,6 +53,21 @@
     "connection-error": "Could not create your account. Please try again.",
     "has-account": "Already have an account?",
     "sign-in": "Sign in"
+  },
+  "password-recovery": {
+    "title": "Recover password",
+    "description": "Enter your email and type your new password twice.",
+    "development-only": "This test feature only changes the password in the development mock server.",
+    "email": "Email",
+    "new-password": "New password",
+    "confirm-password": "Confirm new password",
+    "passwords-do-not-match": "The passwords do not match.",
+    "email-not-found": "No account was found with that email.",
+    "connection-error": "Could not change the password. Please try again.",
+    "submit": "Change password",
+    "submitting": "Changing password...",
+    "success": "The password was changed successfully.",
+    "back-to-login": "Back to sign in"
   },
   "roles": {
     "customer": "Customer",

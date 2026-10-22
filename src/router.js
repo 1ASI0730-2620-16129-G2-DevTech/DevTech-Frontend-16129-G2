@@ -7,6 +7,7 @@ import about from "@/shared/presentation/views/about.vue";
 import laundryOperationsRoutes from "@/laundry-operations/presentation/laundry-operations-routes.js";
 import LoginView from "@/iam/presentation/views/login-view.vue";
 import RegisterView from "@/iam/presentation/views/register-view.vue";
+import PasswordRecoveryView from "@/iam/presentation/views/password-recovery-view.vue";
 import paymentsRoutes from "@/payments/presentation/payments-routes.js";
 import orderManagementRoutes from "@/order-management/presentation/order-management-routes.js";
 import customerManagementRoutes from "@/customer-management/presentation/customer-management-routes.js";
@@ -25,6 +26,12 @@ const routes =
             name: 'register',
             component: RegisterView,
             meta: { titleKey: 'register.title', hideLayout: true }
+        },
+        {
+            path: '/password-recovery',
+            name: 'password-recovery',
+            component: PasswordRecoveryView,
+            meta: { titleKey: 'password-recovery.title', hideLayout: true }
         },
         {
             path: '/home',
