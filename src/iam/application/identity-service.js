@@ -28,6 +28,28 @@ export class IdentityService {
     }
 
     /**
+     * Changes a password in the development mock for the supplied email.
+     * @param {{email: string, password: string}} request
+     * @returns {Promise<void>}
+     */
+    async resetPassword({ email, password }) {
+        if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+            throw new ValidationError("Email must be valid");
+        }
+        if (typeof password !== "string" || password.length < 6) {
+            throw new ValidationError("Password must contain at least 6 characters");
+        }
+
+        const updated = await this.#userRepository.updatePasswordByEmail(
+            email.trim().toLowerCase(),
+            password,
+        );
+        if (!updated) {
+            throw new NotFoundError("USER_NOT_FOUND");
+        }
+    }
+
+    /**
      * @param {Object} request
      * @param {string} request.username
      * @param {string} request.email
