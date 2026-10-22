@@ -399,6 +399,17 @@
       "status": "pending",
       "paidAt": null,
       "orderDate": "2026-10-05T17:45:00.000Z"
+    },
+    {
+      "id": "PG015",
+      "orderId": "01a125db-2d2a-7293-b70d-25fd11913c5e",
+      "customerId": "CL002",
+      "customerName": "Jorge Salas",
+      "amount": 0,
+      "paymentMethod": "cash",
+      "status": "pending",
+      "paidAt": null,
+      "orderDate": "2026-10-10T12:47:37.376Z"
     }
   ],
   "subscription-plans": [
@@ -1195,6 +1206,26 @@
       "specialCareInstructions": "",
       "createdAt": "2026-10-05T17:45:00.000Z",
       "items": []
+    },
+    {
+      "id": "01a125db-2d2a-7293-b70d-25fd11913c5e",
+      "customerId": "CL002",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "CREATED",
+      "deliveryMethod": "DELIVERY",
+      "serviceType": "WASHING_IRONING",
+      "estimatedDeliveryDate": "2026-10-11T12:47:37.376Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-10-10T12:47:37.376Z",
+      "items": [
+        {
+          "id": "01a125db-2d2b-739a-aa92-8f38c00f1edd",
+          "orderId": "01a125db-2d2a-7293-b70d-25fd11913c5e",
+          "type": "Prendas varias",
+          "quantity": 3,
+          "careInstructions": ""
+        }
+      ]
     }
   ],
   "sensorData": [

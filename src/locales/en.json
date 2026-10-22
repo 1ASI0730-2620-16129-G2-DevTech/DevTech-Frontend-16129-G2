@@ -38,6 +38,9 @@
   "register": {
     "title": "Create account",
     "description": "Enter your details to sign up for WashTrack.",
+    "role-label": "Account type",
+    "customer": "Customer",
+    "administrator": "Administrator",
     "name": "Name",
     "email": "Email",
     "password": "Password (at least 6 characters)",
