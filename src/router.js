@@ -5,6 +5,7 @@ import pickupsDeliveriesRoutes from "@/pickups-deliveries/presentation/pickups-d
 import pageNotFound from "@/shared/presentation/views/page-not-found.vue";
 import about from "@/shared/presentation/views/about.vue";
 import laundryOperationsRoutes from "@/laundry-operations/presentation/laundry-operations-routes.js";
+import paymentsRoutes from "@/payments/presentation/payments-routes.js";
 import Home from "@/shared/presentation/views/home.vue";
 
 const routes =
@@ -43,6 +44,12 @@ const routes =
             path: '/tracking-notifications',
             name: 'tracking-notifications',
             children: trackingNotificationsRoutes
+        },
+        // Nested routes for payments
+        {
+            path: '/payments',
+            name: 'payments',
+            children: paymentsRoutes
         },
         // Nested routes for pickups & deliveries
         {
