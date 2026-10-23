@@ -3,6 +3,7 @@ import App from './app.vue'
 import PrimeVue from 'primevue/config'
 import WashTrackPreset from '@/shared/presentation/washtrack-preset.js'
 import '@/shared/presentation/styles/washtrack-theme.css'
+import '@/shared/presentation/styles/board.css'
 import 'primeflex/primeflex.css'
 import 'primeicons/primeicons.css'
 
