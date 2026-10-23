@@ -4,11 +4,12 @@ import {storeToRefs} from "pinia";
 import {useI18n} from "vue-i18n";
 import {usePaymentsStore} from "../../application/payments.store.js";
 import {PaymentStatus} from "../../domain/model/payment-status.js";
+import {searchItems, useBoardSearch} from "@/shared/presentation/board-search.js";
 
 const {t} = useI18n();
 const store = usePaymentsStore();
 const {payments, loading, errors, summary} = storeToRefs(store);
-const search = ref("");
+const {query} = useBoardSearch();
 const selectedStatus = ref("all");
 const selectedPayment = ref(null);
 
@@ -20,16 +21,21 @@ const statusFilters = [
 ];
 
 const filteredPayments = computed(() => {
-    const query = search.value.trim().toLowerCase();
-    return payments.value.filter((payment) => {
-        const matchesStatus = selectedStatus.value === "all" || payment.status === selectedStatus.value;
-        const matchesSearch = !query || [payment.customerName, payment.orderId, payment.id]
-            .some((value) => String(value).toLowerCase().includes(query));
-        return matchesStatus && matchesSearch;
-    });
+    const byStatus = payments.value.filter((payment) =>
+        selectedStatus.value === "all" || payment.status === selectedStatus.value);
+    return searchItems(byStatus, (payment) => [
+        paymentCode(payment), payment.customerName, orderCode(payment.orderId), payment.orderId,
+        formatMethod(payment.paymentMethod), statusLabel(payment.status)
+    ], query.value);
 });
 
 function statusLabel(status) { return t(`payments.status.${status}`); }
+const STATUS_SEVERITY = {
+    [PaymentStatus.PAID]: "success",
+    [PaymentStatus.PENDING]: "warn",
+    [PaymentStatus.CANCELLED]: "danger"
+};
+function statusSeverity(status) { return STATUS_SEVERITY[status] ?? "secondary"; }
 function formatMethod(method) { return method.charAt(0).toUpperCase() + method.slice(1); }
 function formatDate(date) {
     return new Intl.DateTimeFormat("es-PE", {day: "2-digit", month: "2-digit", year: "numeric"}).format(date);
@@ -38,7 +44,11 @@ function formatAmount(amount) {
     return new Intl.NumberFormat("es-PE", {style: "currency", currency: "PEN"}).format(amount);
 }
 function paymentCode(payment) {
-  return `#PG${String(payment.id).padStart(3, "0")}`;
+  return `#${payment.id}`;
+}
+function orderCode(orderId) {
+  const id = String(orderId);
+  return /^\d+$/.test(id) ? `#${id.padStart(4, "0")}` : `#${id.slice(0, 6).toUpperCase()}`;
 }
 function openDetails(payment) {
   selectedPayment.value = payment;
@@ -47,39 +57,38 @@ onMounted(() => store.fetchPayments());
 </script>
 
 <template>
-  <section class="payment-page">
+  <section class="wt-board payment-page">
     <template v-if="!selectedPayment">
-    <div class="catalog-heading">
+    <div class="wt-board-heading">
       <h1>{{ t('payments.catalog-title', {count: payments.length}) }}</h1>
     </div>
 
-    <div class="catalog-panel">
-      <div v-if="loading" class="empty-state">{{ t('payments.loading') }}</div>
-      <div v-else-if="errors.length" class="empty-state error-state">{{ t('payments.error') }}</div>
-      <div v-else-if="!filteredPayments.length" class="empty-state">{{ t('payments.empty') }}</div>
-      <div v-else class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>{{ t('payments.columns.id') }}</th><th>{{ t('payments.columns.order') }}</th>
-              <th>{{ t('payments.columns.customer') }}</th><th>{{ t('payments.columns.amount') }}</th>
-              <th>{{ t('payments.columns.method') }}</th><th>{{ t('payments.columns.status') }}</th>
-              <th>{{ t('payments.columns.date') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="payment in filteredPayments" :key="payment.id" class="payment-row"
-                tabindex="0" @dblclick="openDetails(payment)" @keydown.enter="openDetails(payment)">
-              <td class="payment-id">{{ paymentCode(payment) }}</td>
-              <td>#{{ String(payment.orderId).padStart(4, '0') }}</td>
-              <td class="customer-name">{{ payment.customerName }}</td>
-              <td>{{ formatAmount(payment.amount) }}</td><td>{{ formatMethod(payment.paymentMethod) }}</td>
-              <td><span class="status" :class="`status-${payment.status}`">{{ statusLabel(payment.status) }}</span></td>
-              <td>{{ formatDate(payment.orderDate) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="wt-board-panel">
+      <div v-if="loading" class="wt-board-empty">{{ t('payments.loading') }}</div>
+      <div v-else-if="errors.length" class="wt-board-empty error-state">{{ t('payments.error') }}</div>
+      <div v-else-if="!payments.length" class="wt-board-empty">{{ t('payments.empty') }}</div>
+      <div v-else-if="!filteredPayments.length" class="wt-board-empty">{{ t('board-search.no-results', {query}) }}</div>
+      <table v-else class="wt-board-table">
+        <thead>
+          <tr>
+            <th>{{ t('payments.columns.id') }}</th><th>{{ t('payments.columns.order') }}</th>
+            <th>{{ t('payments.columns.customer') }}</th><th>{{ t('payments.columns.amount') }}</th>
+            <th>{{ t('payments.columns.method') }}</th><th>{{ t('payments.columns.status') }}</th>
+            <th>{{ t('payments.columns.date') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="payment in filteredPayments" :key="payment.id" class="wt-clickable"
+              tabindex="0" @dblclick="openDetails(payment)" @keydown.enter="openDetails(payment)">
+            <td class="wt-board-id">{{ paymentCode(payment) }}</td>
+            <td>{{ orderCode(payment.orderId) }}</td>
+            <td class="customer-name">{{ payment.customerName }}</td>
+            <td>{{ formatAmount(payment.amount) }}</td><td>{{ formatMethod(payment.paymentMethod) }}</td>
+            <td><pv-tag :value="statusLabel(payment.status)" :severity="statusSeverity(payment.status)"/></td>
+            <td>{{ formatDate(payment.orderDate) }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <section class="garment-chart">
@@ -125,11 +134,11 @@ onMounted(() => store.fetchPayments());
             <h2>{{ t('payments.detail.title') }}</h2>
             <dl>
               <div><dt>{{ t('payments.columns.id') }}</dt><dd>{{ paymentCode(selectedPayment) }}</dd></div>
-              <div><dt>{{ t('payments.columns.order') }}</dt><dd>#{{ String(selectedPayment.orderId).padStart(4, '0') }}</dd></div>
+              <div><dt>{{ t('payments.columns.order') }}</dt><dd>{{ orderCode(selectedPayment.orderId) }}</dd></div>
               <div><dt>{{ t('payments.columns.customer') }}</dt><dd>{{ selectedPayment.customerName }}</dd></div>
               <div><dt>{{ t('payments.columns.method') }}</dt><dd>{{ formatMethod(selectedPayment.paymentMethod) }}</dd></div>
               <div><dt>{{ t('payments.columns.date') }}</dt><dd>{{ formatDate(selectedPayment.orderDate) }}</dd></div>
-              <div><dt>{{ t('payments.columns.status') }}</dt><dd>{{ statusLabel(selectedPayment.status) }}</dd></div>
+              <div><dt>{{ t('payments.columns.status') }}</dt><dd><pv-tag :value="statusLabel(selectedPayment.status)" :severity="statusSeverity(selectedPayment.status)"/></dd></div>
               <div><dt>{{ t('payments.columns.amount') }}</dt><dd>{{ formatAmount(selectedPayment.amount) }}</dd></div>
             </dl>
           </div>
@@ -140,19 +149,12 @@ onMounted(() => store.fetchPayments());
 </template>
 
 <style scoped>
-.payment-page { max-width: 60rem; margin: 0; padding: 1.5rem 2rem 3rem; color: #123b7a; }
-.catalog-heading { display: flex; align-items: center; gap: 1rem; margin-bottom: .7rem; }
-h1 { font-size: 1rem; font-weight: 700; } h2 { font-size: .9rem; font-weight: 700; }
+h2 { font-size: .9rem; font-weight: 700; }
 .period-filters { display: flex; align-items: center; gap: .35rem; }
 .period-filters button { border: 0; border-radius: 1rem; padding: .3rem .7rem; background: #f5f9fd; color: #72819b; font-size: .68rem; cursor: pointer; }
 .period-filters button.selected { background: #087fea; color: #fff; }
-.catalog-panel { overflow: hidden; background: #fff; }
-.table-wrapper { overflow-x: auto; } table { width: 100%; min-width: 48rem; border-collapse: collapse; font-size: .72rem; }
-th { padding: .55rem .85rem; background: #f3f8fd; color: #71809a; font-size: .63rem; font-weight: 700; text-align: left; }
-td { padding: .52rem .85rem; border-top: 1px solid #dce9f5; white-space: nowrap; } .payment-id, .customer-name { font-weight: 600; color: #123b7a; }
-.payment-row { cursor: pointer; } .payment-row:hover, .payment-row:focus { background: #f8fbff; outline: none; }
-.status { font-size: .72rem; } .status-paid { color: #1aaf5d; } .status-pending { color: #d97706; } .status-cancelled { color: #9b9b9b; }
-.empty-state { padding: 3rem 1rem; color: #6b7d9f; text-align: center; } .error-state { color: #c03939; }
+.customer-name { font-weight: 600; color: #123b7a; }
+.error-state { color: #c03939; }
 .payment-details { color: #123b7a; }
 .payment-detail-page { min-height: 29rem; }
 .detail-breadcrumb { display: flex; align-items: center; gap: .45rem; margin-bottom: 1.5rem; color: #71809a; font-size: .68rem; }
@@ -174,5 +176,5 @@ td { padding: .52rem .85rem; border-top: 1px solid #dce9f5; white-space: nowrap;
 .chart-area { height: 9.6rem; padding: 1rem .75rem; border-radius: 8px; background: #f4f9fd; }
 .chart-area svg { width: 100%; height: 100%; overflow: visible; }
 .chart-area polyline { fill: none; stroke: #f59b00; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
-@media (max-width: 700px) { .payment-page { padding: 1rem; } .chart-heading { align-items: flex-start; flex-direction: column; } .garment-chart { margin-top: 2.5rem; } .detail-layout { grid-template-columns: 1fr; } .detail-layout .qr-frame { max-width: 20rem; } }
+@media (max-width: 700px) { .chart-heading { align-items: flex-start; flex-direction: column; } .garment-chart { margin-top: 2.5rem; } .detail-layout { grid-template-columns: 1fr; } .detail-layout .qr-frame { max-width: 20rem; } }
 </style>
