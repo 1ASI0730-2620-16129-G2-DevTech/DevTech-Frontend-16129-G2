@@ -44,6 +44,10 @@
   "errors": {
     "occurred": "Errors occurred"
   },
+  "board-search": {
+    "placeholder": "Search order, customer…",
+    "no-results": "No results for \"{query}\"."
+  },
   "payments": {
     "title": "Payments",
     "breadcrumb": "Home / Payments",
