@@ -13,6 +13,7 @@ export class Payment {
         orderDate,
     }) {
         if (!id || !orderId || !customerId || !customerName) throw new Error("Payment identifiers are required");
+        if (!/^PG\d{3,}$/.test(id)) throw new Error("Payment id must follow the PG000 format");
         if (typeof amount !== "number" || amount < 0) throw new Error("Payment amount must be a positive number");
         if (!PAYMENT_STATUSES.includes(status)) throw new Error(`Payment status must be one of ${PAYMENT_STATUSES.join(", ")}`);
 
