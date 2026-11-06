@@ -15,6 +15,8 @@ export class UserAssembler {
             email: resource.email,
             passwordHash: resource.passwordHash,
             role: resource.role,
+            username: resource.username,
+            code: /^(CL|VN)\d+$/.test(String(resource.id)) ? String(resource.id) : '',
         });
     }
 
