@@ -12,6 +12,7 @@ import paymentsRoutes from "@/payments/presentation/payments-routes.js";
 import orderManagementRoutes from "@/order-management/presentation/order-management-routes.js";
 import customerManagementRoutes from "@/customer-management/presentation/customer-management-routes.js";
 import {garmentRoutes, serviceRoutes} from "@/service-catalog/presentation/service-catalog-routes.js";
+import {authenticationGuard} from "@/iam/infrastructure/authentication.guard.js";
 
 const routes =
     [
@@ -114,7 +115,7 @@ router.beforeEach((to) => {
     const baseTitle = 'WashTrack';
     const title = to.meta.titleKey ? i18n.global.t(to.meta.titleKey) : '';
     document.title = title ? `${baseTitle} - ${title}` : baseTitle;
-    return true;
+    return authenticationGuard(to);
 });
 
 export default router;
