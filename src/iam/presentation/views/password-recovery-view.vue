@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useAuthenticationStore } from "@/iam/presentation/authentication.store.js";
+import useIamStore from "@/iam/application/iam.store.js";
 
 const { t } = useI18n();
-const authentication = useAuthenticationStore();
+const authentication = useIamStore();
 const isDevelopment = import.meta.env.DEV;
 const email = ref("");
 const password = ref("");
@@ -32,34 +32,34 @@ async function submit() {
 
       <label for="recovery-email">{{ t("password-recovery.email") }}</label>
       <input
-        id="recovery-email"
-        v-model.trim="email"
-        type="email"
-        autocomplete="email"
-        :disabled="authentication.loading"
-        required
+          id="recovery-email"
+          v-model.trim="email"
+          type="email"
+          autocomplete="email"
+          :disabled="authentication.loading"
+          required
       />
 
       <label for="new-password">{{ t("password-recovery.new-password") }}</label>
       <input
-        id="new-password"
-        v-model="password"
-        type="password"
-        autocomplete="new-password"
-        minlength="6"
-        :disabled="authentication.loading"
-        required
+          id="new-password"
+          v-model="password"
+          type="password"
+          autocomplete="new-password"
+          minlength="6"
+          :disabled="authentication.loading"
+          required
       />
 
       <label for="confirm-new-password">{{ t("password-recovery.confirm-password") }}</label>
       <input
-        id="confirm-new-password"
-        v-model="confirmPassword"
-        type="password"
-        autocomplete="new-password"
-        minlength="6"
-        :disabled="authentication.loading"
-        required
+          id="confirm-new-password"
+          v-model="confirmPassword"
+          type="password"
+          autocomplete="new-password"
+          minlength="6"
+          :disabled="authentication.loading"
+          required
       />
 
       <p v-if="validationError" class="recovery-error" role="alert">

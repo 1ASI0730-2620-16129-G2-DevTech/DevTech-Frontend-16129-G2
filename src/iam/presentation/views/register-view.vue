@@ -2,11 +2,11 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useAuthenticationStore } from "@/iam/presentation/authentication.store.js";
+import useIamStore from "@/iam/application/iam.store.js";
 
 const { t } = useI18n();
 const router = useRouter();
-const authentication = useAuthenticationStore();
+const authentication = useIamStore();
 const username = ref("");
 const email = ref("");
 const password = ref("");
@@ -22,10 +22,10 @@ async function submit() {
   }
 
   const registered = await authentication.register(
-    username.value,
-    email.value,
-    password.value,
-    selectedRole.value,
+      username.value,
+      email.value,
+      password.value,
+      selectedRole.value,
   );
   if (registered) {
     await router.push({ name: "login", query: { registered: "true" } });
@@ -43,22 +43,22 @@ async function submit() {
         <legend>{{ t("register.role-label") }}</legend>
         <div class="role-options">
           <button
-            type="button"
-            class="role-option"
-            :class="{ selected: selectedRole === 'customer' }"
-            :aria-pressed="selectedRole === 'customer'"
-            :disabled="authentication.loading"
-            @click="selectedRole = 'customer'"
+              type="button"
+              class="role-option"
+              :class="{ selected: selectedRole === 'customer' }"
+              :aria-pressed="selectedRole === 'customer'"
+              :disabled="authentication.loading"
+              @click="selectedRole = 'customer'"
           >
             {{ t("register.customer") }}
           </button>
           <button
-            type="button"
-            class="role-option"
-            :class="{ selected: selectedRole === 'shift-manager' }"
-            :aria-pressed="selectedRole === 'shift-manager'"
-            :disabled="authentication.loading"
-            @click="selectedRole = 'shift-manager'"
+              type="button"
+              class="role-option"
+              :class="{ selected: selectedRole === 'shift-manager' }"
+              :aria-pressed="selectedRole === 'shift-manager'"
+              :disabled="authentication.loading"
+              @click="selectedRole = 'shift-manager'"
           >
             {{ t("register.administrator") }}
           </button>
@@ -67,40 +67,40 @@ async function submit() {
 
       <label for="username">{{ t("register.name") }}</label>
       <input
-        id="username"
-        v-model.trim="username"
-        type="text"
-        autocomplete="name"
-        required
+          id="username"
+          v-model.trim="username"
+          type="text"
+          autocomplete="name"
+          required
       />
 
       <label for="register-email">{{ t("register.email") }}</label>
       <input
-        id="register-email"
-        v-model.trim="email"
-        type="email"
-        autocomplete="email"
-        required
+          id="register-email"
+          v-model.trim="email"
+          type="email"
+          autocomplete="email"
+          required
       />
 
       <label for="register-password">{{ t("register.password") }}</label>
       <input
-        id="register-password"
-        v-model="password"
-        type="password"
-        autocomplete="new-password"
-        minlength="6"
-        required
+          id="register-password"
+          v-model="password"
+          type="password"
+          autocomplete="new-password"
+          minlength="6"
+          required
       />
 
       <label for="confirm-password">{{ t("register.confirm-password") }}</label>
       <input
-        id="confirm-password"
-        v-model="confirmPassword"
-        type="password"
-        autocomplete="new-password"
-        minlength="6"
-        required
+          id="confirm-password"
+          v-model="confirmPassword"
+          type="password"
+          autocomplete="new-password"
+          minlength="6"
+          required
       />
 
       <p v-if="validationError" class="register-error" role="alert">
