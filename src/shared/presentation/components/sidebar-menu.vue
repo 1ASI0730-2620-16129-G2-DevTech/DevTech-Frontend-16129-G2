@@ -1,9 +1,14 @@
 <script setup>
+import {computed} from "vue";
 import {useI18n} from "vue-i18n";
+import {useRouter} from "vue-router";
+import useIamStore from "@/iam/application/iam.store.js";
 
 const emit = defineEmits(['navigate']);
 
 const { t } = useI18n();
+const router = useRouter();
+const iamStore = useIamStore();
 
 // Entries with `to: null` belong to modules that are not built yet.
 const groups = [
@@ -17,7 +22,7 @@ const groups = [
       { label: 'menu.garments', to: '/garments' },
       { label: 'menu.services', to: '/services' },
       { label: 'menu.payments', to: '/payments' },
-      { label: 'menu.deliveries', to: '/pickups-deliveries/deliveries' },
+      { label: 'menu.deliveries', to: '/pickups-deliveries' },
       { label: 'menu.tracking', to: '/tracking-notifications/trackings' }
     ] },
   { label: 'menu.groups.monitoring', items: [
@@ -26,11 +31,19 @@ const groups = [
     ] }
 ];
 
-// TODO: take the signed-in user from the IAM store once the IAM context exists.
-const currentUser = { name: 'Rosa Diaz', role: 'shift-manager' };
+/** Signed-in user shown at the bottom of the menu. */
+const currentUser = computed(() => iamStore.currentUser);
 
-// TODO: call the IAM store sign-out once the IAM context exists.
-const signOut = () => {};
+/** Initials for the avatar, for example "RD" for rosa.diaz. */
+const userInitials = computed(() => (currentUser.value?.username ?? '')
+    .split(/[\s._-]+/).filter(Boolean).slice(0, 2).map((word) => word.charAt(0).toUpperCase()).join(''));
+
+/** Closes the session and goes back to the login page. */
+async function signOut() {
+  iamStore.signOut();
+  emit('navigate');
+  await router.push({ name: 'login' });
+}
 </script>
 
 <template>
@@ -55,10 +68,10 @@ const signOut = () => {};
     </nav>
 
     <div class="account">
-      <div class="user-card">
-        <span class="avatar"></span>
+      <div v-if="currentUser" class="user-card">
+        <span class="avatar" aria-hidden="true">{{ userInitials }}</span>
         <span class="user-info">
-          <strong>{{ currentUser.name }}</strong>
+          <strong>{{ currentUser.username }}</strong>
           <small>{{ t(`roles.${currentUser.role}`) }}</small>
         </span>
       </div>
@@ -168,6 +181,12 @@ ul {
   height: 2rem;
   border-radius: 50%;
   background: #1a2f5a;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
 }
 
 .user-info {
