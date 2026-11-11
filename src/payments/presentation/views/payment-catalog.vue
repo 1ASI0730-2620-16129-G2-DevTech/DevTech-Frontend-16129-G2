@@ -48,7 +48,7 @@ function paymentCode(payment) {
 }
 function orderCode(orderId) {
   const id = String(orderId);
-  return /^d+$/.test(id) ? `#${id.padStart(4, "0")}` : `#${id.slice(0, 6).toUpperCase()}`;
+  return /^\d+$/.test(id) ? `#${id.padStart(4, "0")}` : `#${id.slice(0, 6).toUpperCase()}`;
 }
 function openDetails(payment) {
   selectedPayment.value = payment;
