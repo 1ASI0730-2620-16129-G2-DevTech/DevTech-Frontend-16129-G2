@@ -34,7 +34,9 @@
     "forgot-password": "¿Olvidaste tu contraseña?",
     "demo-hint": "Credenciales de prueba:",
     "demo-email": "Correo:",
-    "demo-password": "Contraseña:"
+    "demo-password": "Contraseña:",
+    "demo-email-value": "rosa.diaz{'@'}example.com",
+    "demo-password-value": "1234567"
   },
   "register": {
     "title": "Crear cuenta",
@@ -80,8 +82,7 @@
   },
   "routes": {
     "trackings": "Seguimiento",
-    "tracker": "Detalle de seguimiento",
-    "deliveries": "Recojos y entregas"
+    "tracker": "Detalle de seguimiento"
   },
   "header": {
     "search": "Buscar pedido de cliente"
@@ -333,10 +334,13 @@
     "periods": {"hour": "Última hora", "day": "24 horas", "week": "7 días", "month": "30 días"},
     "detail": {"title": "Detalle de pago", "back": "Volver a pagos"}
   },
-  "deliveries": {
+  "pickups-deliveries": {
     "title": "Recojos y entregas",
     "catalog-title": "Catálogo de recojos y entregas ({count})",
     "schedule": "Programar recojo o entrega",
+    "loading": "Cargando recojos y entregas…",
+    "empty": "No se encontraron recojos ni entregas.",
+    "unknown-customer": "Cliente no registrado",
     "table": {
       "id": "ID",
       "type": "Tipo",
@@ -344,19 +348,31 @@
       "address": "Dirección",
       "driver": "Repartidor",
       "status": "Estado",
-      "date-time": "Fecha y hora"
+      "date-time": "Fecha y hora",
+      "actions": "Acciones"
     },
     "types": {
-      "delivery": "Entrega",
-      "pickup": "Recojo"
+      "PICKUP": "Recojo",
+      "DELIVERY": "Entrega"
     },
     "status": {
-      "completed": "Completado",
-      "scheduled": "Programado",
-      "cancelled": "Cancelado"
+      "SCHEDULED": "Programado",
+      "IN_TRANSIT": "En camino",
+      "COMPLETED": "Completado",
+      "CANCELLED": "Cancelado"
+    },
+    "actions": {
+      "menu": "Acciones de {code}",
+      "change-to": "Marcar como {status}",
+      "view-tracking": "Ver seguimiento"
     },
     "chart": {
-      "title": "Recojos y entregas - {range}"
+      "title": "Recojos y entregas - {range}",
+      "periods": "Periodo del gráfico",
+      "pickups": "Recojos",
+      "deliveries": "Entregas",
+      "empty": "No hay recojos ni entregas programados en este periodo.",
+      "description": "{pickups} recojos y {deliveries} entregas en el periodo"
     },
     "ranges": {
       "last-hour": {
@@ -376,35 +392,67 @@
         "title": "últimos 30 días"
       }
     },
+    "form": {
+      "title": "Programar recojo o entrega",
+      "order": "Pedido",
+      "order-placeholder": "Selecciona un pedido",
+      "order-option": "{code} · {customer}",
+      "order-hint": "Solo aparecen los pedidos que pueden programar un recojo o una entrega.",
+      "no-eligible-orders": "No hay pedidos que puedan programar un recojo o una entrega.",
+      "type": "Tipo",
+      "street": "Calle y número",
+      "city": "Distrito",
+      "driver-name": "Repartidor",
+      "vehicle-plate": "Placa del vehículo",
+      "scheduled-at": "Fecha y hora",
+      "required": "Este campo es obligatorio.",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    },
+    "errors": {
+      "invalid-order": "El pedido no es válido.",
+      "invalid-type": "El tipo debe ser recojo o entrega.",
+      "invalid-status": "El estado no es válido.",
+      "invalid-address": "Ingresa la calle y el distrito.",
+      "invalid-driver": "Ingresa el nombre del repartidor.",
+      "invalid-vehicle-plate": "Ingresa la placa del vehículo.",
+      "invalid-schedule-date": "Ingresa una fecha y hora válidas.",
+      "schedule-date-in-the-past": "La fecha y hora no pueden estar en el pasado.",
+      "order-not-found": "El pedido no existe.",
+      "duplicate-pickup-delivery": "Este pedido ya tiene un movimiento de tipo {type} activo.",
+      "order-not-awaiting-pickup": "Solo se programa un recojo mientras las prendas siguen con el cliente.",
+      "order-without-home-delivery": "El pedido no se creó con entrega a domicilio.",
+      "order-not-ready": "Solo se programa una entrega cuando el pedido está listo.",
+      "status-transition-not-allowed": "No se puede pasar de {from} a {to}.",
+      "unexpected": "No se pudo guardar. Inténtalo de nuevo."
+    },
     "tracking": {
-      "title": "Seguimiento de entrega {code}",
-      "on-the-way": "En camino · llega en ~{minutes} min",
-      "updated": "Actualizado hace {minutes} min",
-      "driver": "Repartidor",
-      "call": "Llamar",
-      "origin": "Sede",
+      "route-title": "Seguimiento",
+      "title": {
+        "PICKUP": "Seguimiento de recojo {code}",
+        "DELIVERY": "Seguimiento de entrega {code}"
+      },
+      "back": "Volver a recojos y entregas",
+      "not-found": "No se encontró el recojo o la entrega {code}.",
+      "vehicle": "Vehículo: {plate}",
+      "details": "Detalle de la entrega",
+      "cancelled": "Este recojo o entrega fue cancelado.",
       "stages": {
         "confirmed": "Confirmado",
-        "picked-up": "Recogido",
         "on-the-way": "En camino",
+        "picked-up": "Recogido",
         "delivered": "Entregado"
       },
-      "details": "Detalle de la entrega",
       "fields": {
         "order": "Pedido",
+        "type": "Tipo",
         "customer": "Cliente",
         "address": "Dirección",
+        "scheduled-at": "Fecha y hora",
         "service": "Servicio",
         "garments": "Prendas"
-      },
-      "map": {
-        "zoom-in": "Acercar",
-        "zoom-out": "Alejar",
-        "my-location": "Mi ubicación"
       }
-    },
-    "empty": "No se encontraron recojos ni entregas.",
-    "unassigned": "Sin asignar"
+    }
   },
   "customers": {
     "title": "Clientes",
