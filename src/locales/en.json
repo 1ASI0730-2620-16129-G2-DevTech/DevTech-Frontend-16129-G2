@@ -34,7 +34,9 @@
     "forgot-password": "Forgot your password?",
     "demo-hint": "Demo credentials:",
     "demo-email": "Email:",
-    "demo-password": "Password:"
+    "demo-password": "Password:",
+    "demo-email-value": "rosa.diaz{'@'}example.com",
+    "demo-password-value": "1234567"
   },
   "register": {
     "title": "Create account",
@@ -80,8 +82,7 @@
   },
   "routes": {
     "trackings": "Tracking",
-    "tracker": "Tracking detail",
-    "deliveries": "Pickups & deliveries"
+    "tracker": "Tracking detail"
   },
   "header": {
     "search": "Search customer order"
@@ -333,10 +334,13 @@
     "periods": {"hour": "Last hour", "day": "24 hours", "week": "7 days", "month": "30 days"},
     "detail": {"title": "Payment details", "back": "Back to payments"}
   },
-  "deliveries": {
+  "pickups-deliveries": {
     "title": "Pickups & deliveries",
     "catalog-title": "Pickups & deliveries catalog ({count})",
     "schedule": "Schedule pickup or delivery",
+    "loading": "Loading pickups and deliveries…",
+    "empty": "No pickups or deliveries found.",
+    "unknown-customer": "Unregistered customer",
     "table": {
       "id": "ID",
       "type": "Type",
@@ -344,19 +348,31 @@
       "address": "Address",
       "driver": "Driver",
       "status": "Status",
-      "date-time": "Date and time"
+      "date-time": "Date and time",
+      "actions": "Actions"
     },
     "types": {
-      "delivery": "Delivery",
-      "pickup": "Pickup"
+      "PICKUP": "Pickup",
+      "DELIVERY": "Delivery"
     },
     "status": {
-      "completed": "Completed",
-      "scheduled": "Scheduled",
-      "cancelled": "Cancelled"
+      "SCHEDULED": "Scheduled",
+      "IN_TRANSIT": "In transit",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "actions": {
+      "menu": "Actions of {code}",
+      "change-to": "Mark as {status}",
+      "view-tracking": "View tracking"
     },
     "chart": {
-      "title": "Pickups & deliveries - {range}"
+      "title": "Pickups & deliveries - {range}",
+      "periods": "Chart period",
+      "pickups": "Pickups",
+      "deliveries": "Deliveries",
+      "empty": "No pickups or deliveries scheduled in this period.",
+      "description": "{pickups} pickups and {deliveries} deliveries in the period"
     },
     "ranges": {
       "last-hour": {
@@ -376,35 +392,67 @@
         "title": "last 30 days"
       }
     },
+    "form": {
+      "title": "Schedule pickup or delivery",
+      "order": "Order",
+      "order-placeholder": "Select an order",
+      "order-option": "{code} · {customer}",
+      "order-hint": "Only the orders that can schedule a pickup or a delivery are listed.",
+      "no-eligible-orders": "There are no orders that can schedule a pickup or a delivery.",
+      "type": "Type",
+      "street": "Street and number",
+      "city": "District",
+      "driver-name": "Driver",
+      "vehicle-plate": "Vehicle plate",
+      "scheduled-at": "Date and time",
+      "required": "This field is required.",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "errors": {
+      "invalid-order": "The order is not valid.",
+      "invalid-type": "The type must be pickup or delivery.",
+      "invalid-status": "The status is not valid.",
+      "invalid-address": "Enter the street and the district.",
+      "invalid-driver": "Enter the driver's name.",
+      "invalid-vehicle-plate": "Enter the vehicle plate.",
+      "invalid-schedule-date": "Enter a valid date and time.",
+      "schedule-date-in-the-past": "The date and time cannot be in the past.",
+      "order-not-found": "The order does not exist.",
+      "duplicate-pickup-delivery": "This order already has an active {type}.",
+      "order-not-awaiting-pickup": "A pickup is only scheduled while the garments are still with the customer.",
+      "order-without-home-delivery": "The order was not created with home delivery.",
+      "order-not-ready": "A delivery is only scheduled when the order is ready.",
+      "status-transition-not-allowed": "It cannot change from {from} to {to}.",
+      "unexpected": "It could not be saved. Try again."
+    },
     "tracking": {
-      "title": "Delivery tracking {code}",
-      "on-the-way": "On the way · arriving in ~{minutes} min",
-      "updated": "Updated {minutes} min ago",
-      "driver": "Driver",
-      "call": "Call",
-      "origin": "Branch",
+      "route-title": "Tracking",
+      "title": {
+        "PICKUP": "Pickup tracking {code}",
+        "DELIVERY": "Delivery tracking {code}"
+      },
+      "back": "Back to pickups & deliveries",
+      "not-found": "Pickup or delivery {code} was not found.",
+      "vehicle": "Vehicle: {plate}",
+      "details": "Delivery details",
+      "cancelled": "This pickup or delivery was cancelled.",
       "stages": {
         "confirmed": "Confirmed",
-        "picked-up": "Picked up",
         "on-the-way": "On the way",
+        "picked-up": "Picked up",
         "delivered": "Delivered"
       },
-      "details": "Delivery details",
       "fields": {
         "order": "Order",
+        "type": "Type",
         "customer": "Customer",
         "address": "Address",
+        "scheduled-at": "Date and time",
         "service": "Service",
         "garments": "Garments"
-      },
-      "map": {
-        "zoom-in": "Zoom in",
-        "zoom-out": "Zoom out",
-        "my-location": "My location"
       }
-    },
-    "empty": "No pickups or deliveries found.",
-    "unassigned": "Unassigned"
+    }
   },
   "customers": {
     "title": "Customers",
