@@ -82,7 +82,8 @@
   },
   "routes": {
     "trackings": "Tracking",
-    "tracker": "Tracking detail"
+    "tracker": "Tracking detail",
+    "deliveries": "Pickups & deliveries"
   },
   "header": {
     "search": "Search customer order"
@@ -333,6 +334,30 @@
     "chart-title": "Most requested garments - last 24 hours",
     "periods": {"hour": "Last hour", "day": "24 hours", "week": "7 days", "month": "30 days"},
     "detail": {"title": "Payment details", "back": "Back to payments"}
+  },
+  "deliveries": {
+    "title": "Pickups & deliveries",
+    "catalog-title": "Pickups & deliveries catalog ({count})",
+    "table": {
+      "id": "ID",
+      "type": "Type",
+      "customer": "Customer",
+      "address": "Address",
+      "driver": "Driver",
+      "status": "Status",
+      "date-time": "Date and time"
+    },
+    "types": {
+      "delivery": "Delivery",
+      "pickup": "Pickup"
+    },
+    "status": {
+      "completed": "Completed",
+      "scheduled": "Scheduled",
+      "cancelled": "Cancelled"
+    },
+    "empty": "No pickups or deliveries found.",
+    "unassigned": "Unassigned"
   },
   "pickups-deliveries": {
     "title": "Pickups & deliveries",

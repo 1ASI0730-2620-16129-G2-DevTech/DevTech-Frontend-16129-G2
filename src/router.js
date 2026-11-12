@@ -73,6 +73,7 @@ const routes =
         {
             path: '/pickups-deliveries',
             name: 'pickups-deliveries',
+            redirect: '/pickups-deliveries/deliveries',
             children: pickupsDeliveriesRoutes
         },
         // Nested routes for payments

@@ -82,7 +82,8 @@
   },
   "routes": {
     "trackings": "Seguimiento",
-    "tracker": "Detalle de seguimiento"
+    "tracker": "Detalle de seguimiento",
+    "deliveries": "Recojos y entregas"
   },
   "header": {
     "search": "Buscar pedido de cliente"
@@ -333,6 +334,30 @@
     "chart-title": "Prendas más solicitadas - últimas 24 horas",
     "periods": {"hour": "Última hora", "day": "24 horas", "week": "7 días", "month": "30 días"},
     "detail": {"title": "Detalle de pago", "back": "Volver a pagos"}
+  },
+  "deliveries": {
+    "title": "Recojos y entregas",
+    "catalog-title": "Catálogo de recojos y entregas ({count})",
+    "table": {
+      "id": "ID",
+      "type": "Tipo",
+      "customer": "Cliente",
+      "address": "Dirección",
+      "driver": "Repartidor",
+      "status": "Estado",
+      "date-time": "Fecha y hora"
+    },
+    "types": {
+      "delivery": "Entrega",
+      "pickup": "Recojo"
+    },
+    "status": {
+      "completed": "Completado",
+      "scheduled": "Programado",
+      "cancelled": "Cancelado"
+    },
+    "empty": "No se encontraron recojos ni entregas.",
+    "unassigned": "Sin asignar"
   },
   "pickups-deliveries": {
     "title": "Recojos y entregas",
