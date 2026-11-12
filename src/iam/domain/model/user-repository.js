@@ -20,6 +20,16 @@ export class UserRepository {
     }
 
     /**
+     * Updates a mock user's password by email.
+     * @param {string} email
+     * @param {string} password
+     * @returns {Promise<boolean>}
+     */
+    async updatePasswordByEmail(email, password) {
+        throw new Error('UserRepository.updatePasswordByEmail must be implemented');
+    }
+
+    /**
      * Persists a user with mock authentication credentials.
      * @param {import('./user.js').User} user
      * @param {{username: string, password: string}} credentials

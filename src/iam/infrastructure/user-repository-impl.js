@@ -47,6 +47,10 @@ export class UserRepositoryImpl extends UserRepository {
         return resource ? this.#assembler.toEntityFromResource(resource) : null;
     }
 
+    updatePasswordByEmail(email, password) {
+        return this.#api.updatePasswordByEmail(email, password);
+    }
+
     /**
      * @param {import("../domain/model/user.js").User} user
      * @param {{username: string, password: string}} credentials

@@ -2,19 +2,23 @@
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useAuthenticationStore } from "@/iam/presentation/authentication.store.js";
+import useIamStore from "@/iam/application/iam.store.js";
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const authentication = useAuthenticationStore();
+const authentication = useIamStore();
 const email = ref("");
 const password = ref("");
 
 async function submit() {
   const signedIn = await authentication.signIn(email.value, password.value);
   if (signedIn) {
-    await router.push("/home");
+    // Return to the page the guard sent the user away from, or to the dashboard.
+    const redirect = typeof route.query.redirect === "string" && route.query.redirect.startsWith("/")
+        ? route.query.redirect
+        : { name: "home" };
+    await router.push(redirect);
   }
 }
 </script>
@@ -30,20 +34,20 @@ async function submit() {
 
       <label for="email">{{ t("login.email") }}</label>
       <input
-        id="email"
-        v-model.trim="email"
-        type="email"
-        autocomplete="username"
-        required
+          id="email"
+          v-model.trim="email"
+          type="email"
+          autocomplete="username"
+          required
       />
 
       <label for="password">{{ t("login.password") }}</label>
       <input
-        id="password"
-        v-model="password"
-        type="password"
-        autocomplete="current-password"
-        required
+          id="password"
+          v-model="password"
+          type="password"
+          autocomplete="current-password"
+          required
       />
 
       <p v-if="authentication.error" class="login-error" role="alert">
@@ -58,10 +62,13 @@ async function submit() {
         {{ t("login.no-account") }}
         <router-link to="/register">{{ t("login.register") }}</router-link>
       </p>
+      <p class="register-link">
+        <router-link to="/password-recovery">{{ t("login.forgot-password") }}</router-link>
+      </p>
 
       <small>{{ t("login.demo-hint") }}</small>
-      <small><strong>{{ t("login.demo-email") }}</strong> rosa.diaz@example.com</small>
-      <small><strong>{{ t("login.demo-password") }}</strong> 123456</small>
+      <small><strong>{{ t("login.demo-email") }}</strong> {{ t("login.demo-email-value") }}</small>
+      <small><strong>{{ t("login.demo-password") }}</strong> {{ t("login.demo-password-value") }}</small>
     </form>
   </section>
 </template>

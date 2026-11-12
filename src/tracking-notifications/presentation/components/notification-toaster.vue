@@ -1,9 +1,10 @@
 <script setup>
-import {onBeforeUnmount, onMounted, toRefs, watch} from "vue";
+import {computed, onBeforeUnmount, onMounted, toRefs, watch} from "vue";
 import {useI18n} from "vue-i18n";
 import {useToast} from "primevue/usetoast";
 import useTrackingNotificationStore from "../../application/tracking-notification.store.js";
 import {formatOrderCode} from "../tracking-helpers.js";
+import useIamStore from "@/iam/application/iam.store.js";
 
 const pollingIntervalInMilliseconds = Number(import.meta.env.VITE_NOTIFICATIONS_POLLING_INTERVAL);
 const toastLifetimeInMilliseconds = Number(import.meta.env.VITE_NOTIFICATIONS_TOAST_LIFETIME);
@@ -15,8 +16,14 @@ const store = useTrackingNotificationStore();
 const { notifications } = toRefs(store);
 const { fetchUnreadNotifications, markNotificationAsRead } = store;
 
-// TODO: replace with the authenticated user once the IAM context is available.
-const userId = 'CL001';
+// Notifications belong to the signed-in user, identified by their business code (for example CL001).
+const iamStore = useIamStore();
+const userId = computed(() => iamStore.currentUser?.code ?? '');
+
+/** Reads the unread notifications of the signed-in user; a user without code has none. */
+const refreshNotifications = () => {
+  if (userId.value) fetchUnreadNotifications(userId.value);
+};
 
 // Ids already shown, so a notification is never displayed twice even if marking it as read fails.
 const shownNotificationIds = new Set();
@@ -55,8 +62,8 @@ watch(notifications, (unreadNotifications) => {
 });
 
 onMounted(() => {
-  fetchUnreadNotifications(userId);
-  pollingTimer = setInterval(() => fetchUnreadNotifications(userId), pollingIntervalInMilliseconds);
+  refreshNotifications();
+  pollingTimer = setInterval(refreshNotifications, pollingIntervalInMilliseconds);
 });
 
 onBeforeUnmount(() => clearInterval(pollingTimer));

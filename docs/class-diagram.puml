@@ -1,0 +1,997 @@
+@startuml WashTrack_Bounded_Contexts_Overview
+title WashTrack - Bounded Contexts Overview (Domain Layer)
+hide methods
+hide attributes
+skinparam packageStyle rectangle
+
+package "Shared Kernel" {
+  package "Domain" {
+    abstract class AggregateRoot {
+      #id: uuid
+    }
+    interface Repository<T> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+    class DomainEvent <<value object>> {
+      -eventId: uuid
+      -occurredAt: timestamp
+    }
+    class Money <<value object>> {
+      -amount: decimal
+      -currency: string
+    }
+  }
+  package "Infrastructure" {
+    abstract class BaseRepository<T> <<repository>> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+    BaseRepository ..|> Repository
+  }
+}
+
+package "Identity & Access" {
+  class User <<aggregate root>>
+}
+
+package "Customer & Business Management" {
+  class Customer <<aggregate root>>
+  class Laundry <<aggregate root>>
+}
+
+package "Order Management" {
+  class Order <<aggregate root>>
+  class GarmentItem <<entity>>
+}
+
+package "Laundry Operations" {
+  class LaundryOrder <<aggregate root>>
+  class WashingCycle <<entity>>
+  class LaundryResource <<aggregate root>>
+}
+
+package "Subscription & Payment" {
+  class Payment <<aggregate root>>
+  class Subscription <<aggregate root>>
+  class SubscriptionPlan <<aggregate root>>
+}
+
+package "Tracking & Notifications" {
+  class Notification <<aggregate root>>
+  class Tracking <<aggregate root>>
+  class StatusHistory <<entity>>
+}
+
+AggregateRoot <|.. User
+AggregateRoot <|.. Customer
+AggregateRoot <|.. Laundry
+AggregateRoot <|.. Order
+AggregateRoot <|.. LaundryOrder
+AggregateRoot <|.. LaundryResource
+AggregateRoot <|.. Payment
+AggregateRoot <|.. Subscription
+AggregateRoot <|.. SubscriptionPlan
+AggregateRoot <|.. Notification
+AggregateRoot <|.. Tracking
+
+Order "1" *-- "1..*" GarmentItem : contains
+Tracking "1" *-- "0..*" StatusHistory : contains
+SubscriptionPlan "1" <-- "0..*" Subscription : planId
+
+Order ..> Customer : customerId
+Order ..> Laundry : laundryId
+LaundryOrder ..> Order : orderId
+LaundryOrder ..> WashingCycle : washingCycleId
+LaundryOrder ..> LaundryResource : resourceId
+Payment ..> Customer : customerId
+Payment ..> Order : orderId
+Subscription ..> Customer : customerId
+Notification ..> User : recipientId
+Notification ..> Order : orderId
+Tracking ..> Order : orderId
+Customer ..> User : userId
+
+note right of AggregateRoot
+  Todos los aggregate roots extienden
+  AggregateRoot del Shared Kernel.
+  Las referencias entre bounded contexts
+  se realizan mediante identificadores.
+end note
+@enduml
+
+@startuml WashTrack_Identity_Access_Frontend
+title WashTrack - Identity & Access Frontend Model
+skinparam packageStyle rectangle
+
+package "Identity & Access Bounded Context" {
+  package "Presentation" {
+    package "Components" {
+      class AuthenticationSection <<component>> {
+        -router: Router
+        -store: IamStore
+        -signOut: function
+        -isSignedIn: computed
+        -currentUsername: computed
+        +performSignIn()
+        +performSignUp()
+        +performSignOut()
+      }
+    }
+    package "Views" {
+      class SignUpForm <<component>> {
+        -router: Router
+        -store: IamStore
+        -signUp: function
+        -form: object
+        +performSignUp()
+      }
+      class SignInForm <<component>> {
+        -router: Router
+        -store: IamStore
+        -signIn: function
+        -form: object
+        +performSignIn()
+      }
+    }
+  }
+
+  package "Application" {
+    class IamStore <<store>> {
+      -users: User[]
+      -errors: any[]
+      -usersLoaded: boolean
+      -isSignedIn: boolean
+      -currentUsername: string|null
+      -currentUserId: number|null
+      -currentRole: UserRole|null
+      +currentToken: computed
+      +signIn(signInCommand, router)
+      +signUp(signUpCommand, router)
+      +signOut()
+      +fetchUsers()
+      +hasAccess(requiredRole): boolean
+    }
+  }
+
+  package "Domain" {
+    class SignUpCommand <<command>> {
+      -username: string
+      -email: string
+      -password: string
+      -role: UserRole
+      +constructor(username, email, password, role)
+    }
+    class SignInCommand <<command>> {
+      -username: string
+      -password: string
+      +constructor(username, password)
+    }
+    class User <<entity>> {
+      -id: string|number
+      -username: string
+      -email: string
+      -role: UserRole
+      +constructor(id, username, email, role)
+      +hasRole(role): boolean
+    }
+    enum UserRole {
+      FARMER
+      OPERATOR
+      TECHNICIAN
+    }
+    User --> UserRole : has
+  }
+
+  package "Infrastructure" {
+    class iamInterceptor <<interceptor>> {
+      +iamInterceptor(config): AxiosRequestConfig
+    }
+    class roleGuard <<guard>> {
+      +roleGuard(to, from): object|boolean
+    }
+    class authenticationGuard <<guard>> {
+      +authenticationGuard(to, from): object|boolean
+    }
+    class UserAssembler <<assembler>> {
+      +toEntityFromResource(resource): User
+      +toEntitiesFromResponse(response): User[]
+    }
+    class SignInAssembler <<assembler>> {
+      +toResourceFromResponse(response): SignInResource
+    }
+    class SignUpAssembler <<assembler>> {
+      +toResourceFromResponse(response): SignUpResource
+    }
+    class IamApi {
+      -signInEndpoint: BaseEndpoint
+      -signUpEndpoint: BaseEndpoint
+      -usersEndpoint: BaseEndpoint
+      +constructor()
+      +signIn(signInRequest): Promise
+      +signUp(signUpRequest): Promise
+      +getUsers(): Promise
+      +updateUserRole(id, role): Promise
+    }
+    class SignUpResource <<resource>> {
+      -message: string
+      +constructor(message)
+    }
+    class SignInResource <<resource>> {
+      -id: string|number
+      -username: string
+      -role: string
+      -token: string
+      +constructor(id, username, role, token)
+    }
+  }
+}
+
+package "Shared Bounded Context" {
+  class BaseApi
+  class BaseEndpoint
+}
+
+AuthenticationSection --> IamStore
+SignUpForm --> IamStore
+SignUpForm --> SignUpCommand
+SignInForm --> IamStore
+SignInForm --> SignInCommand
+IamStore --> IamApi
+IamStore --> UserAssembler
+IamStore --> SignInAssembler
+IamStore --> SignUpAssembler
+iamInterceptor --> IamStore
+roleGuard --> IamStore
+authenticationGuard --> IamStore
+IamApi --> BaseEndpoint
+IamApi ..|> BaseApi
+SignInAssembler ..> SignInResource
+SignUpAssembler ..> SignUpResource
+UserAssembler ..> User
+@enduml
+
+@startuml WashTrack_Identity_Access_Service
+title WashTrack - Identity & Access Bounded Context
+skinparam packageStyle rectangle
+
+package "Identity & Access Bounded Context" {
+  package "Presentation" {
+    class AuthenticationController <<controller>> {
+      +signIn(request)
+      +signUp(request)
+    }
+  }
+  package "Application" {
+    class IdentityService <<service>> {
+      +authenticate(email, password): User
+      +register(user): User
+      +getUserById(id): User
+    }
+    interface AuthenticationService <<port>> {
+      +authenticate(email, password): User
+      +generateToken(user): string
+    }
+  }
+  package "Domain" {
+    class User <<aggregate root>> {
+      -id: uuid
+      -email: string
+      -passwordHash: string
+      -role: string
+      +constructor(id, email, passwordHash, role)
+    }
+    interface UserRepository <<repository>> {
+      +findByEmail(email): User
+    }
+  }
+  package "Infrastructure" {
+    class AuthenticationServiceImpl <<adapter>>
+    class UserRepositoryImpl <<adapter>>
+  }
+}
+
+package "Shared Kernel" {
+  package "Domain" {
+    abstract class AggregateRoot {
+      #id: uuid
+    }
+    interface Repository<T> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+    class DomainEvent <<value object>> {
+      -eventId: uuid
+      -occurredAt: timestamp
+    }
+    class Money <<value object>> {
+      -amount: decimal
+      -currency: string
+    }
+  }
+  package "Infrastructure" {
+    abstract class BaseRepository<T> <<repository>> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+  }
+}
+
+AuthenticationController --> IdentityService
+IdentityService --> AuthenticationService
+IdentityService --> UserRepository
+AuthenticationServiceImpl ..|> AuthenticationService
+UserRepositoryImpl ..|> UserRepository
+UserRepositoryImpl ..|> BaseRepository
+AggregateRoot <|.. User
+UserRepository ..|> Repository
+BaseRepository ..|> Repository
+@enduml
+
+@startuml WashTrack_Customer_Business_Management
+title WashTrack - Customer & Business Management Bounded Context
+skinparam packageStyle rectangle
+
+package "Customer & Business Management Bounded Context" {
+  package "Presentation" {
+    class LaundryController <<controller>> {
+      +getLaundry(id)
+      +createLaundry(request)
+      +updateLaundry(request)
+    }
+    class CustomerController <<controller>> {
+      +getCustomer(id)
+      +updateCustomer(request)
+    }
+  }
+  package "Application" {
+    class LaundryService <<service>> {
+      +getLaundryById(id): Laundry
+      +createLaundry(landry): Laundry
+      +updateLaundry(landry): Laundry
+    }
+    class CustomerService <<service>> {
+      +getCustomerById(id): Customer
+      +updateCustomer(customer): Customer
+    }
+  }
+  package "Domain" {
+    class Laundry <<aggregate root>> {
+      -id: uuid
+      -businessName: string
+      -address: string
+      -phone: string
+      +constructor(id, businessName, address, phone)
+    }
+    class Customer <<aggregate root>> {
+      -id: uuid
+      -userId: uuid
+      -fullName: string
+      -phone: string
+      +constructor(id, userId, fullName, phone)
+    }
+    interface LaundryRepository <<repository>> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+    interface CustomerRepository <<repository>> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+  }
+  package "Infrastructure" {
+    class LaundryRepositoryImpl <<adapter>>
+    class CustomerRepositoryImpl <<adapter>>
+  }
+}
+
+package "Shared Kernel" {
+  package "Domain" {
+    abstract class AggregateRoot {
+      #id: uuid
+    }
+    class DomainEvent <<value object>> {
+      -eventId: uuid
+      -occurredAt: timestamp
+    }
+    class Money <<value object>> {
+      -amount: decimal
+      -currency: string
+    }
+    interface Repository<T> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+  }
+  package "Infrastructure" {
+    abstract class BaseRepository<T> <<repository>> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+  }
+}
+
+LaundryController --> LaundryService
+CustomerController --> CustomerService
+LaundryService --> Laundry
+CustomerService --> Customer
+LaundryService --> LaundryRepository
+CustomerService --> CustomerRepository
+LaundryRepositoryImpl ..|> LaundryRepository
+CustomerRepositoryImpl ..|> CustomerRepository
+LaundryRepositoryImpl ..|> BaseRepository
+CustomerRepositoryImpl ..|> BaseRepository
+AggregateRoot <|.. Laundry
+AggregateRoot <|.. Customer
+LaundryRepository ..|> Repository
+CustomerRepository ..|> Repository
+BaseRepository ..|> Repository
+Customer ..> User : userId (ID only)
+note right of Customer
+  Customer.userId referencia a User
+  (Identity & Access BC) solo por ID.
+end note
+@enduml
+
+@startuml WashTrack_Order_Management
+title WashTrack - Order Management Bounded Context
+skinparam packageStyle rectangle
+
+package "Order Management Bounded Context" {
+  package "Presentation" {
+    class OrderController <<controller>> {
+      +create(request)
+      +getById(id)
+      +update(id, request)
+      +changeStatus(id, status)
+    }
+  }
+  package "Application" {
+    class OrderService <<service>> {
+      +createOrder(order): Order
+      +getOrderById(id): Order
+      +updateOrder(order): Order
+      +changeOrderStatus(id, status)
+      +addItem(orderId, item): GarmentItem
+      +updateItem(orderId, item): GarmentItem
+      +removeItem(orderId, itemId)
+    }
+  }
+  package "Domain" {
+    class Order <<aggregate root>> {
+      -id: uuid
+      -customerId: uuid
+      -laundryId: uuid
+      -status: OrderStatus
+      -deliveryMethod: DeliveryMethod
+      -specialCareInstructions: string
+      -createdAt: timestamp
+      +constructor(id, customerId, laundryId, deliveryMethod)
+      +addGarmentItem(item)
+      +removeGarmentItem(itemId)
+      +changeStatus(status)
+    }
+    class GarmentItem <<entity>> {
+      -id: uuid
+      -orderId: uuid
+      -type: string
+      -quantity: int
+      -careInstructions: string
+      +constructor(id, orderId, type, quantity, careInstructions)
+    }
+    enum OrderStatus {
+      CREATED
+      RECEIVED
+      CLASSIFIED
+      IN_PROCESS
+      READY
+      DELIVERED
+    }
+    enum DeliveryMethod {
+      PICKUP
+      DELIVERY
+    }
+    interface OrderRepository <<repository>> {
+      +findByCustomer(customerId): Order[]
+    }
+  }
+  package "Infrastructure" {
+    class OrderRepositoryImpl <<adapter>>
+  }
+}
+
+package "Shared Kernel" {
+  package "Domain" {
+    abstract class AggregateRoot {
+      #id: uuid
+    }
+    class DomainEvent <<value object>> {
+      -eventId: uuid
+      -occurredAt: timestamp
+    }
+    class Money <<value object>> {
+      -amount: decimal
+      -currency: string
+    }
+    interface Repository<T> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+  }
+  package "Infrastructure" {
+    abstract class BaseRepository<T> <<repository>> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+  }
+}
+
+OrderController --> OrderService
+OrderService --> Order
+OrderService --> OrderRepository
+OrderRepositoryImpl ..|> OrderRepository
+OrderRepositoryImpl ..|> BaseRepository
+AggregateRoot <|.. Order
+OrderRepository ..|> Repository
+BaseRepository ..|> Repository
+Order "1" *-- "1..*" GarmentItem : contains
+Order --> OrderStatus
+Order --> DeliveryMethod
+Order ..> Customer : customerId (ID only)
+Order ..> Laundry : laundryId (ID only)
+note right of Order
+  customerId -> Customer (Customer & Business BC)
+  laundryId -> Laundry (Customer & Business BC)
+  Referencias solo por ID.
+end note
+@enduml
+
+@startuml WashTrack_Laundry_Operations
+title WashTrack - Laundry Operations Bounded Context
+skinparam packageStyle rectangle
+
+package "Laundry Operations Bounded Context" {
+  package "Presentation" {
+    class LaundryOperationsController <<controller>> {
+      +receiveOrder(request)
+      +classifyOrder(request)
+      +assignCycle(request)
+      +assignResource(request)
+      +advanceStage(request)
+    }
+    class LaundryDashboard <<component>> {
+      -laundryOrders: LaundryOrder[]
+      +displayOrders()
+      +updateStage(orderId, stage)
+      +prioritizeOrder(orderId)
+    }
+  }
+  package "Application" {
+    class LaundryOperationService <<service>> {
+      +receiveOrder(orderId): LaundryOrder
+      +classifyOrder(orderId)
+      +assignWashingCycle(orderId, cycleId)
+      +assignResource(orderId, resourceId)
+      +advanceStage(orderId, stage)
+      +prioritizeOrder(orderId)
+    }
+    class ResourceService <<service>> {
+      +getAvailableResources(laundryId): LaundryResource[]
+      +assignResource(resourceId)
+      +releaseResource(resourceId)
+    }
+  }
+  package "Domain" {
+    class LaundryOrder <<aggregate root>> {
+      -id: uuid
+      -orderId: uuid
+      -currentStage: ProcessingStage
+      -priority: Priority
+      -washingCycleId: uuid
+      -resourceId: uuid
+      -expectedCompletion: timestamp
+      +advanceStage(stage)
+      +assignResource(resourceId)
+      +assignWashingCycle(cycleId)
+    }
+    class WashingCycle <<entity>> {
+      -id: uuid
+      -name: string
+      -durationMinutes: int
+      -compatibleType: string
+      +constructor(id, name, durationMinutes, compatibleType)
+    }
+    class LaundryResource <<aggregate root>> {
+      -id: uuid
+      -laundryId: uuid
+      -name: string
+      -status: ResourceStatus
+      -capacity: int
+      +assign()
+      +release()
+    }
+    enum Priority {
+      NORMAL
+      VIP
+    }
+    enum ProcessingStage {
+      RECEPTION
+      CLASSIFICATION
+      WASHING
+      DRYING_IRONING
+      PACKAGING
+      READY
+    }
+    enum ResourceStatus {
+      AVAILABLE
+      BUSY
+      MAINTENANCE
+    }
+    interface WashingCycleRepository <<repository>> {
+      +findCompatible(type): WashingCycle[]
+    }
+    interface ResourceRepository <<repository>> {
+      +findAvailable(laundryId): LaundryResource[]
+    }
+    interface LaundryOperationRepository <<repository>> {
+      +findByOrderId(orderId): LaundryOrder
+    }
+  }
+  package "Infrastructure" {
+    class WashingCycleRepositoryImpl <<adapter>>
+    class ResourceRepositoryImpl <<adapter>>
+    class LaundryOperationRepositoryImpl <<adapter>>
+    class ResourceMonitoringACL <<anti-corruption layer>> {
+      -iotGateway: IoTGatewayAPI
+      +getResourceStatus(deviceId): ResourceStatus
+      +translate(payload: SensorTelemetryPayload): ResourceStatus
+    }
+  }
+}
+
+package "External IoT Gateway" {
+  class SensorTelemetryPayload <<DTO>> {
+    -deviceId: string
+    -rawStatusCode: int
+    -humidity: decimal
+    -vibration: decimal
+    -electricCurrent: decimal
+    -timestamp: string
+  }
+  class IoTGatewayAPI <<external system>> {
+    +readSensorData(deviceId): SensorTelemetryPayload
+  }
+}
+
+package "Shared Kernel" {
+  package "Domain" {
+    abstract class AggregateRoot {
+      #id: uuid
+    }
+    class DomainEvent <<value object>> {
+      -eventId: uuid
+      -occurredAt: timestamp
+    }
+    class Money <<value object>> {
+      -amount: decimal
+      -currency: string
+    }
+    interface Repository<T> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+  }
+  package "Infrastructure" {
+    abstract class BaseRepository<T> <<repository>> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+  }
+}
+
+LaundryOperationsController --> LaundryOperationService
+LaundryDashboard --> LaundryOperationService
+LaundryOperationService --> LaundryOrder
+LaundryOperationService --> WashingCycleRepository
+LaundryOperationService --> LaundryOperationRepository
+ResourceService --> ResourceRepository
+LaundryOrder ..> WashingCycle : washingCycleId
+LaundryOrder ..> LaundryResource : resourceId
+LaundryOrder --> Priority
+LaundryOrder --> ProcessingStage
+LaundryResource --> ResourceStatus
+WashingCycleRepositoryImpl ..|> WashingCycleRepository
+ResourceRepositoryImpl ..|> ResourceRepository
+LaundryOperationRepositoryImpl ..|> LaundryOperationRepository
+WashingCycleRepositoryImpl ..|> BaseRepository
+ResourceRepositoryImpl ..|> BaseRepository
+LaundryOperationRepositoryImpl ..|> BaseRepository
+AggregateRoot <|.. LaundryOrder
+AggregateRoot <|.. LaundryResource
+WashingCycleRepository ..|> Repository
+ResourceRepository ..|> Repository
+LaundryOperationRepository ..|> Repository
+BaseRepository ..|> Repository
+ResourceService ..> ResourceMonitoringACL : monitors
+ResourceMonitoringACL --> IoTGatewayAPI
+IoTGatewayAPI ..> SensorTelemetryPayload
+LaundryOrder ..> Order : orderId (ID only)
+LaundryResource ..> Laundry : laundryId (ID only)
+note right of LaundryOrder
+  orderId -> Order (Order Management BC)
+  laundryId -> Laundry (Customer & Business BC)
+  Referencias solo por ID.
+end note
+@enduml
+
+@startuml WashTrack_Subscription_Payment
+title WashTrack - Subscription & Payment Bounded Context
+skinparam packageStyle rectangle
+
+package "Subscription & Payment Bounded Context" {
+  package "Presentation" {
+    class SubscriptionController <<controller>> {
+      +getPlans()
+      +subscribe(request)
+      +validateSubscription(customerId)
+      +cancelSubscription(id)
+    }
+    class SubscriptionView <<component>> {
+      +displayPlans()
+      +selectPlan(planId)
+      +displaySubscriptionStatus()
+    }
+    class PaymentController <<controller>> {
+      +createPayment(request)
+      +getPayment(id)
+    }
+  }
+  package "Application" {
+    class SubscriptionService <<service>> {
+      +createSubscription(customerId, planId): Subscription
+      +validateSubscription(customerId): Subscription
+      +applyBenefit(subscriptionId)
+      +cancelSubscription(id)
+    }
+    class PaymentService <<service>> {
+      +processPayment(payment): Payment
+      +confirmPayment(id): Payment
+    }
+    interface PaymentGateway <<port>> {
+      +processPayment(amount: Money): PaymentResult
+    }
+  }
+  package "Domain" {
+    class Payment <<aggregate root>> {
+      -id: uuid
+      -customerId: uuid
+      -orderId: uuid
+      -amount: Money
+      -status: PaymentStatus
+      -transactionId: string
+      -processedAt: timestamp
+      +process()
+      +confirm()
+    }
+    class Subscription <<aggregate root>> {
+      -id: uuid
+      -customerId: uuid
+      -planId: uuid
+      -startDate: date
+      -expirationDate: date
+      -status: SubscriptionStatus
+      -credits: int
+      +activate()
+      +validate()
+      +applyBenefit()
+    }
+    class SubscriptionPlan <<aggregate root>> {
+      -id: uuid
+      -name: string
+      -price: Money
+      -credits: int
+      -durationDays: int
+      +constructor(id, name, price, credits, durationDays)
+    }
+    class PaymentResult <<value object>> {
+      -transactionId: string
+      -status: string
+      +constructor(transactionId, status)
+    }
+    enum PaymentStatus {
+      PENDING
+      COMPLETED
+      FAILED
+    }
+    enum SubscriptionStatus {
+      ACTIVE
+      EXPIRED
+      CANCELLED
+    }
+    interface SubscriptionPlanRepository <<repository>> {
+      +findAll(): SubscriptionPlan[]
+    }
+    interface SubscriptionRepository <<repository>> {
+      +findByCustomer(customerId): Subscription
+    }
+    interface PaymentRepository <<repository>>
+  }
+  package "Infrastructure" {
+    class PaymentGatewayAdapter <<adapter>>
+    class SubscriptionPlanRepositoryImpl <<adapter>>
+    class SubscriptionRepositoryImpl <<adapter>>
+    class PaymentRepositoryImpl <<adapter>>
+    class PaymentGatewayACL <<anti-corruption layer>> {
+      -externalApi: ExternalPaymentProviderAPI
+      +charge(amount: Money): PaymentResult
+      +translate(response: ExternalChargeResponse): PaymentResult
+    }
+  }
+}
+
+package "External Payment Provider" {
+  class ExternalPaymentProviderAPI <<external system>> {
+    +charge(cardToken, amount, currency): ExternalChargeResponse
+  }
+  class ExternalChargeResponse <<DTO>> {
+    -externalTransactionId: string
+    -statusCode: string
+    -statusMessage: string
+    -rawPayload: string
+  }
+}
+
+package "Shared Kernel" {
+  package "Domain" {
+    abstract class AggregateRoot {
+      #id: uuid
+    }
+    class DomainEvent <<value object>> {
+      -eventId: uuid
+      -occurredAt: timestamp
+    }
+    class Money <<value object>> {
+      -amount: decimal
+      -currency: string
+    }
+    interface Repository<T> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+  }
+  package "Infrastructure" {
+    abstract class BaseRepository<T> <<repository>> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+  }
+}
+
+SubscriptionController --> SubscriptionService
+SubscriptionView --> SubscriptionService
+PaymentController --> PaymentService
+PaymentService --> PaymentGateway
+PaymentService --> Payment
+SubscriptionService --> Subscription
+SubscriptionService --> SubscriptionPlanRepository
+SubscriptionService --> SubscriptionRepository
+SubscriptionPlanRepositoryImpl ..|> SubscriptionPlanRepository
+SubscriptionRepositoryImpl ..|> SubscriptionRepository
+PaymentRepositoryImpl ..|> PaymentRepository
+PaymentGatewayAdapter ..|> PaymentGateway
+PaymentGatewayAdapter --> PaymentGatewayACL
+PaymentGatewayACL --> ExternalPaymentProviderAPI
+ExternalPaymentProviderAPI ..> ExternalChargeResponse
+PaymentGatewayACL ..> PaymentResult : produces
+PaymentGateway ..> PaymentResult
+Payment --> PaymentStatus
+Subscription --> SubscriptionStatus
+Subscription ..> SubscriptionPlan : planId
+Payment ..> Customer : customerId (ID only)
+Payment ..> Order : orderId (ID only)
+Subscription ..> Customer : customerId (ID only)
+SubscriptionPlanRepository ..|> Repository
+SubscriptionRepository ..|> Repository
+PaymentRepository ..|> Repository
+AggregateRoot <|.. Payment
+AggregateRoot <|.. Subscription
+AggregateRoot <|.. SubscriptionPlan
+BaseRepository ..|> Repository
+note right of Subscription
+  customerId -> Customer (Customer & Business BC)
+  orderId -> Order (Order Management BC)
+  Referencias solo por ID.
+end note
+@enduml
+
+@startuml WashTrack_Tracking_Notifications
+title WashTrack - Tracking & Notifications Bounded Context
+skinparam packageStyle rectangle
+
+package "Tracking & Notifications Bounded Context" {
+  package "Domain" {
+    class Notification <<aggregate root>>
+    class Tracking <<aggregate root>>
+    class StatusHistory <<entity>>
+  }
+}
+
+Tracking "1" *-- "0..*" StatusHistory : contains
+Notification ..> User : recipientId
+Notification ..> Order : orderId
+Tracking ..> Order : orderId
+@enduml
+
+@startuml WashTrack_Shared_Kernel
+title WashTrack - Shared Bounded Context (Shared Kernel)
+skinparam packageStyle rectangle
+
+package "Shared Kernel" {
+  package "Domain" {
+    abstract class AggregateRoot {
+      #id: uuid
+    }
+    interface Repository<T> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+    class DomainEvent <<value object>> {
+      -eventId: uuid
+      -occurredAt: timestamp
+    }
+    class Money <<value object>> {
+      -amount: decimal
+      -currency: string
+    }
+  }
+  package "Infrastructure" {
+    abstract class BaseRepository<T> <<repository>> {
+      +findById(id: uuid): T
+      +save(entity: T): T
+      +update(entity: T): T
+      +delete(id: uuid)
+    }
+    BaseRepository ..|> Repository
+  }
+  package "Presentation" {
+    class Layout <<component>> {
+      +render()
+    }
+    class Navigation <<component>> {
+      +navigate(route)
+    }
+  }
+}
+
+Layout --> Navigation
+@enduml

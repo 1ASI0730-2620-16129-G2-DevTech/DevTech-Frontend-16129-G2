@@ -2,16 +2,17 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useAuthenticationStore } from "@/iam/presentation/authentication.store.js";
+import useIamStore from "@/iam/application/iam.store.js";
 
 const { t } = useI18n();
 const router = useRouter();
-const authentication = useAuthenticationStore();
+const authentication = useIamStore();
 const username = ref("");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const validationError = ref("");
+const selectedRole = ref("customer");
 
 async function submit() {
   validationError.value = "";
@@ -20,7 +21,12 @@ async function submit() {
     return;
   }
 
-  const registered = await authentication.register(username.value, email.value, password.value);
+  const registered = await authentication.register(
+      username.value,
+      email.value,
+      password.value,
+      selectedRole.value,
+  );
   if (registered) {
     await router.push({ name: "login", query: { registered: "true" } });
   }
@@ -33,42 +39,68 @@ async function submit() {
       <h1>{{ t("register.title") }}</h1>
       <p>{{ t("register.description") }}</p>
 
+      <fieldset class="role-selection">
+        <legend>{{ t("register.role-label") }}</legend>
+        <div class="role-options">
+          <button
+              type="button"
+              class="role-option"
+              :class="{ selected: selectedRole === 'customer' }"
+              :aria-pressed="selectedRole === 'customer'"
+              :disabled="authentication.loading"
+              @click="selectedRole = 'customer'"
+          >
+            {{ t("register.customer") }}
+          </button>
+          <button
+              type="button"
+              class="role-option"
+              :class="{ selected: selectedRole === 'shift-manager' }"
+              :aria-pressed="selectedRole === 'shift-manager'"
+              :disabled="authentication.loading"
+              @click="selectedRole = 'shift-manager'"
+          >
+            {{ t("register.administrator") }}
+          </button>
+        </div>
+      </fieldset>
+
       <label for="username">{{ t("register.name") }}</label>
       <input
-        id="username"
-        v-model.trim="username"
-        type="text"
-        autocomplete="name"
-        required
+          id="username"
+          v-model.trim="username"
+          type="text"
+          autocomplete="name"
+          required
       />
 
       <label for="register-email">{{ t("register.email") }}</label>
       <input
-        id="register-email"
-        v-model.trim="email"
-        type="email"
-        autocomplete="email"
-        required
+          id="register-email"
+          v-model.trim="email"
+          type="email"
+          autocomplete="email"
+          required
       />
 
       <label for="register-password">{{ t("register.password") }}</label>
       <input
-        id="register-password"
-        v-model="password"
-        type="password"
-        autocomplete="new-password"
-        minlength="6"
-        required
+          id="register-password"
+          v-model="password"
+          type="password"
+          autocomplete="new-password"
+          minlength="6"
+          required
       />
 
       <label for="confirm-password">{{ t("register.confirm-password") }}</label>
       <input
-        id="confirm-password"
-        v-model="confirmPassword"
-        type="password"
-        autocomplete="new-password"
-        minlength="6"
-        required
+          id="confirm-password"
+          v-model="confirmPassword"
+          type="password"
+          autocomplete="new-password"
+          minlength="6"
+          required
       />
 
       <p v-if="validationError" class="register-error" role="alert">
@@ -128,7 +160,7 @@ async function submit() {
   font: inherit;
 }
 
-.register-card button {
+.register-card > button[type="submit"] {
   min-height: 2.8rem;
   margin-top: 0.7rem;
   border: 0;
@@ -143,6 +175,49 @@ async function submit() {
 .register-card button:disabled {
   cursor: wait;
   opacity: 0.7;
+}
+
+.role-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.role-selection legend {
+  margin-bottom: 0.6rem;
+  font-weight: 600;
+}
+
+.role-options {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.register-card .role-option {
+  flex: 1;
+  min-height: 2.8rem;
+  margin: 0;
+  border: 1px solid var(--wt-border);
+  border-radius: 0.5rem;
+  background: var(--wt-white);
+  color: var(--wt-primary);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.register-card .role-option.selected {
+  border-color: var(--wt-primary);
+  background: var(--wt-primary);
+  color: var(--wt-white);
+}
+
+.register-card .role-option:focus-visible {
+  outline: 2px solid var(--wt-secondary);
+  outline-offset: 2px;
 }
 
 .register-error {

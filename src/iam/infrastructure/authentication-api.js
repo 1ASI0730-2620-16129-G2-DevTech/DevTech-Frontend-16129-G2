@@ -36,6 +36,21 @@ export class AuthenticationApi extends BaseApi {
         return this.#usersEndpoint.create(resource);
     }
 
+    async updatePasswordByEmail(email, password) {
+        if (!import.meta.env.DEV) {
+            throw new Error("PASSWORD_RESET_DEVELOPMENT_ONLY");
+        }
+
+        const response = await this.getUsers({ email: email.trim().toLowerCase() });
+        const user = response.data[0];
+        if (!user) {
+            return false;
+        }
+
+        await this.#usersEndpoint.update(user.id, { ...user, password });
+        return true;
+    }
+
     /**
      * Returns the next free mock code for a prefix (CL for customers, VN for managers).
      * Customer codes are shared with the customers collection, so it is checked too.

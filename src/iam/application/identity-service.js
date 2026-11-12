@@ -28,24 +28,50 @@ export class IdentityService {
     }
 
     /**
+     * Changes a password in the development mock for the supplied email.
+     * @param {{email: string, password: string}} request
+     * @returns {Promise<void>}
+     */
+    async resetPassword({ email, password }) {
+        if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+            throw new ValidationError("Email must be valid");
+        }
+        if (typeof password !== "string" || password.length < 6) {
+            throw new ValidationError("Password must contain at least 6 characters");
+        }
+
+        const updated = await this.#userRepository.updatePasswordByEmail(
+            email.trim().toLowerCase(),
+            password,
+        );
+        if (!updated) {
+            throw new NotFoundError("USER_NOT_FOUND");
+        }
+    }
+
+    /**
      * @param {Object} request
      * @param {string} request.username
      * @param {string} request.email
      * @param {string} request.password
+     * @param {"customer"|"shift-manager"} [request.role]
      * @returns {Promise<User>}
      */
-    async register({ username, email, password }) {
+    async register({ username, email, password, role = "customer" }) {
         if (typeof username !== "string" || username.trim() === "") {
             throw new ValidationError("Username must not be empty");
         }
         if (typeof password !== "string" || password.length < 6) {
             throw new ValidationError("Password must contain at least 6 characters");
         }
+        if (role !== "customer" && role !== "shift-manager") {
+            throw new ValidationError("User role is invalid");
+        }
 
         const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : email;
         const user = new User({
             email: normalizedEmail,
-            role: "customer",
+            role,
         });
         if (await this.#userRepository.findByEmail(user.email)) {
             throw new Error("EMAIL_ALREADY_REGISTERED");
