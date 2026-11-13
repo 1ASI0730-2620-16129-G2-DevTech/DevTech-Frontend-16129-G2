@@ -63,6 +63,14 @@
       "documentType": "DNI",
       "documentNumber": "73139401",
       "address": "MZ C LOTE 23 URB LOS DIBUJITOS"
+    },
+    {
+      "id": "CL009",
+      "fullName": "Carlos Figeroa",
+      "phone": "993 992 132",
+      "documentType": "DNI",
+      "documentNumber": "73219232",
+      "address": "Mz A Lt 31 URB Los Rosarios"
     }
   ],
   "laundry-businesses": [
@@ -410,6 +418,17 @@
       "status": "pending",
       "paidAt": null,
       "orderDate": "2026-10-10T12:47:37.376Z"
+    },
+    {
+      "id": "PG016",
+      "orderId": "01a1d30d-3831-71e7-9208-1d2e7d555a32",
+      "customerId": "CL009",
+      "customerName": "Carlos Figeroa",
+      "amount": 0,
+      "paymentMethod": "yape",
+      "status": "pending",
+      "paidAt": null,
+      "orderDate": "2026-11-12T05:00:00.000Z"
     }
   ],
   "subscription-plans": [
@@ -519,6 +538,7 @@
     {
       "id": 1,
       "orderId": 1,
+      "customerName": "Carmen Torres",
       "currentStage": "ready",
       "estimatedDelivery": "2026-10-03T18:00:00-05:00",
       "history": [
@@ -551,6 +571,7 @@
     {
       "id": 2,
       "orderId": 2,
+      "customerName": "Jorge Salas",
       "currentStage": "ready",
       "estimatedDelivery": "2026-10-05T18:00:00-05:00",
       "history": [
@@ -583,6 +604,7 @@
     {
       "id": 3,
       "orderId": 3,
+      "customerName": "Ana Ruiz",
       "currentStage": "packaging",
       "estimatedDelivery": "2026-10-07T18:00:00-05:00",
       "history": [
@@ -611,6 +633,7 @@
     {
       "id": 4,
       "orderId": 4,
+      "customerName": "Lucía Prado",
       "currentStage": "drying-ironing",
       "estimatedDelivery": "2026-10-08T18:00:00-05:00",
       "history": [
@@ -635,6 +658,7 @@
     {
       "id": 5,
       "orderId": 5,
+      "customerName": "Carmen Torres",
       "currentStage": "washing",
       "estimatedDelivery": "2026-10-08T18:00:00-05:00",
       "history": [
@@ -655,6 +679,7 @@
     {
       "id": 6,
       "orderId": 6,
+      "customerName": "Jorge Salas",
       "currentStage": "sorting",
       "estimatedDelivery": "2026-10-09T18:00:00-05:00",
       "history": [
@@ -671,6 +696,7 @@
     {
       "id": 7,
       "orderId": 7,
+      "customerName": "Ana Ruiz",
       "currentStage": "received",
       "estimatedDelivery": "2026-10-09T18:00:00-05:00",
       "history": [
@@ -683,12 +709,26 @@
     {
       "id": 8,
       "orderId": 8,
+      "customerName": "Lucía Prado",
       "currentStage": "received",
       "estimatedDelivery": "2026-10-09T18:00:00-05:00",
       "history": [
         {
           "stage": "received",
           "occurredAt": "2026-10-07T12:00:00-05:00"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "orderId": "01a1d30d-3831-71e7-9208-1d2e7d555a32",
+      "customerName": "Carlos Figeroa",
+      "currentStage": "packaging",
+      "estimatedDelivery": "2026-11-15T05:00:00.000Z",
+      "history": [
+        {
+          "stage": "received",
+          "occurredAt": "2026-11-12T05:00:00.000Z"
         }
       ]
     }
@@ -969,44 +1009,63 @@
       "driverName": "",
       "status": "cancelled",
       "scheduledAt": "2026-10-08T11:00:00-05:00"
+    },
+    {
+      "id": 11,
+      "orderId": "01a1d30d-3831-71e7-9208-1d2e7d555a32",
+      "type": "delivery",
+      "customerName": "Carlos Figeroa",
+      "address": "Mz A Lt 31 URB Los Rosarios",
+      "driverName": "",
+      "status": "scheduled",
+      "scheduledAt": "2026-11-15T05:00:00.000Z"
     }
   ],
   "laundryOrders": [
     {
       "id": "0192a1c0-0000-7000-8000-000000000001",
-      "orderId": "0192a1b0-0000-7000-8000-0000000000a1",
+      "orderId": "9ef2afbb-f5ad-4cab-8dea-a0bc2fde4dfa",
       "currentStage": "RECEPTION",
       "priority": "NORMAL",
       "washingCycleId": null,
       "resourceId": null,
-      "expectedCompletion": "2026-10-12T18:00:00.000Z"
+      "expectedCompletion": "2026-10-07T22:00:00.000Z"
     },
     {
       "id": "0192a1c0-0000-7000-8000-000000000002",
-      "orderId": "0192a1b0-0000-7000-8000-0000000000a2",
+      "orderId": "7cd08d9f-d38b-4aef-8bc8-8e9a0dbc2bd8",
       "currentStage": "CLASSIFICATION",
       "priority": "VIP",
       "washingCycleId": null,
       "resourceId": null,
-      "expectedCompletion": "2026-10-01T18:00:00.000Z"
+      "expectedCompletion": "2026-10-08T22:00:00.000Z"
     },
     {
       "id": "0192a1c0-0000-7000-8000-000000000003",
-      "orderId": "0192a1b0-0000-7000-8000-0000000000a3",
+      "orderId": "5abe6b7d-b16f-4ecd-8fa6-6c7e8b9a0fb6",
       "currentStage": "WASHING",
       "priority": "NORMAL",
       "washingCycleId": "0192a1d0-0000-7000-8000-000000000001",
       "resourceId": "0192a1e0-0000-7000-8000-000000000001",
-      "expectedCompletion": "2026-10-12T20:00:00.000Z"
+      "expectedCompletion": "2026-10-08T22:00:00.000Z"
     },
     {
       "id": "0192a1c0-0000-7000-8000-000000000004",
-      "orderId": "0192a1b0-0000-7000-8000-0000000000a4",
+      "orderId": "6bcf7c8e-c27a-4fde-9ab7-7d8f9cab1ac7",
       "currentStage": "READY",
       "priority": "NORMAL",
       "washingCycleId": "0192a1d0-0000-7000-8000-000000000002",
       "resourceId": null,
-      "expectedCompletion": "2026-10-06T12:00:00.000Z"
+      "expectedCompletion": "2026-10-07T23:00:00.000Z"
+    },
+    {
+      "id": "01a1d30d-3891-7505-b3de-81c077bbf7d3",
+      "orderId": "01a1d30d-3831-71e7-9208-1d2e7d555a32",
+      "currentStage": "PACKAGING",
+      "priority": "NORMAL",
+      "washingCycleId": "0192a1d0-0000-7000-8000-000000000001",
+      "resourceId": "0192a1e0-0000-7000-8000-000000000002",
+      "expectedCompletion": "2026-11-15T05:00:00.000Z"
     }
   ],
   "washingCycles": [
@@ -1041,7 +1100,7 @@
       "id": "0192a1e0-0000-7000-8000-000000000002",
       "laundryId": "0192a1f0-0000-7000-8000-000000000001",
       "name": "Washer 2",
-      "status": "AVAILABLE",
+      "status": "BUSY",
       "capacity": 8
     },
     {
@@ -1223,6 +1282,26 @@
           "orderId": "01a125db-2d2a-7293-b70d-25fd11913c5e",
           "type": "Prendas varias",
           "quantity": 3,
+          "careInstructions": ""
+        }
+      ]
+    },
+    {
+      "id": "01a1d30d-3831-71e7-9208-1d2e7d555a32",
+      "customerId": "CL009",
+      "laundryId": "3e9c4f5b-9f4d-4cab-8d84-4a5c6f7e8d94",
+      "status": "IN_PROCESS",
+      "deliveryMethod": "DELIVERY",
+      "serviceType": "WASHING_IRONING",
+      "estimatedDeliveryDate": "2026-11-15T05:00:00.000Z",
+      "specialCareInstructions": "",
+      "createdAt": "2026-11-12T05:00:00.000Z",
+      "items": [
+        {
+          "id": "01a1d30d-3832-73dc-888a-3771a9baa324",
+          "orderId": "01a1d30d-3831-71e7-9208-1d2e7d555a32",
+          "type": "Prendas varias",
+          "quantity": 5,
           "careInstructions": ""
         }
       ]
