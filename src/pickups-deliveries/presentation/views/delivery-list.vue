@@ -16,11 +16,8 @@ const visibleDeliveries = computed(() => searchItems(deliveries.value, (delivery
   t(`deliveries.types.${delivery.type}`), t(`deliveries.status.${delivery.status}`)
 ], query.value));
 
-onMounted(() => {
-  if (!store.deliveriesLoaded) {
-    fetchDeliveries();
-  }
-});
+// Reload on every visit, so deliveries scheduled from other boards (for example a new order) show up.
+onMounted(() => fetchDeliveries());
 </script>
 
 <template>

@@ -14,4 +14,8 @@ export class PickupsDeliveriesApi extends BaseApi {
     getDeliveries() {
         return this.#deliveriesEndpoint.getAll();
     }
+
+    createDelivery(resource) {
+        return this.#deliveriesEndpoint.create(resource);
+    }
 }
