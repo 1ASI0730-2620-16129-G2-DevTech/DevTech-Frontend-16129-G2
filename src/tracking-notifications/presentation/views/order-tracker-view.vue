@@ -14,13 +14,14 @@ const router = useRouter();
 const store = useTrackingNotificationStore();
 const { fetchTracking } = store;
 
-const orderId = computed(() => Number(route.params.orderId));
+// Kept as text: older orders use numbers (1, 2...) and new orders use UUIDs.
+const orderId = computed(() => String(route.params.orderId));
 
 watch(orderId, (id) => fetchTracking(id), { immediate: true });
 
 /** The tracking of this order (ignores a stale tracking of another order). */
 const tracking = computed(() => {
-  return store.currentTracking?.orderId === orderId.value ? store.currentTracking : null;
+  return String(store.currentTracking?.orderId) === orderId.value ? store.currentTracking : null;
 });
 
 const navigateBack = () => {

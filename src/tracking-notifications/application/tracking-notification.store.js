@@ -3,6 +3,10 @@ import {computed, ref} from "vue";
 import {TrackingNotificationApi} from "@/tracking-notifications/infrastructure/tracking-notification-api.js";
 import {TrackingAssembler} from "@/tracking-notifications/infrastructure/tracking.assembler.js";
 import {NotificationAssembler} from "@/tracking-notifications/infrastructure/notification.assembler.js";
+import {OrderTracking} from "@/tracking-notifications/domain/model/order-tracking.entity.js";
+
+/** First stage of every tracking (see ORDER_STAGES in the presentation helpers). */
+const RECEIVED_STAGE = 'received';
 
 const trackingNotificationApi = new TrackingNotificationApi();
 
@@ -41,6 +45,29 @@ const useTrackingNotificationStore = defineStore("trackingNotification", () => {
     function getTrackingById(id) {
         let idNum = parseInt(id);
         return trackings.value.find(tracking => tracking["id"] === idNum);
+    }
+
+    /**
+     * Starts the tracking of a new order at the "received" stage.
+     * @returns {Promise<OrderTracking|null>} The new tracking, or null when it could not be registered.
+     */
+    async function startTracking({orderId, customerName, estimatedDelivery}) {
+        try {
+            const tracking = new OrderTracking({
+                orderId,
+                customerName,
+                currentStage: RECEIVED_STAGE,
+                estimatedDelivery,
+                history: [{stage: RECEIVED_STAGE, occurredAt: new Date().toISOString()}]
+            });
+            const response = await trackingNotificationApi.createTracking(TrackingAssembler.toResourceFromEntity(tracking));
+            const started = TrackingAssembler.toEntityFromResource(response.data);
+            if (trackingsLoaded.value) trackings.value.push(started);
+            return started;
+        } catch (error) {
+            errors.value.push(error);
+            return null;
+        }
     }
 
     function addTracking(tracking) {
@@ -153,6 +180,7 @@ const useTrackingNotificationStore = defineStore("trackingNotification", () => {
         fetchTrackings,
         fetchTracking,
         getTrackingById,
+        startTracking,
         addTracking,
         updateTracking,
         deleteTracking,

@@ -26,6 +26,7 @@ function stagesReached(tracking) {
       <thead>
         <tr>
           <th>{{ t('trackings.columns.order') }}</th>
+          <th>{{ t('trackings.columns.customer') }}</th>
           <th>{{ t('trackings.columns.stage') }}</th>
           <th>{{ t('trackings.columns.progress') }}</th>
           <th>{{ t('trackings.estimated-delivery') }}</th>
@@ -36,6 +37,7 @@ function stagesReached(tracking) {
         <tr v-for="tracking in trackings" :key="tracking.id" class="wt-clickable" tabindex="0"
             @click="emit('view', tracking.orderId)" @keydown.enter="emit('view', tracking.orderId)">
           <td class="wt-board-id">{{ formatOrderCode(tracking.orderId) }}</td>
+          <td>{{ tracking.customerName || '—' }}</td>
           <td><stage-tag :stage="tracking.currentStage" /></td>
           <td>{{ t('tracking.progress', { done: stagesReached(tracking), total: ORDER_STAGES.length }) }}</td>
           <td>{{ formatDateTime(tracking.estimatedDelivery) }}</td>
