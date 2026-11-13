@@ -7,7 +7,7 @@ import {LaundryOrder} from "@/laundry-operations/domain/model/laundry-order.enti
 import {PROCESSING_STAGES, ProcessingStage} from "@/laundry-operations/domain/model/processing-stage.js";
 import {Priority} from "@/laundry-operations/domain/model/priority.js";
 import useResourceStore from "@/laundry-operations/application/resource.store.js";
-import {generateUuid} from "@/shared/domain/model/uuid.js";
+import {generateUuid, validateUuid} from "@/shared/domain/model/uuid.js";
 import {ValidationError} from "@/shared/domain/model/errors.js";
 
 const laundryOperationsApi = new LaundryOperationsApi();
@@ -68,12 +68,14 @@ const useLaundryOperationStore = defineStore("laundry-operation", () => {
 
     // ---------- Queries ----------
 
+    async function loadLaundryOrders() {
+        const response = await laundryOperationsApi.getLaundryOrders();
+        laundryOrders.value = LaundryOrderAssembler.toEntitiesFromResponse(response);
+        laundryOrdersLoaded.value = true;
+    }
+
     function fetchLaundryOrders() {
-        return run(async () => {
-            const response = await laundryOperationsApi.getLaundryOrders();
-            laundryOrders.value = LaundryOrderAssembler.toEntitiesFromResponse(response);
-            laundryOrdersLoaded.value = true;
-        });
+        return run(loadLaundryOrders);
     }
 
     function fetchWashingCycles() {
@@ -103,6 +105,11 @@ const useLaundryOperationStore = defineStore("laundry-operation", () => {
         return washingCycles.value.find(cycle => cycle.id === id);
     }
 
+    /** True when the order of Order Management already has its laundry order. */
+    function isOrderReceived(orderId) {
+        return laundryOrders.value.some(order => order.orderId === orderId);
+    }
+
     // ---------- Internal helpers ----------
 
     function requireOrder(id) {
@@ -122,10 +129,15 @@ const useLaundryOperationStore = defineStore("laundry-operation", () => {
 
     // ---------- Use cases ----------
 
-    /** receiveOrder(orderId): creates the laundry order for an order coming from Order Management. */
+    /**
+     * receiveOrder(orderId, expectedCompletion): creates the laundry order for an order coming from Order Management.
+     * The order id must be the real id (UUID), and an order can only be received once.
+     */
     function receiveOrder(orderId, expectedCompletion = null) {
         return run(async () => {
-            if (!orderId) throw new ValidationError("A laundry order must reference an order");
+            if (!validateUuid(orderId)) throw new ValidationError(`A laundry order must reference a valid order id: ${orderId}`);
+            if (!laundryOrdersLoaded.value) await loadLaundryOrders();
+            if (isOrderReceived(orderId)) throw new ValidationError(`The order was already received: ${orderId}`);
             const order = new LaundryOrder({id: generateUuid(), orderId, expectedCompletion});
             const response = await laundryOperationsApi.createLaundryOrder(
                 LaundryOrderAssembler.toResourceFromEntity(order));
@@ -209,6 +221,7 @@ const useLaundryOperationStore = defineStore("laundry-operation", () => {
         findCompatibleWashingCycles,
         getLaundryOrderById,
         getWashingCycleById,
+        isOrderReceived,
         receiveOrder,
         classifyOrder,
         assignWashingCycle,

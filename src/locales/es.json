@@ -136,7 +136,7 @@
     "progress": "Etapa {done} de {total}"
   },
   "trackings": {
-    "columns": {"order":"Pedido","stage":"Etapa","progress":"Progreso"},
+    "columns": {"order":"Pedido","customer":"Cliente","stage":"Etapa","progress":"Progreso"},
     "title": "Pedidos en seguimiento",
     "search": "Buscar por código (ej. WT-001)",
     "estimated-delivery": "Entrega estimada",
@@ -183,6 +183,8 @@
       "title": "Tablero de Producción",
       "receive": "Recibir pedido",
       "order-id": "ID del pedido",
+      "select-order": "Selecciona un pedido",
+      "no-pending-orders": "No hay pedidos pendientes de recibir",
       "dismiss": "Cerrar"
     },
     "stages": {
@@ -307,7 +309,10 @@
       "cancel": "Cancelar",
       "save": "Guardar",
       "default-garment": "Prendas varias",
-      "payment-error": "El pedido se guardó, pero no se pudo registrar su pago."
+      "payment-error": "El pedido se guardó, pero no se pudo registrar su pago.",
+      "laundry-error": "El pedido y su pago se guardaron, pero no se pudo enviar el pedido al Tablero de Producción. Recíbelo desde allí.",
+      "delivery-error": "El pedido se guardó, pero no se pudo programar su entrega a domicilio.",
+      "tracking-error": "El pedido se guardó, pero no se pudo iniciar su seguimiento."
     },
     "detail": {
       "title": "Prendas del pedido {code}",

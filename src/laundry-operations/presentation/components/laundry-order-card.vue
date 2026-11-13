@@ -3,9 +3,11 @@ import {computed} from "vue";
 import {useI18n} from "vue-i18n";
 import {Priority} from "@/laundry-operations/domain/model/priority.js";
 import {nextStage} from "@/laundry-operations/domain/model/processing-stage.js";
+import {toOrderCode} from "@/shared/presentation/order-code.js";
 
 const props = defineProps({
   order: {type: Object, required: true},
+  customerName: {type: String, default: null},
   cycle: {type: Object, default: null},
   resource: {type: Object, default: null}
 });
@@ -13,7 +15,7 @@ const emit = defineEmits(['classify', 'assign', 'advance', 'prioritize']);
 
 const {t} = useI18n();
 
-const shortOrderId = computed(() => String(props.order.orderId ?? '').slice(0, 8));
+const orderCode = computed(() => toOrderCode(props.order.orderId));
 const isReception = computed(() => props.order.currentStage === 'RECEPTION');
 const isClassification = computed(() => props.order.currentStage === 'CLASSIFICATION');
 const atRisk = computed(() => props.order.isAtDeliveryRisk());
@@ -23,12 +25,13 @@ const atRisk = computed(() => props.order.isAtDeliveryRisk());
   <pv-card class="mb-2">
     <template #title>
       <div class="flex align-items-center justify-content-between">
-        <span class="text-base">#{{ shortOrderId }}</span>
+        <span class="text-base">{{ orderCode }}</span>
         <pv-tag v-if="order.isVip" :value="t('laundry-operations.priority.' + Priority.VIP)" severity="warn"/>
       </div>
     </template>
     <template #content>
       <div class="text-sm">
+        <div v-if="customerName" class="font-semibold mb-1">{{ customerName }}</div>
         <div v-if="order.expectedCompletion">
           {{ t('laundry-operations.card.expected') }}: {{ order.expectedCompletion.toLocaleString() }}
         </div>

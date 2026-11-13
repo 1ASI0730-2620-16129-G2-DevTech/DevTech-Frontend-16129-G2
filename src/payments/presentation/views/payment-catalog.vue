@@ -5,6 +5,7 @@ import {useI18n} from "vue-i18n";
 import {usePaymentsStore} from "../../application/payments.store.js";
 import {PaymentStatus} from "../../domain/model/payment-status.js";
 import {searchItems, useBoardSearch} from "@/shared/presentation/board-search.js";
+import {toOrderCode} from "@/shared/presentation/order-code.js";
 
 const {t} = useI18n();
 const store = usePaymentsStore();
@@ -47,8 +48,7 @@ function paymentCode(payment) {
   return `#${payment.id}`;
 }
 function orderCode(orderId) {
-  const id = String(orderId);
-  return /^\d+$/.test(id) ? `#${id.padStart(4, "0")}` : `#${id.slice(0, 6).toUpperCase()}`;
+  return toOrderCode(orderId);
 }
 function openDetails(payment) {
   selectedPayment.value = payment;
