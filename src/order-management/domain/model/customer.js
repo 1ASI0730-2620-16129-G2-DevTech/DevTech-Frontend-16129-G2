@@ -10,20 +10,22 @@ export function isValidCustomerId(value) {
 
 /**
  * Customer as seen by the Order Management context: just enough to
- * identify who places an order.
+ * identify who places an order and where a home delivery goes.
  */
 export class Customer {
     #id;
     #fullName;
     #documentNumber;
+    #address;
 
     /**
      * @param {Object} params
      * @param {string} params.id - Customer code, e.g. CL001.
      * @param {string} params.fullName
      * @param {string} [params.documentNumber]
+     * @param {string} [params.address]
      */
-    constructor({ id, fullName, documentNumber = "" }) {
+    constructor({ id, fullName, documentNumber = "", address = "" }) {
         if (!isValidCustomerId(id)) {
             throw new ValidationError("Customer id must follow the CL000 format");
         }
@@ -33,6 +35,7 @@ export class Customer {
         this.#id = id;
         this.#fullName = fullName.trim();
         this.#documentNumber = String(documentNumber).trim();
+        this.#address = String(address ?? "").trim();
         Object.freeze(this);
     }
 
@@ -46,6 +49,10 @@ export class Customer {
 
     get documentNumber() {
         return this.#documentNumber;
+    }
+
+    get address() {
+        return this.#address;
     }
 
     /**

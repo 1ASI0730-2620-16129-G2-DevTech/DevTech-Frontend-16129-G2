@@ -4,15 +4,23 @@ import {storeToRefs} from "pinia";
 import {useI18n} from "vue-i18n";
 import {useOrderStore} from "../../application/order-store.js";
 import {usePaymentsStore} from "@/payments/application/payments.store.js";
+import useLaundryOperationStore from "@/laundry-operations/application/laundry-operations.store.js";
+import usePickupsDeliveriesStore from "@/pickups-deliveries/application/pickups-deliveries.store.js";
+import useTrackingNotificationStore from "@/tracking-notifications/application/tracking-notification.store.js";
 import {ORDER_STATUS_SEQUENCE, OrderStatus} from "../../domain/model/order-status.js";
+import {DeliveryMethod} from "../../domain/model/delivery-method.js";
 import {CURRENT_LAUNDRY_ID} from "../current-laundry.js";
 import OrderCreateDialog from "../components/order-create-dialog.vue";
 import {mergeSort} from "@/shared/domain/model/merge-sort.js";
 import {searchItems, useBoardSearch} from "@/shared/presentation/board-search.js";
+import {toOrderCode} from "@/shared/presentation/order-code.js";
 
 const {t} = useI18n();
 const orderStore = useOrderStore();
 const paymentsStore = usePaymentsStore();
+const laundryOperationStore = useLaundryOperationStore();
+const pickupsDeliveriesStore = usePickupsDeliveriesStore();
+const trackingNotificationStore = useTrackingNotificationStore();
 const {orders, customers, loading, errors} = storeToRefs(orderStore);
 const {payments} = storeToRefs(paymentsStore);
 
@@ -52,7 +60,7 @@ const STATUS_SEVERITY = {
   [OrderStatus.DELIVERED]: "success"
 };
 function statusSeverity(status) { return STATUS_SEVERITY[status] ?? "secondary"; }
-function orderCode(order) { return `#${order.id.slice(0, 6).toUpperCase()}`; }
+function orderCode(order) { return toOrderCode(order.id); }
 function customerName(order) { return customerNames.value.get(order.customerId) ?? "—"; }
 function paymentLabel(order) {
   const payment = paymentsByOrder.value.get(order.id);
@@ -73,7 +81,12 @@ function openCreateDialog() {
 }
 
 /**
- * Registers the order in Order Management and then its payment in Payments.
+ * Registers the order in Order Management, then its payment in Payments and,
+ * unless it was registered as already delivered:
+ * - its laundry order in Laundry Operations (it enters the Production Board at RECEPTION
+ *   with the estimated delivery date of the order);
+ * - its tracking in Tracking & Notifications (it starts at the "received" stage);
+ * - for a home delivery, its delivery in Pickups & Deliveries (scheduled for the estimated delivery date).
  * Each bounded context validates its own data through its domain model.
  */
 async function createOrder(form) {
@@ -102,11 +115,43 @@ async function createOrder(form) {
     status: form.paymentStatus,
     orderDate: order.createdAt
   });
-  saving.value = false;
   if (!payment) {
     saveError.value = t("orders.form.payment-error");
+    saving.value = false;
     return;
   }
+  if (order.status !== OrderStatus.DELIVERED) {
+    const received = await laundryOperationStore.receiveOrder(order.id, order.estimatedDeliveryDate);
+    if (!received) {
+      saveError.value = t("orders.form.laundry-error");
+      saving.value = false;
+      return;
+    }
+    const tracking = await trackingNotificationStore.startTracking({
+      orderId: order.id,
+      customerName: form.customer.fullName,
+      estimatedDelivery: order.estimatedDeliveryDate.toISOString()
+    });
+    if (!tracking) {
+      saveError.value = t("orders.form.tracking-error");
+      saving.value = false;
+      return;
+    }
+    if (order.deliveryMethod === DeliveryMethod.DELIVERY) {
+      const delivery = await pickupsDeliveriesStore.scheduleDelivery({
+        orderId: order.id,
+        customerName: form.customer.fullName,
+        address: form.customer.address,
+        scheduledAt: order.estimatedDeliveryDate.toISOString()
+      });
+      if (!delivery) {
+        saveError.value = t("orders.form.delivery-error");
+        saving.value = false;
+        return;
+      }
+    }
+  }
+  saving.value = false;
   dialogVisible.value = false;
   selectedOrderId.value = order.id;
 }

@@ -13,6 +13,7 @@ export class CustomerAssembler {
             id: resource.id,
             fullName: resource.fullName,
             documentNumber: resource.documentNumber,
+            address: resource.address,
         });
     }
 }

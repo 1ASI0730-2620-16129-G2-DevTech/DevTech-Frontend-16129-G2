@@ -136,7 +136,7 @@
     "progress": "Stage {done} of {total}"
   },
   "trackings": {
-    "columns": {"order":"Order","stage":"Stage","progress":"Progress"},
+    "columns": {"order":"Order","customer":"Customer","stage":"Stage","progress":"Progress"},
     "title": "Orders being tracked",
     "search": "Search by code (e.g. WT-001)",
     "estimated-delivery": "Estimated delivery",
@@ -183,6 +183,8 @@
       "title": "Production Board",
       "receive": "Receive order",
       "order-id": "Order ID",
+      "select-order": "Select an order",
+      "no-pending-orders": "There are no orders waiting to be received",
       "dismiss": "Dismiss"
     },
     "stages": {
@@ -307,7 +309,10 @@
       "cancel": "Cancel",
       "save": "Save",
       "default-garment": "Assorted garments",
-      "payment-error": "The order was saved, but its payment could not be registered."
+      "payment-error": "The order was saved, but its payment could not be registered.",
+      "laundry-error": "The order and its payment were saved, but the order could not be sent to the Production Board. Receive it from there.",
+      "delivery-error": "The order was saved, but its home delivery could not be scheduled.",
+      "tracking-error": "The order was saved, but its tracking could not be started."
     },
     "detail": {
       "title": "Garments of order {code}",

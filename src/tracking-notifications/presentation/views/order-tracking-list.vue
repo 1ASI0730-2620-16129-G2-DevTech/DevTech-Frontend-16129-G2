@@ -15,15 +15,13 @@ const { fetchTrackings } = store;
 
 const { query } = useBoardSearch();
 
-onMounted(() => {
-  if (!store.trackingsLoaded) {
-    fetchTrackings();
-  }
-});
+// Reload on every visit, so trackings started from other boards (for example a new order) show up.
+onMounted(() => fetchTrackings());
 
-/** Trackings matching the header search by order code (e.g. "WT-001" or "1") or stage. */
+/** Trackings matching the header search by order code (e.g. "WT-001" or "1"), customer or stage. */
 const filteredTrackings = computed(() => searchItems(trackings.value, (tracking) => [
-  formatOrderCode(tracking.orderId), tracking.orderId, t(`tracking.stages.${tracking.currentStage}`)
+  formatOrderCode(tracking.orderId), tracking.orderId, tracking.customerName,
+  t(`tracking.stages.${tracking.currentStage}`)
 ], query.value));
 
 /**
