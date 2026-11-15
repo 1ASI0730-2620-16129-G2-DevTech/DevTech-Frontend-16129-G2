@@ -4,13 +4,15 @@ import {storeToRefs} from "pinia";
 import {useI18n} from "vue-i18n";
 import {useOrderStore} from "../../application/order-store.js";
 import {usePaymentsStore} from "@/payments/application/payments.store.js";
+import {PaymentStatus} from "@/payments/domain/model/payment-status.js";
 import useLaundryOperationStore from "@/laundry-operations/application/laundry-operations.store.js";
 import usePickupsDeliveriesStore from "@/pickups-deliveries/application/pickups-deliveries.store.js";
 import useTrackingNotificationStore from "@/tracking-notifications/application/tracking-notification.store.js";
 import {ORDER_STATUS_SEQUENCE, OrderStatus} from "../../domain/model/order-status.js";
 import {DeliveryMethod} from "../../domain/model/delivery-method.js";
-import {CURRENT_LAUNDRY_ID} from "../current-laundry.js";
+import {CURRENT_LAUNDRY_ADDRESS, CURRENT_LAUNDRY_ID} from "../current-laundry.js";
 import OrderCreateDialog from "../components/order-create-dialog.vue";
+import {useServiceCatalogStore} from "@/service-catalog/application/service-catalog.store.js";
 import {mergeSort} from "@/shared/domain/model/merge-sort.js";
 import {searchItems, useBoardSearch} from "@/shared/presentation/board-search.js";
 import {toOrderCode} from "@/shared/presentation/order-code.js";
@@ -23,6 +25,10 @@ const pickupsDeliveriesStore = usePickupsDeliveriesStore();
 const trackingNotificationStore = useTrackingNotificationStore();
 const {orders, customers, loading, errors} = storeToRefs(orderStore);
 const {payments} = storeToRefs(paymentsStore);
+// Garments of the catalog (Service Catalog): their names are offered as garment types of a new order.
+const serviceCatalogStore = useServiceCatalogStore();
+const {garments} = storeToRefs(serviceCatalogStore);
+const garmentTypes = computed(() => garments.value.filter((garment) => garment.active).map((garment) => garment.name));
 
 const selectedOrderId = ref(null);
 const dialogVisible = ref(false);
@@ -71,6 +77,25 @@ function formatDate(date) {
       .replace(".", "").replace(/^(\d+) (\w)/, (_, day, letter) => `${day} ${letter.toUpperCase()}`);
 }
 
+/**
+ * Schedules how the clean garments go back to the customer, on the estimated delivery date
+ * (Pickups & Deliveries):
+ * - "Delivery a domicilio": a delivery at the customer's address;
+ * - "Recoger en tienda": a pickup at the laundry (the customer collects them there).
+ * @returns {Promise<boolean>} False when it could not be scheduled.
+ */
+async function scheduleHandover(order, customer) {
+  const request = {
+    orderId: order.id,
+    customerName: customer?.fullName ?? "",
+    scheduledAt: order.estimatedDeliveryDate.toISOString()
+  };
+  const scheduled = order.deliveryMethod === DeliveryMethod.DELIVERY
+      ? await pickupsDeliveriesStore.scheduleDelivery({...request, address: customer?.address ?? ""})
+      : await pickupsDeliveriesStore.schedulePickup({...request, address: CURRENT_LAUNDRY_ADDRESS});
+  return scheduled !== null;
+}
+
 async function advance(order) {
   await orderStore.changeOrderStatus(order.id, nextStatus(order));
 }
@@ -86,7 +111,7 @@ function openCreateDialog() {
  * - its laundry order in Laundry Operations (it enters the Production Board at RECEPTION
  *   with the estimated delivery date of the order);
  * - its tracking in Tracking & Notifications (it starts at the "received" stage);
- * - for a home delivery, its delivery in Pickups & Deliveries (scheduled for the estimated delivery date).
+ * - its delivery (home) or pickup (store) in Pickups & Deliveries, for the estimated delivery date.
  * Each bounded context validates its own data through its domain model.
  */
 async function createOrder(form) {
@@ -100,20 +125,20 @@ async function createOrder(form) {
     receptionDate: form.receptionDate,
     estimatedDeliveryDate: form.estimatedDeliveryDate,
     status: form.status,
-    items: [{type: t("orders.form.default-garment"), quantity: form.garmentCount}]
+    items: form.items
   });
   if (!order) {
     saveError.value = errors.value[0]?.message ?? t("orders.error");
     saving.value = false;
     return;
   }
+  // The backend charges the payment through its gateway; "paid" at the counter confirms it right away.
   const payment = await paymentsStore.createPayment({
     orderId: order.id,
     customerId: form.customer.id,
-    customerName: form.customer.fullName,
+    amount: form.amount,
     paymentMethod: form.paymentMethod,
-    status: form.paymentStatus,
-    orderDate: order.createdAt
+    confirm: form.paymentStatus === PaymentStatus.COMPLETED
   });
   if (!payment) {
     saveError.value = t("orders.form.payment-error");
@@ -137,18 +162,11 @@ async function createOrder(form) {
       saving.value = false;
       return;
     }
-    if (order.deliveryMethod === DeliveryMethod.DELIVERY) {
-      const delivery = await pickupsDeliveriesStore.scheduleDelivery({
-        orderId: order.id,
-        customerName: form.customer.fullName,
-        address: form.customer.address,
-        scheduledAt: order.estimatedDeliveryDate.toISOString()
-      });
-      if (!delivery) {
-        saveError.value = t("orders.form.delivery-error");
-        saving.value = false;
-        return;
-      }
+    if (!(await scheduleHandover(order, form.customer))) {
+      saveError.value = t(order.deliveryMethod === DeliveryMethod.DELIVERY
+          ? "orders.form.delivery-error" : "orders.form.pickup-error");
+      saving.value = false;
+      return;
     }
   }
   saving.value = false;
@@ -160,6 +178,7 @@ onMounted(() => {
   orderStore.fetchCustomers();
   orderStore.fetchAllOrders();
   paymentsStore.fetchPayments();
+  if (!garments.value.length) serviceCatalogStore.fetchGarments();
 });
 </script>
 
@@ -235,8 +254,8 @@ onMounted(() => {
       </table>
     </section>
 
-    <order-create-dialog v-model:visible="dialogVisible" :customers="customers" :saving="saving"
-                         :error-message="saveError" @save="createOrder"/>
+    <order-create-dialog v-model:visible="dialogVisible" :customers="customers" :garment-types="garmentTypes"
+                         :saving="saving" :error-message="saveError" @save="createOrder"/>
   </section>
 </template>
 

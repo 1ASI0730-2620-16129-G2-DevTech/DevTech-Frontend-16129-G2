@@ -1,11 +1,13 @@
 import { ValidationError } from "../../../shared/domain/model/errors.js";
+import { validateUuid } from "../../../shared/domain/model/uuid.js";
 
 /**
  * @param {*} value
- * @returns {boolean} True when value is a customer code such as CL001.
+ * @returns {boolean} True when value is a customer code such as CL001, or the GUID
+ * of a customer that was registered straight in the backend.
  */
 export function isValidCustomerId(value) {
-    return typeof value === "string" && /^CL\d{3,}$/.test(value);
+    return typeof value === "string" && (/^CL\d{3,}$/.test(value) || validateUuid(value));
 }
 
 /**
