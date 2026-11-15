@@ -7,7 +7,8 @@ import {LaundryOrder} from "@/laundry-operations/domain/model/laundry-order.enti
 import {PROCESSING_STAGES, ProcessingStage} from "@/laundry-operations/domain/model/processing-stage.js";
 import {Priority} from "@/laundry-operations/domain/model/priority.js";
 import useResourceStore from "@/laundry-operations/application/resource.store.js";
-import {generateUuid, validateUuid} from "@/shared/domain/model/uuid.js";
+import {validateUuid} from "@/shared/domain/model/uuid.js";
+import {currentLaundryId} from "@/shared/infrastructure/backend-api.js";
 import {ValidationError} from "@/shared/domain/model/errors.js";
 
 const laundryOperationsApi = new LaundryOperationsApi();
@@ -118,16 +119,19 @@ const useLaundryOperationStore = defineStore("laundry-operation", () => {
         return new LaundryOrder({...order});
     }
 
-    async function persistOrder(order) {
-        const response = await laundryOperationsApi.updateLaundryOrder(
-            order.id, LaundryOrderAssembler.toResourceFromEntity(order));
+    /** Reads the laundry order again from the backend after an operation changed it. */
+    async function refreshOrder(id) {
+        const response = await laundryOperationsApi.getLaundryOrderById(id);
         const saved = LaundryOrderAssembler.toEntityFromResource(response.data);
         const index = laundryOrders.value.findIndex(o => o.id === saved.id);
         if (index !== -1) laundryOrders.value[index] = saved;
+        else laundryOrders.value.push(saved);
         return saved;
     }
 
     // ---------- Use cases ----------
+    // Each use case checks the rules on the domain model first (clear errors without a round trip)
+    // and then asks the backend to run the same operation, which keeps the real state.
 
     /**
      * receiveOrder(orderId, expectedCompletion): creates the laundry order for an order coming from Order Management.
@@ -138,10 +142,10 @@ const useLaundryOperationStore = defineStore("laundry-operation", () => {
             if (!validateUuid(orderId)) throw new ValidationError(`A laundry order must reference a valid order id: ${orderId}`);
             if (!laundryOrdersLoaded.value) await loadLaundryOrders();
             if (isOrderReceived(orderId)) throw new ValidationError(`The order was already received: ${orderId}`);
-            const order = new LaundryOrder({id: generateUuid(), orderId, expectedCompletion});
-            const response = await laundryOperationsApi.createLaundryOrder(
-                LaundryOrderAssembler.toResourceFromEntity(order));
-            laundryOrders.value.push(LaundryOrderAssembler.toEntityFromResource(response.data));
+            await laundryOperationsApi.receiveLaundryOrder(LaundryOrderAssembler.toReceiveResource({
+                orderId, laundryId: currentLaundryId, priority: Priority.NORMAL, expectedCompletion
+            }));
+            await loadLaundryOrders();
         });
     }
 
@@ -150,7 +154,8 @@ const useLaundryOperationStore = defineStore("laundry-operation", () => {
         return run(async () => {
             const order = requireOrder(orderId);
             order.advanceStage(ProcessingStage.CLASSIFICATION);
-            await persistOrder(order);
+            await laundryOperationsApi.classifyLaundryOrder(orderId);
+            await refreshOrder(orderId);
         });
     }
 
@@ -160,39 +165,40 @@ const useLaundryOperationStore = defineStore("laundry-operation", () => {
             const order = requireOrder(orderId);
             if (!getWashingCycleById(cycleId)) throw new ValidationError(`Washing cycle not found: ${cycleId}`);
             order.assignWashingCycle(cycleId);
-            await persistOrder(order);
+            await laundryOperationsApi.assignWashingCycle(orderId, {washingCycleId: cycleId});
+            await refreshOrder(orderId);
         });
     }
 
     /**
-     * assignResource(orderId, resourceId): reserves the resource and links it to the order.
-     * If the order already had another resource, that one is released.
+     * assignResource(orderId, resourceId): the backend reserves the resource and links it to the order.
+     * The resources are read again, because their status changes with the assignment.
      */
     function assignResource(orderId, resourceId) {
         return run(async () => {
             const order = requireOrder(orderId);
-            const previousResourceId = order.resourceId;
-            if (previousResourceId === resourceId) return;
-
+            if (order.resourceId === resourceId) return;
+            const resource = resourceStore.getLaundryResourceById(resourceId);
+            if (!resource) throw new ValidationError(`Laundry resource not found: ${resourceId}`);
+            if (!resource.isAvailable()) throw new ValidationError(`Resource "${resource.name}" is not available`);
             order.assignResource(resourceId);
-            await resourceStore.assignResource(resourceId);
             try {
-                await persistOrder(order);
-            } catch (error) {
-                await resourceStore.releaseResource(resourceId).catch(() => {});
-                throw error;
+                await laundryOperationsApi.assignLaundryResource(orderId, {resourceId});
+                await refreshOrder(orderId);
+            } finally {
+                await resourceStore.fetchLaundryResources();
             }
-            if (previousResourceId) await resourceStore.releaseResource(previousResourceId);
         });
     }
 
-    /** advanceStage(orderId, stage): when the order becomes READY, its resource is released. */
+    /** advanceStage(orderId, stage): when the order becomes READY, the backend frees its resource. */
     function advanceStage(orderId, stage = null) {
         return run(async () => {
             const order = requireOrder(orderId);
             order.advanceStage(stage);
-            const saved = await persistOrder(order);
-            if (saved.isReady && saved.resourceId) await resourceStore.releaseResource(saved.resourceId);
+            await laundryOperationsApi.advanceLaundryOrderStage(orderId);
+            const saved = await refreshOrder(orderId);
+            if (saved.isReady && order.resourceId) await resourceStore.fetchLaundryResources();
         });
     }
 
@@ -201,7 +207,8 @@ const useLaundryOperationStore = defineStore("laundry-operation", () => {
         return run(async () => {
             const order = requireOrder(orderId);
             order.setPriority(Priority.VIP);
-            await persistOrder(order);
+            await laundryOperationsApi.prioritizeLaundryOrder(orderId, LaundryOrderAssembler.toPriorityResource(Priority.VIP));
+            await refreshOrder(orderId);
         });
     }
 

@@ -22,15 +22,12 @@ export class IoTGatewayApi {
     /**
      * Reads the latest telemetry of a device.
      * @param {string} deviceId
-     * @returns {Promise<SensorTelemetryPayload>}
+     * @returns {Promise<SensorTelemetryPayload|null>} Null when the device has not reported any telemetry.
      */
     async readSensorData(deviceId) {
         const response = await this.#http.get(sensorDataEndpointPath, {params: {deviceId}});
         const rows = response.data instanceof Array ? response.data : [response.data];
         const latest = rows.filter(Boolean).at(-1);
-        if (!latest) {
-            throw new Error(`No telemetry available for device ${deviceId}`);
-        }
-        return new SensorTelemetryPayload(latest);
+        return latest ? new SensorTelemetryPayload(latest) : null;
     }
 }

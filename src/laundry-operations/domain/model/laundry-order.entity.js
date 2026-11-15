@@ -21,6 +21,7 @@ export class LaundryOrder {
     constructor({
                     id = null,
                     orderId = null,
+                    laundryId = null,
                     currentStage = ProcessingStage.RECEPTION,
                     priority = Priority.NORMAL,
                     washingCycleId = null,
@@ -35,6 +36,7 @@ export class LaundryOrder {
         }
         this.id = id;
         this.orderId = orderId;
+        this.laundryId = laundryId;
         this.currentStage = currentStage;
         this.priority = priority;
         this.washingCycleId = washingCycleId;

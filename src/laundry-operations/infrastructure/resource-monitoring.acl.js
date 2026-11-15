@@ -24,11 +24,11 @@ export class ResourceMonitoringACL {
 
     /**
      * @param {string} deviceId
-     * @returns {Promise<string>} A value of {@link ResourceStatus}.
+     * @returns {Promise<string|null>} A value of {@link ResourceStatus}, or null when the device has no telemetry.
      */
     async getResourceStatus(deviceId) {
         const payload = await this.#iotGateway.readSensorData(deviceId);
-        return this.translate(payload);
+        return payload === null ? null : this.translate(payload);
     }
 
     /**

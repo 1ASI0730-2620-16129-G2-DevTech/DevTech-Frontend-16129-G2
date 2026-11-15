@@ -49,17 +49,18 @@ const useResourceStore = defineStore("laundry-resource", () => {
         return new LaundryResource({...resource});
     }
 
-    async function persist(resource) {
-        const response = await laundryOperationsApi.updateLaundryResource(
-            resource.id, LaundryResourceAssembler.toResourceFromEntity(resource));
-        const saved = LaundryResourceAssembler.toEntityFromResource(response.data);
-        const index = laundryResources.value.findIndex(r => r.id === saved.id);
-        if (index !== -1) laundryResources.value[index] = saved;
-        return saved;
+    /** Sends the status reported by the monitoring to the backend and keeps it in the state. */
+    async function synchronizeStatus(resource) {
+        await laundryOperationsApi.synchronizeLaundryResourceStatus(
+            resource.id, LaundryResourceAssembler.toStatusResource(resource.status));
+        const index = laundryResources.value.findIndex(r => r.id === resource.id);
+        if (index !== -1) laundryResources.value[index] = resource;
+        return resource;
     }
 
     /**
      * Refreshes the status of the resources from the IoT sensors (through the ACL).
+     * Resources without telemetry keep the status stored in the backend.
      * @param {string|null} laundryId - Only the resources of this laundry, or all if null.
      */
     function syncResourceStatuses(laundryId = null) {
@@ -68,10 +69,11 @@ const useResourceStore = defineStore("laundry-resource", () => {
             await Promise.all(targets.map(async (target) => {
                 try {
                     const monitoredStatus = await resourceMonitoring.getResourceStatus(target.id);
+                    if (monitoredStatus === null) return;
                     const resource = requireResource(target.id);
                     const previousStatus = resource.status;
                     resource.applyMonitoredStatus(monitoredStatus);
-                    if (resource.status !== previousStatus) await persist(resource);
+                    if (resource.status !== previousStatus) await synchronizeStatus(resource);
                 } catch (error) {
                     errors.value.push(error);
                 }
@@ -89,19 +91,18 @@ const useResourceStore = defineStore("laundry-resource", () => {
         return laundryResources.value.filter(r => r.laundryId === laundryId && r.isAvailable());
     }
 
-    /** Reserves a resource (BUSY). Throws if it is not available. Called by the laundry operation use cases. */
-    async function assignResource(resourceId) {
-        const resource = requireResource(resourceId);
-        resource.assign();
-        return persist(resource);
-    }
-
-    /** Releases a resource (AVAILABLE). Does nothing if it is not BUSY. Called by the laundry operation use cases. */
+    /**
+     * Frees a BUSY resource that no order is using any more (AVAILABLE). Does nothing if it is not BUSY.
+     * Resources reserved by an order are freed by the backend when the order becomes READY.
+     */
     async function releaseResource(resourceId) {
         const resource = requireResource(resourceId);
         if (resource.status !== ResourceStatus.BUSY) return resource;
         resource.release();
-        return persist(resource);
+        await laundryOperationsApi.releaseLaundryResource(resourceId);
+        const index = laundryResources.value.findIndex(r => r.id === resourceId);
+        if (index !== -1) laundryResources.value[index] = resource;
+        return resource;
     }
 
     return {
@@ -113,7 +114,6 @@ const useResourceStore = defineStore("laundry-resource", () => {
         getLaundryResourceById,
         syncResourceStatuses,
         getAvailableResources,
-        assignResource,
         releaseResource
     };
 });

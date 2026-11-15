@@ -5,7 +5,8 @@ import {ResourceStatus} from "@/laundry-operations/domain/model/resource-status.
  * Physical resource of a laundry (e.g., a washing machine or a dryer).
  */
 export class LaundryResource {
-    constructor({id = null, laundryId = null, name = '', status = ResourceStatus.AVAILABLE, capacity = 0} = {}) {
+    constructor({id = null, laundryId = null, name = '', status = ResourceStatus.AVAILABLE, capacity = 0,
+                    assignedOrderId = null} = {}) {
         if (!Object.values(ResourceStatus).includes(status)) {
             throw new ValidationError(`Invalid resource status: ${status}`);
         }
@@ -17,6 +18,8 @@ export class LaundryResource {
         this.name = name;
         this.status = status;
         this.capacity = capacity;
+        /** Laundry order that is using the resource, if any. */
+        this.assignedOrderId = assignedOrderId;
     }
 
     isAvailable() {
