@@ -4,56 +4,99 @@ import {storeToRefs} from "pinia";
 import {useI18n} from "vue-i18n";
 import {usePaymentsStore} from "../../application/payments.store.js";
 import {PaymentStatus} from "../../domain/model/payment-status.js";
+import {useOrderStore} from "@/order-management/application/order-store.js";
 import {searchItems, useBoardSearch} from "@/shared/presentation/board-search.js";
 import {toOrderCode} from "@/shared/presentation/order-code.js";
 
 const {t} = useI18n();
 const store = usePaymentsStore();
+const orderStore = useOrderStore();
 const {payments, loading, errors, summary} = storeToRefs(store);
+const {customers} = storeToRefs(orderStore);
 const {query} = useBoardSearch();
 const selectedStatus = ref("all");
 const selectedPayment = ref(null);
 
 const statusFilters = [
     {key: "all", label: "payments.filters.all"},
-    {key: PaymentStatus.PAID, label: "payments.filters.paid"},
+    {key: PaymentStatus.COMPLETED, label: "payments.filters.completed"},
     {key: PaymentStatus.PENDING, label: "payments.filters.pending"},
-    {key: PaymentStatus.CANCELLED, label: "payments.filters.cancelled"}
+    {key: PaymentStatus.FAILED, label: "payments.filters.failed"}
 ];
+
+/** The payment only keeps the customer id; the name comes from the customers list. */
+const customerNames = computed(() =>
+    new Map(customers.value.map((customer) => [customer.id, customer.fullName])));
+function customerName(payment) {
+    return customerNames.value.get(payment.customerId) ?? payment.customerId;
+}
 
 const filteredPayments = computed(() => {
     const byStatus = payments.value.filter((payment) =>
         selectedStatus.value === "all" || payment.status === selectedStatus.value);
     return searchItems(byStatus, (payment) => [
-        paymentCode(payment), payment.customerName, orderCode(payment.orderId), payment.orderId,
-        formatMethod(payment.paymentMethod), statusLabel(payment.status)
+        paymentCode(payment), customerName(payment), orderCode(payment.orderId), payment.orderId,
+        methodLabel(payment.paymentMethod), payment.transactionId, statusLabel(payment.status)
     ], query.value);
 });
 
 function statusLabel(status) { return t(`payments.status.${status}`); }
+function methodLabel(method) { return t(`orders.payment-method.${method}`); }
 const STATUS_SEVERITY = {
-    [PaymentStatus.PAID]: "success",
+    [PaymentStatus.COMPLETED]: "success",
     [PaymentStatus.PENDING]: "warn",
-    [PaymentStatus.CANCELLED]: "danger"
+    [PaymentStatus.FAILED]: "danger"
 };
 function statusSeverity(status) { return STATUS_SEVERITY[status] ?? "secondary"; }
-function formatMethod(method) { return method.charAt(0).toUpperCase() + method.slice(1); }
 function formatDate(date) {
+    if (!date) return "—";
     return new Intl.DateTimeFormat("es-PE", {day: "2-digit", month: "2-digit", year: "numeric"}).format(date);
 }
-function formatAmount(amount) {
-    return new Intl.NumberFormat("es-PE", {style: "currency", currency: "PEN"}).format(amount);
+function formatAmount(payment) {
+    return new Intl.NumberFormat("es-PE", {style: "currency", currency: payment.currency}).format(payment.amount);
 }
+/** Payment code shown to people, e.g. #PG001 for the payment 1 of the backend. */
 function paymentCode(payment) {
-  return `#${payment.id}`;
+  return `#PG${String(payment.id).padStart(3, "0")}`;
 }
 function orderCode(orderId) {
   return toOrderCode(orderId);
 }
 function openDetails(payment) {
   selectedPayment.value = payment;
+  payResult.value = null;
 }
-onMounted(() => store.fetchPayments());
+
+// ---------- Pay (confirm the payment in the backend) ----------
+const paying = ref(false);
+/** "success" or "error" after pressing Pay; null before. */
+const payResult = ref(null);
+
+/** Only a payment approved by the gateway and still pending can be paid (confirmed). */
+const canPay = computed(() =>
+    Boolean(selectedPayment.value?.isPending() && selectedPayment.value?.transactionId));
+
+async function pay() {
+  paying.value = true;
+  payResult.value = null;
+  const paid = await store.confirmPayment(selectedPayment.value.id);
+  paying.value = false;
+  if (paid) {
+    selectedPayment.value = paid;
+    payResult.value = "success";
+  } else {
+    payResult.value = "error";
+  }
+}
+
+function backToList() {
+  selectedPayment.value = null;
+  payResult.value = null;
+}
+onMounted(() => {
+  store.fetchPayments();
+  if (!customers.value.length) orderStore.fetchCustomers();
+});
 </script>
 
 <template>
@@ -82,10 +125,10 @@ onMounted(() => store.fetchPayments());
               tabindex="0" @dblclick="openDetails(payment)" @keydown.enter="openDetails(payment)">
             <td class="wt-board-id">{{ paymentCode(payment) }}</td>
             <td>{{ orderCode(payment.orderId) }}</td>
-            <td class="customer-name">{{ payment.customerName }}</td>
-            <td>{{ formatAmount(payment.amount) }}</td><td>{{ formatMethod(payment.paymentMethod) }}</td>
+            <td class="customer-name">{{ customerName(payment) }}</td>
+            <td>{{ formatAmount(payment) }}</td><td>{{ methodLabel(payment.paymentMethod) }}</td>
             <td><pv-tag :value="statusLabel(payment.status)" :severity="statusSeverity(payment.status)"/></td>
-            <td>{{ formatDate(payment.orderDate) }}</td>
+            <td>{{ formatDate(payment.processedAt) }}</td>
           </tr>
         </tbody>
       </table>
@@ -111,7 +154,7 @@ onMounted(() => store.fetchPayments());
 
     <section v-else class="payment-detail-page">
       <div class="detail-breadcrumb">
-        <button type="button" class="back-button" @click="selectedPayment = null">
+        <button type="button" class="back-button" @click="backToList">
           <i class="pi pi-arrow-left" aria-hidden="true"></i>
           {{ t('payments.detail.back') }}
         </button>
@@ -125,8 +168,8 @@ onMounted(() => store.fetchPayments());
           <div class="payment-person">
             <span class="person-avatar"></span>
             <div>
-              <strong>{{ selectedPayment.customerName }}</strong>
-              <small>{{ t(`payments.status.${selectedPayment.status}`) }}</small>
+              <strong>{{ customerName(selectedPayment) }}</strong>
+              <small :class="`status-${selectedPayment.status}`">{{ t(`payments.status.${selectedPayment.status}`) }}</small>
             </div>
             <span class="phone-icon pi pi-phone"></span>
           </div>
@@ -135,13 +178,21 @@ onMounted(() => store.fetchPayments());
             <dl>
               <div><dt>{{ t('payments.columns.id') }}</dt><dd>{{ paymentCode(selectedPayment) }}</dd></div>
               <div><dt>{{ t('payments.columns.order') }}</dt><dd>{{ orderCode(selectedPayment.orderId) }}</dd></div>
-              <div><dt>{{ t('payments.columns.customer') }}</dt><dd>{{ selectedPayment.customerName }}</dd></div>
-              <div><dt>{{ t('payments.columns.method') }}</dt><dd>{{ formatMethod(selectedPayment.paymentMethod) }}</dd></div>
-              <div><dt>{{ t('payments.columns.date') }}</dt><dd>{{ formatDate(selectedPayment.orderDate) }}</dd></div>
+              <div><dt>{{ t('payments.columns.customer') }}</dt><dd>{{ customerName(selectedPayment) }}</dd></div>
+              <div><dt>{{ t('payments.columns.method') }}</dt><dd>{{ methodLabel(selectedPayment.paymentMethod) }}</dd></div>
+              <div><dt>{{ t('payments.columns.transaction') }}</dt><dd class="transaction-id">{{ selectedPayment.transactionId ?? '—' }}</dd></div>
+              <div><dt>{{ t('payments.columns.date') }}</dt><dd>{{ formatDate(selectedPayment.processedAt) }}</dd></div>
               <div><dt>{{ t('payments.columns.status') }}</dt><dd><pv-tag :value="statusLabel(selectedPayment.status)" :severity="statusSeverity(selectedPayment.status)"/></dd></div>
-              <div><dt>{{ t('payments.columns.amount') }}</dt><dd>{{ formatAmount(selectedPayment.amount) }}</dd></div>
+              <div><dt>{{ t('payments.columns.amount') }}</dt><dd>{{ formatAmount(selectedPayment) }}</dd></div>
             </dl>
           </div>
+
+          <div v-if="payResult" :class="['pay-result', payResult]" role="status">
+            <i :class="['pi', payResult === 'success' ? 'pi-check-circle' : 'pi-times-circle']" aria-hidden="true"></i>
+            {{ t(`payments.detail.pay-${payResult}`) }}
+          </div>
+          <pv-button v-if="canPay" :label="t('payments.detail.pay', {amount: formatAmount(selectedPayment)})"
+                     icon="pi pi-wallet" class="pay-button" :loading="paying" @click="pay"/>
         </div>
       </div>
     </section>
@@ -154,6 +205,7 @@ h2 { font-size: .9rem; font-weight: 700; }
 .period-filters button { border: 0; border-radius: 1rem; padding: .3rem .7rem; background: #f5f9fd; color: #72819b; font-size: .68rem; cursor: pointer; }
 .period-filters button.selected { background: #087fea; color: #fff; }
 .customer-name { font-weight: 600; color: #123b7a; }
+.transaction-id { max-width: 12rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: monospace; font-size: .72rem; }
 .error-state { color: #c03939; }
 .payment-details { color: #123b7a; }
 .payment-detail-page { min-height: 29rem; }
@@ -171,6 +223,12 @@ h2 { font-size: .9rem; font-weight: 700; }
 .detail-card h2 { margin: 0 0 .65rem; font-size: .86rem; }
 .detail-card dl { margin: 0; font-size: .72rem; } .detail-card dl div { display: flex; justify-content: space-between; gap: 1rem; padding: .32rem 0; border-top: 1px solid #dce9f5; }
 .detail-card dt { font-weight: 600; } .detail-card dd { margin: 0; text-align: right; }
+.payment-person small.status-completed { color: #15803d; }
+.payment-person small.status-failed { color: #c03939; }
+.pay-button { width: 100%; justify-content: center; border-radius: 10px; }
+.pay-result { display: flex; align-items: center; gap: .5rem; padding: .7rem .8rem; border-radius: 10px; font-size: .8rem; font-weight: 600; }
+.pay-result.success { background: #e8f6ec; color: #15803d; }
+.pay-result.error { background: #fdecec; color: #b42318; }
 .garment-chart { margin-top: 3.7rem; }
 .chart-heading { display: flex; align-items: center; justify-content: space-between; margin: 0 0 .65rem; }
 .chart-area { height: 9.6rem; padding: 1rem .75rem; border-radius: 8px; background: #f4f9fd; }

@@ -3,18 +3,16 @@ import {defineStore} from "pinia";
 import {PaymentsApi} from "../infrastructure/payments-api.js";
 import {PaymentAssembler} from "../infrastructure/payment-assembler.js";
 import {PaymentStatus} from "../domain/model/payment-status.js";
-import {Payment} from "../domain/model/payment.js";
+import {PaymentMethod} from "../domain/model/payment-method.js";
+
 const paymentsApi = new PaymentsApi();
 
-/** Next free payment code (PG015 after PG014), read from the API so it is right even before the list loads. */
-async function nextPaymentCode() {
-    const response = await paymentsApi.getPayments();
-    const highest = response.data
-        .map((resource) => /^PG(\d+)$/.exec(String(resource.id))?.[1])
-        .filter(Boolean)
-        .reduce((max, digits) => Math.max(max, Number(digits)), 0);
-    return `PG${String(highest + 1).padStart(3, "0")}`;
-}
+/**
+ * Card token sent to the payment gateway. The backend simulates the provider:
+ * every token is approved unless it contains "declined".
+ * TODO: take it from the card form once the web app tokenizes real cards.
+ */
+const SIMULATED_CARD_TOKEN = "tok_washtrack_web_app";
 
 export const usePaymentsStore = defineStore("payments", () => {
     const payments = ref([]);
@@ -22,10 +20,17 @@ export const usePaymentsStore = defineStore("payments", () => {
     const errors = ref([]);
 
     const summary = computed(() => ({
-        paid: payments.value.filter((payment) => payment.status === PaymentStatus.PAID).length,
+        completed: payments.value.filter((payment) => payment.status === PaymentStatus.COMPLETED).length,
         pending: payments.value.filter((payment) => payment.status === PaymentStatus.PENDING).length,
-        cancelled: payments.value.filter((payment) => payment.status === PaymentStatus.CANCELLED).length,
+        failed: payments.value.filter((payment) => payment.status === PaymentStatus.FAILED).length,
     }));
+
+    function replaceInState(payment) {
+        const index = payments.value.findIndex((existing) => existing.id === payment.id);
+        payments.value = index === -1
+            ? [...payments.value, payment]
+            : payments.value.map((existing) => existing.id === payment.id ? payment : existing);
+    }
 
     async function fetchPayments() {
         loading.value = true;
@@ -41,33 +46,53 @@ export const usePaymentsStore = defineStore("payments", () => {
     }
 
     /**
-     * Registers the payment of an order. The amount starts at 0 until the
-     * laundry prices the order.
-     * @returns {Promise<Payment|null>}
+     * Registers and charges the payment of an order. The backend leaves an approved payment
+     * PENDING; with `confirm` it is confirmed right away (COMPLETED), e.g. when the customer paid at the counter.
+     * @param {Object} request
+     * @param {string} request.orderId - Order id (UUID).
+     * @param {string} request.customerId - Customer code, e.g. CL005.
+     * @param {number} [request.amount] - 0 until the laundry prices the order.
+     * @param {string} [request.currency]
+     * @param {string} [request.paymentMethod] - One of PaymentMethod; card by default.
+     * @param {boolean} [request.confirm]
+     * @returns {Promise<import("../domain/model/payment.js").Payment|null>}
      */
-    async function createPayment({orderId, customerId, customerName, paymentMethod, status, orderDate, amount = 0}) {
+    async function createPayment({orderId, customerId, amount = 0, currency = "PEN", paymentMethod = PaymentMethod.CARD,
+                                     confirm = false}) {
         errors.value = [];
         try {
-            const payment = new Payment({
-                id: await nextPaymentCode(),
-                orderId,
-                customerId,
-                customerName,
-                amount,
-                paymentMethod,
-                status,
-                paidAt: status === PaymentStatus.PAID ? new Date() : null,
-                orderDate
-            });
-            const response = await paymentsApi.createPayment(PaymentAssembler.toResourceFromEntity(payment));
-            const created = PaymentAssembler.toEntityFromResource(response.data);
-            payments.value = [...payments.value, created];
-            return created;
+            const response = await paymentsApi.createPayment(PaymentAssembler.toCreateResource({
+                orderId, customerId, amount, currency, paymentMethod, cardToken: SIMULATED_CARD_TOKEN
+            }));
+            let payment = PaymentAssembler.toEntityFromResource(response.data);
+            if (confirm && payment.isPending()) {
+                const confirmed = await paymentsApi.confirmPayment(payment.id);
+                payment = PaymentAssembler.toEntityFromResource(confirmed.data);
+            }
+            replaceInState(payment);
+            return payment;
         } catch (error) {
             errors.value.push(error);
             return null;
         }
     }
 
-    return {payments, loading, errors, summary, fetchPayments, createPayment};
+    /**
+     * Confirms a pending payment in the backend (PENDING -> COMPLETED) and keeps the list up to date.
+     * A failure is returned as null (and logged) without touching `errors`, which belongs to loading the list.
+     * @returns {Promise<import("../domain/model/payment.js").Payment|null>}
+     */
+    async function confirmPayment(paymentId) {
+        try {
+            const response = await paymentsApi.confirmPayment(paymentId);
+            const payment = PaymentAssembler.toEntityFromResource(response.data);
+            replaceInState(payment);
+            return payment;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    return {payments, loading, errors, summary, fetchPayments, createPayment, confirmPayment};
 });
