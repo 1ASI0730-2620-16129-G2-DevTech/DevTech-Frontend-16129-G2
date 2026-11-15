@@ -24,10 +24,11 @@ export const useDashboardStore = defineStore("dashboard", () => {
                 status: resource.status,
                 createdAt: new Date(resource.createdAt),
             }));
+            // Backend payments: status PENDING / COMPLETED / FAILED and processedAt (when the charge went through).
             payments.value = paymentsResponse.data.map((resource) => ({
                 amount: Number(resource.amount),
-                status: resource.status,
-                paidAt: resource.paidAt ? new Date(resource.paidAt) : null,
+                status: String(resource.status).toLowerCase(),
+                paidAt: resource.processedAt ? new Date(resource.processedAt) : null,
             }));
             customersCount.value = customersResponse.data.length;
         } catch (error) {

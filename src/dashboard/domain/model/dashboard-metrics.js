@@ -13,6 +13,9 @@ const PENDING_STATUSES = ["CREATED", "RECEIVED"];
 const IN_PROCESS_STATUSES = ["CLASSIFIED", "IN_PROCESS"];
 const READY_STATUSES = ["READY"];
 
+// A payment counts as revenue once the backend confirmed it (COMPLETED).
+const PAID_STATUS = "completed";
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 function startOfDay(date) {
@@ -30,7 +33,7 @@ function countWhere(orders, statuses) {
  */
 export function summarize({ orders, payments, customersCount }) {
     const revenue = payments
-        .filter((payment) => payment.status === "paid")
+        .filter((payment) => payment.status === PAID_STATUS)
         .reduce((total, payment) => total + payment.amount, 0);
     return {
         orders: orders.length,
@@ -69,7 +72,7 @@ export function ordersPerDay(orders, days = 7, now = new Date()) {
 }
 
 export function revenuePerDay(payments, days = 7, now = new Date()) {
-    const paid = payments.filter((payment) => payment.status === "paid");
+    const paid = payments.filter((payment) => payment.status === PAID_STATUS);
     return perDay(paid, (payment) => payment.paidAt, (payment) => payment.amount, days, now)
         .map((point) => ({ ...point, value: Math.round(point.value * 100) / 100 }));
 }
