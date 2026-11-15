@@ -8,13 +8,14 @@ export const DeliveryType = Object.freeze({
 });
 
 /**
- * Lifecycle states of a pickup or delivery.
+ * Lifecycle states of a pickup or delivery (backend PickupDeliveryStatus).
  * Each value has a translation under `deliveries.status.<value>`.
  */
 export const DeliveryStatus = Object.freeze({
     SCHEDULED: 'scheduled',
+    IN_TRANSIT: 'in-transit',
     COMPLETED: 'completed',
-    CANCELLED: 'cancelled'
+    FAILED: 'failed'
 });
 
 /**

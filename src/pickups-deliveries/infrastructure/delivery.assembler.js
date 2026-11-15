@@ -1,31 +1,61 @@
-import {Delivery} from "@/pickups-deliveries/domain/model/delivery.entity.js";
+import {Delivery, DeliveryStatus, DeliveryType} from "@/pickups-deliveries/domain/model/delivery.entity.js";
+
+/** Backend names (ServiceType and PickupDeliveryStatus) to the values of the web app. */
+const TYPE_FROM_RESOURCE = Object.freeze({Pickup: DeliveryType.PICKUP, Delivery: DeliveryType.DELIVERY});
+const TYPE_TO_RESOURCE = Object.freeze({[DeliveryType.PICKUP]: "Pickup", [DeliveryType.DELIVERY]: "Delivery"});
+const STATUS_FROM_RESOURCE = Object.freeze({
+    Scheduled: DeliveryStatus.SCHEDULED,
+    InTransit: DeliveryStatus.IN_TRANSIT,
+    Completed: DeliveryStatus.COMPLETED,
+    Failed: DeliveryStatus.FAILED
+});
+
+const DEFAULT_CITY = "Lima";
+
+/**
+ * Splits "Jr. Puno 029, Breña" into street and city (the part after the last comma).
+ * @param {string} address
+ * @returns {{street: string, city: string}}
+ */
+function splitAddress(address) {
+    const text = String(address ?? "").trim();
+    const comma = text.lastIndexOf(",");
+    if (comma === -1) return {street: text, city: DEFAULT_CITY};
+    return {street: text.slice(0, comma).trim(), city: text.slice(comma + 1).trim() || DEFAULT_CITY};
+}
 
 export class DeliveryAssembler {
-    static toEntityFromResource(resource) {
-        return new Delivery({...resource});
+    /**
+     * @param {Object} resource - PickupDeliveryResource of the backend.
+     * @param {Object} [context] - Data the backend does not keep with the pickup or delivery.
+     * @param {string} [context.customerName] - From the customer of the order.
+     * @param {string} [context.scheduledAt] - Estimated delivery date of the order (ISO string).
+     * @returns {Delivery}
+     */
+    static toEntityFromResource(resource, {customerName = "", scheduledAt = ""} = {}) {
+        return new Delivery({
+            id: resource.id,
+            orderId: resource.orderId,
+            type: TYPE_FROM_RESOURCE[resource.type] ?? String(resource.type).toLowerCase(),
+            customerName,
+            address: [resource.street, resource.city].filter(Boolean).join(", "),
+            status: STATUS_FROM_RESOURCE[resource.status] ?? String(resource.status).toLowerCase(),
+            scheduledAt
+        });
     }
 
-    /** The id is left out while it is null, so the API assigns it. */
-    static toResourceFromEntity(entity) {
-        const resource = {
+    /**
+     * SchedulePickupDeliveryResource of the backend.
+     * @param {Delivery} entity
+     * @returns {Object}
+     */
+    static toScheduleResource(entity) {
+        const {street, city} = splitAddress(entity.address);
+        return {
             orderId: entity.orderId,
-            type: entity.type,
-            customerName: entity.customerName,
-            address: entity.address,
-            driverName: entity.driverName,
-            status: entity.status,
-            scheduledAt: entity.scheduledAt
+            street,
+            city,
+            type: TYPE_TO_RESOURCE[entity.type]
         };
-        return entity.id === null ? resource : {id: entity.id, ...resource};
-    }
-
-    static toEntitiesFromResponse(response) {
-        if (response.status !== 200) {
-            console.error(response.statusText);
-            return [];
-        }
-        let resources = response.data instanceof Array ? response.data : response.data['deliveries'];
-
-        return resources.map(resource => this.toEntityFromResource(resource));
     }
 }

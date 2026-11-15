@@ -16,6 +16,7 @@ export function formatDateTime(value) {
  */
 export function getStatusSeverity(status) {
     if (status === DeliveryStatus.COMPLETED) return 'success';
-    if (status === DeliveryStatus.CANCELLED) return 'danger';
+    if (status === DeliveryStatus.FAILED) return 'danger';
+    if (status === DeliveryStatus.IN_TRANSIT) return 'warn';
     return 'info';
 }
