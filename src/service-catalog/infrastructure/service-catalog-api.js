@@ -1,4 +1,5 @@
 import {BaseApi} from "@/shared/infrastructure/base-api.js";
+import {BackendApi, currentLaundryId} from "@/shared/infrastructure/backend-api.js";
 import {BaseEndpoint} from "@/shared/infrastructure/base-endpoint.js";
 
 const servicesEndpointPath = import.meta.env.VITE_SERVICES_ENDPOINT_PATH;
@@ -9,7 +10,8 @@ const ordersEndpointPath = import.meta.env.VITE_ORDERS_ENDPOINT_PATH;
 export class ServiceCatalogApi extends BaseApi {
     #servicesEndpoint;
     #garmentsEndpoint;
-    #ordersEndpoint;
+    /** Orders live in the Order Management backend; services and garments are still on the mock API. */
+    #ordersApi = new BackendApi();
 
     constructor() {
         super();
@@ -18,7 +20,6 @@ export class ServiceCatalogApi extends BaseApi {
         }
         this.#servicesEndpoint = new BaseEndpoint(this, servicesEndpointPath);
         this.#garmentsEndpoint = new BaseEndpoint(this, garmentsEndpointPath);
-        this.#ordersEndpoint = new BaseEndpoint(this, ordersEndpointPath);
     }
 
     getServices() {
@@ -37,7 +38,8 @@ export class ServiceCatalogApi extends BaseApi {
         return this.#garmentsEndpoint.create(resource);
     }
 
+    /** Orders of the current laundry (read only). */
     getOrders() {
-        return this.#ordersEndpoint.getAll();
+        return this.#ordersApi.http.get(ordersEndpointPath, {params: {laundryId: currentLaundryId}});
     }
 }
