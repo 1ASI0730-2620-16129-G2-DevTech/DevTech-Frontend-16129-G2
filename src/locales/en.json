@@ -112,12 +112,12 @@
     "loading": "Loading payments...",
     "error": "The payment catalog could not be loaded.",
     "empty": "No payments match the search.",
-    "filters": {"all": "All", "paid": "Paid", "pending": "Pending", "cancelled": "Order cancelled"},
-    "status": {"paid": "Paid", "pending": "Pending", "cancelled": "Cancelled"},
-    "columns": {"id": "ID", "order": "Order", "customer": "Customer", "amount": "Amount", "method": "Method", "status": "Status", "date": "Date"},
+    "filters": {"all": "All", "completed": "Paid", "pending": "Pending", "failed": "Order cancelled"},
+    "status": {"completed": "Paid", "pending": "Pending", "failed": "Cancelled"},
+    "columns": {"id": "ID", "order": "Order", "customer": "Customer", "amount": "Amount", "method": "Method", "transaction": "Transaction", "status": "Status", "date": "Date"},
     "chart-title": "Most requested garments - last 24 hours",
     "periods": {"hour": "Last hour", "day": "24 hours", "week": "7 days", "month": "30 days"},
-    "detail": {"title": "Payment details", "back": "Back to payments"}
+    "detail": {"title": "Payment details", "back": "Back to payments", "pay": "Pay {amount}", "pay-success": "Payment successful", "pay-error": "The payment could not be registered. Please try again."}
   },
   "tracking": {
     "stages": {
@@ -302,6 +302,18 @@
       "payment-status": "Payment status",
       "delivery-method": "Delivery type",
       "payment-method": "Payment method",
+      "amount": "Amount (S/)",
+      "amount-required": "Enter an amount greater than 0.",      "items": {
+        "title": "Order garments",
+        "type": "Garment",
+        "type-placeholder": "Choose or type a garment",
+        "quantity": "Quantity",
+        "care": "Care (optional)",
+        "care-placeholder": "E.g. wash cold",
+        "add": "Add garment",
+        "remove": "Remove garment",
+        "invalid": "Each garment needs a name and a quantity between 1 and 1000."
+      },
       "delivery": {
         "PICKUP": "Store pickup",
         "DELIVERY": "Home delivery"
@@ -312,6 +324,7 @@
       "payment-error": "The order was saved, but its payment could not be registered.",
       "laundry-error": "The order and its payment were saved, but the order could not be sent to the Production Board. Receive it from there.",
       "delivery-error": "The order was saved, but its home delivery could not be scheduled.",
+      "pickup-error": "The order was saved, but its store pickup could not be scheduled.",
       "tracking-error": "The order was saved, but its tracking could not be started."
     },
     "detail": {
@@ -333,12 +346,12 @@
     "loading": "Loading payments...",
     "error": "The payment catalog could not be loaded.",
     "empty": "No payments match the search.",
-    "filters": {"all": "All", "paid": "Paid", "pending": "Pending", "cancelled": "Order cancelled"},
-    "status": {"paid": "Paid", "pending": "Pending", "cancelled": "Cancelled"},
-    "columns": {"id": "ID", "order": "Order", "customer": "Customer", "amount": "Amount", "method": "Method", "status": "Status", "date": "Date"},
+    "filters": {"all": "All", "completed": "Paid", "pending": "Pending", "failed": "Order cancelled"},
+    "status": {"completed": "Paid", "pending": "Pending", "failed": "Cancelled"},
+    "columns": {"id": "ID", "order": "Order", "customer": "Customer", "amount": "Amount", "method": "Method", "transaction": "Transaction", "status": "Status", "date": "Date"},
     "chart-title": "Most requested garments - last 24 hours",
     "periods": {"hour": "Last hour", "day": "24 hours", "week": "7 days", "month": "30 days"},
-    "detail": {"title": "Payment details", "back": "Back to payments"}
+    "detail": {"title": "Payment details", "back": "Back to payments", "pay": "Pay {amount}", "pay-success": "Payment successful", "pay-error": "The payment could not be registered. Please try again."}
   },
   "deliveries": {
     "title": "Pickups & deliveries",
@@ -359,6 +372,8 @@
     "status": {
       "completed": "Completed",
       "scheduled": "Scheduled",
+      "in-transit": "In transit",
+      "failed": "Failed",
       "cancelled": "Cancelled"
     },
     "empty": "No pickups or deliveries found.",
