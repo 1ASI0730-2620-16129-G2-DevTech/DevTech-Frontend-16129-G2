@@ -13,9 +13,12 @@ export class BaseApi {
      */
     #http;
 
-    constructor() {
+    /**
+     * @param {string} [baseURL] - Base URL of the API; the mock platform API by default.
+     */
+    constructor(baseURL = platformApi) {
         this.#http = axios.create({
-            baseURL: platformApi,
+            baseURL,
             headers: {
                 "Content-Type": "application/json"
             }
