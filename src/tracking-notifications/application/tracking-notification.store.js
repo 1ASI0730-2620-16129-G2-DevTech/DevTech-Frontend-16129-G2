@@ -3,10 +3,7 @@ import {computed, ref} from "vue";
 import {TrackingNotificationApi} from "@/tracking-notifications/infrastructure/tracking-notification-api.js";
 import {TrackingAssembler} from "@/tracking-notifications/infrastructure/tracking.assembler.js";
 import {NotificationAssembler} from "@/tracking-notifications/infrastructure/notification.assembler.js";
-import {OrderTracking} from "@/tracking-notifications/domain/model/order-tracking.entity.js";
-
-/** First stage of every tracking (see ORDER_STAGES in the presentation helpers). */
-const RECEIVED_STAGE = 'received';
+import {customerGuidToCode} from "@/shared/infrastructure/customer-id-translator.js";
 
 const trackingNotificationApi = new TrackingNotificationApi();
 
@@ -25,21 +22,47 @@ const useTrackingNotificationStore = defineStore("trackingNotification", () => {
         return trackingsLoaded.value ? trackings.value.length : 0;
     });
 
-    function fetchTrackings() {
-        trackingNotificationApi.getTrackings().then((response) => {
-            trackings.value = TrackingAssembler.toEntitiesFromResponse(response);
-            trackingsLoaded.value = true;
-        }).catch((error) => {
-            errors.value.push(error);
-        });
+    /** Customer name of each order: order (backend) -> customer code -> customer (mock API). */
+    async function loadCustomerNames(orderResources) {
+        const customersResponse = await trackingNotificationApi.getCustomers();
+        const names = new Map(customersResponse.data.map(customer => [customer.id, customer.fullName]));
+        return new Map(orderResources.map(order => [order.id, names.get(customerGuidToCode(order.customerId)) ?? '']));
     }
 
-    function fetchTracking(orderId) {
-        trackingNotificationApi.getTrackingByOrderId(orderId).then((response) => {
-            currentTracking.value = TrackingAssembler.toEntitiesFromResponse(response)[0] ?? null;
-        }).catch((error) => {
+    /**
+     * Trackings of every order. The stages come from the backend, which records them by itself
+     * every time the order advances on the Production Board.
+     */
+    async function fetchTrackings() {
+        try {
+            const [trackingsResponse, ordersResponse] = await Promise.all([
+                trackingNotificationApi.getTrackings(),
+                trackingNotificationApi.getOrders()
+            ]);
+            const customerNames = await loadCustomerNames(ordersResponse.data);
+            trackings.value = TrackingAssembler.toEntitiesFromResponse(trackingsResponse,
+                orderId => customerNames.get(orderId) ?? '');
+            trackingsLoaded.value = true;
+        } catch (error) {
             errors.value.push(error);
-        });
+        }
+    }
+
+    /** Tracking of one order, for the tracker view. */
+    async function fetchTracking(orderId) {
+        try {
+            const response = await trackingNotificationApi.getTrackingByOrderId(orderId);
+            const resource = Array.isArray(response.data) ? response.data[0] : null;
+            if (!resource) {
+                currentTracking.value = null;
+                return;
+            }
+            const order = await trackingNotificationApi.getOrderById(orderId).then(r => r.data).catch(() => null);
+            const customerNames = order ? await loadCustomerNames([order]) : new Map();
+            currentTracking.value = TrackingAssembler.toEntityFromResource(resource, customerNames.get(orderId) ?? '');
+        } catch (error) {
+            errors.value.push(error);
+        }
     }
 
     function getTrackingById(id) {
@@ -48,66 +71,23 @@ const useTrackingNotificationStore = defineStore("trackingNotification", () => {
     }
 
     /**
-     * Starts the tracking of a new order at the "received" stage.
-     * @returns {Promise<OrderTracking|null>} The new tracking, or null when it could not be registered.
+     * Starts the tracking of a new order at the "received" stage. The backend may have started it already
+     * (when Laundry Operations received the order); then it keeps that one and stores the estimated delivery.
+     * @returns {Promise<OrderTracking|null>} The tracking, or null when it could not be registered.
      */
     async function startTracking({orderId, customerName, estimatedDelivery}) {
         try {
-            const tracking = new OrderTracking({
-                orderId,
-                customerName,
-                currentStage: RECEIVED_STAGE,
-                estimatedDelivery,
-                history: [{stage: RECEIVED_STAGE, occurredAt: new Date().toISOString()}]
-            });
-            const response = await trackingNotificationApi.createTracking(TrackingAssembler.toResourceFromEntity(tracking));
-            const started = TrackingAssembler.toEntityFromResource(response.data);
-            if (trackingsLoaded.value) trackings.value.push(started);
+            const response = await trackingNotificationApi.createTracking(
+                TrackingAssembler.toStartResource({orderId, estimatedDelivery}));
+            const started = TrackingAssembler.toEntityFromResource(response.data, customerName);
+            if (trackingsLoaded.value) {
+                trackings.value = [...trackings.value.filter(t => t.id !== started.id), started];
+            }
             return started;
         } catch (error) {
             errors.value.push(error);
             return null;
         }
-    }
-
-    function addTracking(tracking) {
-        trackingNotificationApi.createTracking(tracking).then((response) => {
-            const resource = response.data;
-            const newTracking = TrackingAssembler.toEntityFromResource(resource);
-            trackings.value.push(newTracking);
-        }).catch((error) => {
-            errors.value.push(error);
-        });
-    }
-
-    function updateTracking(tracking) {
-        trackingNotificationApi.updateTracking(tracking).then((response) => {
-            const resource = response.data;
-            const updatedTracking = TrackingAssembler.toEntityFromResource(resource);
-            const index = trackings.value.findIndex(t => t["id"] === updatedTracking.id);
-            if (index !== -1) {
-                trackings.value[index] = updatedTracking;
-            }
-            if (currentTracking.value?.id === updatedTracking.id) {
-                currentTracking.value = updatedTracking;
-            }
-        }).catch((error) => {
-            errors.value.push(error);
-        });
-    }
-
-    function deleteTracking(tracking) {
-        trackingNotificationApi.deleteTracking(tracking.id).then(() => {
-            const index = trackings.value.findIndex(t => t["id"] === tracking.id);
-            if (index !== -1) {
-                trackings.value.splice(index, 1);
-            }
-            if (currentTracking.value?.id === tracking.id) {
-                currentTracking.value = null;
-            }
-        }).catch((error) => {
-            errors.value.push(error);
-        });
     }
 
     function fetchUnreadNotifications(userId) {
@@ -181,9 +161,6 @@ const useTrackingNotificationStore = defineStore("trackingNotification", () => {
         fetchTracking,
         getTrackingById,
         startTracking,
-        addTracking,
-        updateTracking,
-        deleteTracking,
         fetchUnreadNotifications,
         getNotificationById,
         addNotification,
